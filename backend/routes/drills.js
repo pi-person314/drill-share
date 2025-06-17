@@ -3,9 +3,11 @@ import Drill from "../schema/Drill.js";
 
 const router = Router();
 
+// TODO: add two GET routes -> get all public drills, get all drills created by a user
+
 router.post("/", async (req, res) => {
     const drill = req.body;
-    if (!drill.name || !drill.description || !drill.length) {
+    if (!drill.name || !drill.description || !drill.creator || drill.public == undefined) {
         res.status(400).json({success: false, message: "Please fill in all required fields."});
     }
 

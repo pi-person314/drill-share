@@ -1,6 +1,7 @@
 import { Router } from "express";
 import User from "../schema/User.js";
 import Drill from "../schema/Drill.js";
+import Workout from "../schema/Workout.js";
 
 const router = Router();
 
@@ -12,8 +13,7 @@ router.get("/:id", async (req, res) => {
             return res.status(404).json({success: false, message: "User not found."});
         }
 
-        const drills = await Drill.find({creator: id});
-        res.status(200).json({success: true, data: {user, drills}, message: "Fetched user info!"});
+        res.status(200).json({success: true, data: user, message: "Fetched user info!"});
     } catch (error) {
         res.status(500).json({success: false, message: "Server Error"});
         console.log(error);
@@ -99,6 +99,9 @@ router.delete("/:id", async (req, res) => {
 
         const drills = await Drill.find({creator: id});
         drills.forEach(async drill => await Drill.findByIdAndDelete(drill.id));
+
+        const workouts = await Workout.find({creator: id});
+        workouts.forEach(async workout => await Workout.findByIdAndDelete(workout.id));
 
         res.status(200).json({success: true, data: {user, drills}, message: "User deleted!"});
     } catch (error) {

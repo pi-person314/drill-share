@@ -3,15 +3,13 @@ import mongoose from "mongoose";
 const drillSchema = new mongoose.Schema({
     name: {type: String, required: true},
     description: {type: String, required: true},
-    length: {type: Number, required: true},
-    sports: {type: [String], default: []},
+    public: {type: Boolean, required: true},
+    creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
     media: {type: [String], default: []},
-    public: {type: Boolean, default: false},
-    creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    }
+    length: {type: Number, default: 0}, // suggested length (can be filter tag)
+    sports: {type: [String], default: []}, // filter tag
+    difficulty: {type: [String], default: []}, // filter tag
+    likes: {type: Number, default: 0}
 }, {
     timestamps: true
 });
