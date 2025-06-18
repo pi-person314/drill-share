@@ -10,6 +10,6 @@ const workoutSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Workout = mongoose.Model("Workout", workoutSchema);
+const Workout = mongoose.model("Workout", workoutSchema);
 
 export default Workout;

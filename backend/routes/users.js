@@ -103,7 +103,7 @@ router.delete("/:id", async (req, res) => {
         const workouts = await Workout.find({creator: id});
         workouts.forEach(async workout => await Workout.findByIdAndDelete(workout.id));
 
-        res.status(200).json({success: true, data: {user, drills}, message: "User deleted!"});
+        res.status(200).json({success: true, data: {user, drills, workouts}, message: "User deleted!"});
     } catch (error) {
         res.status(500).json({success: false, message: "Server Error"});
         console.log(error);
