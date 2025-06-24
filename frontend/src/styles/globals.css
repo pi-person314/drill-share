@@ -1,0 +1,25 @@
+@import "tailwindcss";
+/* TODO: fix color scheme and fonts */
+:root {
+  --bg: #b2c0c6;
+  --text: #262d31;
+  --primary: #68aab8;
+  --secondary: #81cbdb;
+  --link: var(--color-blue-600);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #262d31;
+    --text: #b2c0c6;
+    --primary: #0f1f2b;
+    --secondary: #1e425e;
+    --link: var(--color-blue-300);
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
