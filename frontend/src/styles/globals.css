@@ -1,10 +1,12 @@
 @import "tailwindcss";
-/* TODO: fix color scheme and fonts */
+/* TODO: fix color scheme (especially light mode) and fonts */
 :root {
   --bg: #b2c0c6;
   --text: #262d31;
   --primary: #68aab8;
   --secondary: #81cbdb;
+  --accent: #38BDF8;
+  --danger: var(--color-red-600);
   --link: var(--color-blue-600);
 }
 
@@ -14,7 +16,10 @@
     --text: #b2c0c6;
     --primary: #0f1f2b;
     --secondary: #1e425e;
+    --accent: #007c82;
+    --danger: var(--color-red-400);
     --link: var(--color-blue-300);
+    
   }
 }
 
