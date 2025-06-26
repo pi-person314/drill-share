@@ -10,12 +10,12 @@ router.get("/:id", async (req, res) => {
     try {
         const user = await User.findById(id).select("-password");
         if (!user) {
-            return res.status(404).json({success: false, message: "User not found."});
+            return res.status(404).json({message: "User not found."});
         }
 
-        res.status(200).json({success: true, data: user, message: "Fetched user info!"});
+        res.status(200).json({data: user, message: "Fetched user info!"});
     } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"});
+        res.status(500).json({message: "Server Error"});
         console.log(error);
     }
 });
@@ -23,22 +23,22 @@ router.get("/:id", async (req, res) => {
 router.post("/register", async (req, res) => {
     const user = req.body;
     if (!user.username || !user.password) {
-        return res.status(400).json({success: false, message: "Please fill in all required fields."});
+        return res.status(400).json({message: "Please fill in all required fields."});
     }
 
     try {
         const exists = await User.findOne({username: user.username});
         if (exists) {
-            return res.status(400).json({success: false, message: "User already exists."});
+            return res.status(400).json({message: "User already exists."});
         }
 
         const newUser = await User(user);
         newUser.password = newUser.generateHash(user.password);
 
         await newUser.save();
-        res.status(201).json({success: true, data: newUser, message: "User created!"});
+        res.status(201).json({data: newUser, message: "User created!"});
     } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"});
+        res.status(500).json({message: "Server Error"});
         console.log(error);
     }
 });
@@ -46,22 +46,22 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     const user = req.body;
     if (!user.username || !user.password) {
-        return res.status(400).json({success: false, message: "Please fill in all required fields."});
+        return res.status(400).json({message: "Please fill in all required fields."});
     }
 
     try {
         const userData = await User.findOne({username: user.username});
         if (!userData) {
-            return res.status(404).json({success: false, message: "User not found."});
+            return res.status(404).json({message: "User not found."});
         }
 
         if (!userData.validPassword(user.password)) {
-            return res.status(400).json({success: false, message: "Invalid username or password"});
+            return res.status(400).json({message: "Invalid username or password."});
         }
 
-        res.status(200).json({success: true, data: userData, message: "User validated!"});
+        res.status(200).json({data: userData, message: "User validated!"});
     } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"});
+        res.status(500).json({message: "Server Error"});
         console.log(error);
     }
 });
@@ -70,21 +70,21 @@ router.put("/:id", async (req, res) => {
     const id = req.params.id;
     const newData = req.body;
     if (!newData.username || !newData.password) {
-        return res.status(400).json({success: false, message: "Please fill in all required fields."});
+        return res.status(400).json({message: "Please fill in all required fields."});
     }
 
     try {
         const user = await User.findById(id);
         if (!user) {
-            return res.status(404).json({success: false, message: "User not found."});
+            return res.status(404).json({message: "User not found."});
         }
 
         newData.password = user.generateHash(newData.password);
         await User.findByIdAndUpdate(id, newData);
         
-        res.status(200).json({success: true, data: newData, message: "User updated!"});
+        res.status(200).json({data: newData, message: "User updated!"});
     } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"});
+        res.status(500).json({message: "Server Error"});
         console.log(error);
     }
 });
@@ -94,7 +94,7 @@ router.delete("/:id", async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(id);
         if (!user) {
-            return res.status(404).json({success: false, message: "User not found."});
+            return res.status(404).json({message: "User not found."});
         }
 
         const drills = await Drill.find({creator: id});
@@ -103,9 +103,9 @@ router.delete("/:id", async (req, res) => {
         const workouts = await Workout.find({creator: id});
         workouts.forEach(async workout => await Workout.findByIdAndDelete(workout.id));
 
-        res.status(200).json({success: true, data: {user, drills, workouts}, message: "User deleted!"});
+        res.status(200).json({data: {user, drills, workouts}, message: "User deleted!"});
     } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"});
+        res.status(500).json({message: "Server Error"});
         console.log(error);
     }
 });

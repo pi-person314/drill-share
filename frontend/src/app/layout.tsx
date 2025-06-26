@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Exo } from "next/font/google";
 import "../styles/globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const exo = Exo({
+  variable: "--exo",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"]
 });
 
 export const metadata: Metadata = {
@@ -12,16 +13,10 @@ export const metadata: Metadata = {
   description: "A platform for discovering and sharing new ways to practice sports!",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} antialiased`}
-      >
+      <body className={`${exo.variable} antialiased`}>
         {children}
       </body>
     </html>

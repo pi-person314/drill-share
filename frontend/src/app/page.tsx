@@ -6,7 +6,7 @@ export default function Home() {
     <div className="flex flex-col w-screen h-screen">
       <Header />
       <main className="flex-1 flex flex-col justify-center items-center text-center p-10 space-y-5">
-        <h1 className="text-4xl md:text-6xl">Welcome to Drill Share!</h1>
+        <h1 className="text-4xl md:text-6xl font-semibold">Welcome to Drill Share!</h1>
         <p className="text-xs md:text-base">
           This website is designed to help you discover new ways to improve your sports skills,
           <br/>

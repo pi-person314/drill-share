@@ -1,11 +1,11 @@
 @import "tailwindcss";
-/* TODO: fix color scheme (especially light mode) and fonts */
+
 :root {
-  --bg: #b2c0c6;
-  --text: #262d31;
-  --primary: #68aab8;
-  --secondary: #81cbdb;
-  --accent: #38BDF8;
+  --bg: #eaf1f4;
+  --text: #1a2327;
+  --primary: #b2d6e3;
+  --secondary: #d2eaf2;
+  --accent: #38bdf8;
   --danger: var(--color-red-600);
   --link: var(--color-blue-600);
 }
@@ -13,18 +13,17 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #262d31;
-    --text: #b2c0c6;
+    --text: #d2e1e6;
     --primary: #0f1f2b;
     --secondary: #1e425e;
     --accent: #007c82;
     --danger: var(--color-red-400);
     --link: var(--color-blue-300);
-    
   }
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--exo), Arial, Helvetica, sans-serif;
 }
