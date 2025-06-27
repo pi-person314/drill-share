@@ -26,25 +26,25 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col w-screen h-screen">
+        <div className="flex flex-col w-fulls h-screen">
             <Header />
-            <main className="flex-1 flex justify-center items-center">
-                <div className="flex flex-col w-1/2 items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16">
+            <main className="flex-1 flex justify-center items-center p-10">
+                <div className="flex flex-col w-1/2 min-w-72 max-w-[40rem] items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16">
                     <h1 className="text-5xl mb-10 font-medium">Login</h1>
                     <input 
                         placeholder="Username" 
                         value={userInfo.username} 
                         onChange={e => setUserInfo({...userInfo, username: e.target.value})} 
-                        className={`w-2/3 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.username ? "border-[var(--danger)]" : ""}`}
+                        className={`w-5/6 min-w-60 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.username ? "border-[var(--danger)]" : ""}`}
                     />
                     <input 
                         placeholder="Password" 
                         type="password" 
                         value={userInfo.password} 
                         onChange={e => setUserInfo({...userInfo, password: e.target.value})}
-                        className={`w-2/3 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
+                        className={`w-5/6 min-w-60 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
                     />
-                    <button onClick={handleLogin} className="bg-[var(--accent)] hover:scale-105 rounded-lg p-3 mt-5">Sign In</button>
+                    <button onClick={handleLogin} className="bg-[var(--accent)] hover:scale-105 rounded-lg cursor-pointer p-3 mt-5">Sign In</button>
                     {error && <p className="text-center text-[var(--danger)]">
                         {error}<br/>If this is your first time here, 
                         <Link href="/register" className="text-[var(--link)]"> <u>create an account!</u></Link>
