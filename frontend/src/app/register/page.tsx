@@ -1,8 +1,8 @@
 "use client";
-import Header from "@/components/Header";
 import Select from "react-select";
 import { useDropzone } from "react-dropzone";
 import { useState } from "react";
+import { useAuth } from "@/context/auth";
 
 export default function Register() {
     type UserInfo = {
@@ -37,6 +37,8 @@ export default function Register() {
 
     const [ error, setError ] = useState("");
 
+    const { login } = useAuth();
+
     const handleRegister = async () => {
         const res = await fetch("http://localhost:5000/api/users/register", {
             method: "POST",
@@ -45,98 +47,95 @@ export default function Register() {
             },
             body: JSON.stringify(userInfo)
         });
+
+        const data = await res.json();
         if (res.ok) {
-            setError("");
-            setUserInfo({ username: "", password: "", bio: "", sports: [], photo: "" });
+            login(data.data.uid);
             window.location.href = "/dashboard";
         } else {
-            const data = await res.json();
             setError(data.message);
         }
     }
 
     return (
-        <div className="flex flex-col w-full h-screen">
-            <Header />
-            <main className="flex-1 flex justify-center items-center p-10">
-                <div className="flex flex-col w-1/2 min-w-72 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16">
-                    <h1 className="text-5xl mb-10 font-medium">Register</h1>
+        <main className="flex-1 flex justify-center items-center p-10">
+            <div className="flex flex-col w-1/2 min-w-72 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16">
+                <h1 className="text-5xl mb-10 font-medium">Register</h1>
 
-                    <div className="w-5/6 min-w-60 space-y-1">
-                        <p>Username <span className="text-[var(--danger)]">*</span></p>
-                        <input 
-                            placeholder="Username"
-                            value={userInfo.username}
-                            onChange={e => setUserInfo({...userInfo, username: e.target.value})}
-                            className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !userInfo.username ? "border-[var(--danger)]" : ""}`}
-                        />
-                    </div>
+                <div className="w-5/6 min-w-60 space-y-1">
+                    <p>Username <span className="text-[var(--danger)]">*</span></p>
+                    <input 
+                        placeholder="Username"
+                        value={userInfo.username}
+                        onChange={e => setUserInfo({...userInfo, username: e.target.value})}
+                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !userInfo.username ? "border-[var(--danger)]" : ""}`}
+                    />
+                </div>
 
-                    <div className="w-5/6 min-w-60 space-y-1">
-                        <p>Password <span className="text-[var(--danger)]">*</span></p>
-                        <input 
-                            placeholder="Password" 
-                            type="password" 
-                            value={userInfo.password}
-                            onChange={e => setUserInfo({...userInfo, password: e.target.value})}
-                            className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
-                        />
-                    </div>
+                <div className="w-5/6 min-w-60 space-y-1">
+                    <p>Password <span className="text-[var(--danger)]">*</span></p>
+                    <input 
+                        placeholder="Password" 
+                        type="password" 
+                        value={userInfo.password}
+                        onChange={e => setUserInfo({...userInfo, password: e.target.value})}
+                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
+                    />
+                </div>
 
-                    <div className="w-5/6 min-w-60 space-y-1">
-                        <p>Bio <span className="text-[var(--muted)]">(optional)</span></p>
-                        <textarea 
-                            placeholder="Experience, location, fun facts, etc." 
-                            rows={3} 
-                            value={userInfo.bio}
-                            onChange={e => setUserInfo({...userInfo, bio: e.target.value})}
-                            className="w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border"
-                        />
-                    </div>
+                <div className="w-5/6 min-w-60 space-y-1">
+                    <p>Bio <span className="text-[var(--muted)]">(optional)</span></p>
+                    <textarea 
+                        placeholder="Experience, location, fun facts, etc." 
+                        rows={3} 
+                        value={userInfo.bio}
+                        onChange={e => setUserInfo({...userInfo, bio: e.target.value})}
+                        className="w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border"
+                    />
+                </div>
 
-                    <div className="w-5/6 min-w-60 space-y-1">
-                        <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
-                        <Select 
-                            isMulti 
-                            options={options}
-                            value={options.filter(option => userInfo.sports.includes(option.value))}
-                            onChange={selected => setUserInfo({
-                                ...userInfo,
-                                sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
-                            })}
-                            className="w-full" 
-                            styles={{
-                                placeholder: base => ({...base, color: "var(--muted)"}),
-                                control: base => ({...base, backgroundColor: "var(--secondary)"}),
-                                menu: base => ({...base, backgroundColor: "var(--secondary)"}),
-                                option: (base, state) => ({
-                                    ...base, 
-                                    backgroundColor: state.isFocused ? "var(--primary)" : "var(--secondary)", 
-                                    color: "var(--text)",
-                                    ":active": {backgroundColor: "var(--accent)"}
-                                }),
-                                multiValue: base => ({...base, backgroundColor: "var(--primary)"}),
-                                multiValueLabel: base => ({...base, color: "var(--text)"})
-                            }}
-                        />
-                    </div>
+                <div className="w-5/6 min-w-60 space-y-1">
+                    <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
+                    <Select 
+                        isMulti 
+                        options={options}
+                        value={options.filter(option => userInfo.sports.includes(option.value))}
+                        onChange={selected => setUserInfo({
+                            ...userInfo,
+                            sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
+                        })}
+                        className="w-full" 
+                        styles={{
+                            placeholder: base => ({...base, color: "var(--muted)"}),
+                            control: base => ({...base, backgroundColor: "var(--secondary)"}),
+                            menu: base => ({...base, backgroundColor: "var(--secondary)"}),
+                            option: (base, state) => ({
+                                ...base, 
+                                backgroundColor: state.isFocused ? "var(--primary)" : "var(--secondary)", 
+                                color: "var(--text)",
+                                ":active": {backgroundColor: "var(--accent)"}
+                            }),
+                            multiValue: base => ({...base, backgroundColor: "var(--primary)"}),
+                            multiValueLabel: base => ({...base, color: "var(--text)"})
+                        }}
+                    />
+                </div>
 
-                    <div className="w-5/6 min-w-60 space-y-1">
-                        <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
-                        <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
-                            <input {...getInputProps()} />
-                            <div className={`flex flex-col justify-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
-                                <h1 className="text-xl mb-2">Upload</h1>
-                                {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
-                                {userInfo.photo && <img src={userInfo.photo} alt="Photo Preview" className="h-1/2"/>}
-                            </div>
+                <div className="w-5/6 min-w-60 space-y-1">
+                    <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
+                    <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
+                        <input {...getInputProps()} />
+                        <div className={`flex flex-col justify-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                            <h1 className="text-xl mb-2">Upload</h1>
+                            {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
+                            {userInfo.photo && <img src={userInfo.photo} alt="Photo Preview" className="h-1/2 object-contain"/>}
                         </div>
                     </div>
-
-                    <button onClick={handleRegister} className="bg-[var(--accent)] hover:scale-105 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
-                    {error && <p className="text-center text-[var(--danger)]">{error}</p>}
                 </div>
-            </main>
-        </div>
+
+                <button onClick={handleRegister} className="bg-[var(--accent)] hover:scale-105 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
+                {error && <p className="text-center text-[var(--danger)]">{error}</p>}
+            </div>
+        </main>
     )
 }
