@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
+import { FaUpload } from "react-icons/fa";
 
 export default function Register() {
     type UserInfo = {
@@ -135,8 +136,8 @@ export default function Register() {
                     <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
-                            <h1 className="text-xl mb-2">Upload</h1>
+                        <div className={`flex flex-col justify-center items-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                            <FaUpload className="text-3xl mb-3"/>
                             {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
                             {userInfo.photo && <img src={userInfo.photo} alt="Photo Preview" className="h-1/2 object-contain"/>}
                         </div>

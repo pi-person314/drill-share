@@ -3,6 +3,7 @@ import { Exo } from "next/font/google";
 import "../styles/globals.css";
 import Header from "@/components/Header";
 import { AuthProvider } from "@/context/auth";
+import Sidebar from "@/components/Sidebar";
 
 const exo = Exo({
   variable: "--exo",
@@ -22,7 +23,10 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
         <AuthProvider>
           <div className="flex flex-col w-full h-screen">
             <Header />
-            {children}
+            <div className="flex h-full">
+              <Sidebar />
+              {children}
+            </div>
           </div>
         </AuthProvider>
       </body>
