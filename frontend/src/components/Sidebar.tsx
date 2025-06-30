@@ -70,11 +70,11 @@ export default function Sidebar() {
                         </div>}
                     </div>
                 </div>
-                <Link href="/profile" className="flex bg-[var(--secondary)] w-full h-32 items-center space-x-2 px-3 py-5 rounded-2xl hover:scale-105">
+                <Link href="/profile" className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl hover:scale-105">
                     <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
-                    <div className="flex-1 min-w-0 h-full flex flex-col">
+                    <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
                         <h1 className="text-xl w-full truncate">{userInfo.username}</h1>
-                        {userInfo.bio && <p className="flex-1 text-sm text-[var(--muted)] whitespace-pre-line overflow-y-auto">{userInfo.bio}</p>}
+                        {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-2/3 overflow-y-auto">{userInfo.bio}</p>}
                     </div>
                 </Link>
             </div>}

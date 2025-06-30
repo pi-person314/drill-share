@@ -144,7 +144,7 @@ export default function Register() {
                     </div>
                 </div>
 
-                <button onClick={handleRegister} className="bg-[var(--accent)] hover:scale-105 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
+                <button className="bg-[var(--accent)] hover:scale-105 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
                 {error && <p className="text-center text-[var(--danger)]">{error}</p>}
             </form>
         </main>
