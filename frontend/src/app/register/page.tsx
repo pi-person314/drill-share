@@ -15,20 +15,12 @@ export default function Register() {
         photo: string;
     }
 
-    const options = [
-        { value: "soccer", label: "Soccer" },
-        { value: "basketball", label: "Basketball" },
-        { value: "tennis", label: "Tennis" },
-        { value: "volleyball", label: "Volleyball" },
-        { value: "baseball", label: "Baseball" }
-    ];
+    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", password: "", bio: "", sports: [], photo: "" });
+    const [ error, setError ] = useState("");
+    const [ loading, setLoading ] = useState(false);
 
     const { user, login } = useAuth();
-    useEffect(() => {
-        if (user) router.replace("/dashboard");
-    }, [user]);
-
-    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", password: "", bio: "", sports: [], photo: "" });
+    const router = useRouter();
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         multiple: false,
         accept: {"image/*": []},
@@ -42,9 +34,11 @@ export default function Register() {
         }
     });
 
-    const [ error, setError ] = useState("");
-
-    const router = useRouter();
+    
+    useEffect(() => {
+        if (user) router.replace("/dashboard");
+    }, [user]);
+    
     const handleRegister = async () => {
         const res = await fetch("http://localhost:5000/api/users/register", {
             method: "POST",
@@ -56,11 +50,28 @@ export default function Register() {
 
         const data = await res.json();
         if (res.ok) {
+            setLoading(true);
             login(data.data._id);
             router.push("/dashboard");
         } else {
             setError(data.message);
         }
+    }
+
+    const options = [
+        { value: "soccer", label: "Soccer" },
+        { value: "basketball", label: "Basketball" },
+        { value: "tennis", label: "Tennis" },
+        { value: "volleyball", label: "Volleyball" },
+        { value: "baseball", label: "Baseball" }
+    ];
+
+    if (loading) {
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+            </div>
+        )
     }
 
     return (

@@ -37,47 +37,47 @@ export default function Sidebar() {
         getUserInfo();
     }, [user]);
 
+    if (!user) return null;
+
     return (
-        <>
-            {user && <div className="flex flex-col w-1/6 min-w-72 max-w-80 h-full bg-[var(--primary)] justify-between items-center py-10 px-5">
-                <Link href="/dashboard" className={`flex items-center text-3xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
-                    <FaHome className="mr-2"/>
-                    Dashboard
+        <aside className="flex flex-col w-80 h-full bg-[var(--primary)] justify-between items-center py-10 px-6">
+            <Link href="/dashboard" className={`flex items-center text-3xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                <FaHome className="mr-2"/>
+                Dashboard
+            </Link>
+            <div className="flex flex-col items-center">
+                <Link href="/browse" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/browse" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                    <FaSearch className="mr-2"/>
+                    Browse
                 </Link>
                 <div className="flex flex-col items-center">
-                    <Link href="/browse" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/browse" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
-                        <FaSearch className="mr-2"/>
-                        Browse
+                    <Link href="/drills" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/drills" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                        <FaBasketballBall className="mr-2"/>
+                        Drills
                     </Link>
-                    <div className="flex flex-col items-center">
-                        <Link href="/drills" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/drills" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
-                            <FaBasketballBall className="mr-2"/>
-                            Drills
-                        </Link>
-                        {pathname === "/drills" && <div className="flex flex-col items-center space-y-1 mt-4">
-                            <Link href="/drills#my-drills" className="hover:text-[var(--muted)]">My Drills</Link>
-                            <Link href="/drills#saved-drills" className="hover:text-[var(--muted)]">Saved Drills</Link>
-                        </div>}
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <Link href="/workouts" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/workouts" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
-                            <FaDumbbell className="mr-2"/>
-                            Workouts
-                        </Link>
-                        {pathname === "/workouts" && <div className="flex flex-col items-center space-y-1 mt-4">
-                            <Link href="/workouts#new-workout" className="hover:text-[var(--muted)]">New Workout</Link>
-                            <Link href="/workouts#review-workouts" className="hover:text-[var(--muted)]">Review Workouts</Link>
-                        </div>}
-                    </div>
+                    {pathname === "/drills" && <div className="flex flex-col items-center space-y-1 mt-4">
+                        <Link href="/drills#my-drills" className="hover:text-[var(--muted)]">My Drills</Link>
+                        <Link href="/drills#saved-drills" className="hover:text-[var(--muted)]">Saved Drills</Link>
+                    </div>}
                 </div>
-                <Link href="/profile" className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl hover:scale-105">
-                    <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
-                    <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
-                        <h1 className="text-xl w-full truncate">{userInfo.username}</h1>
-                        {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-2/3 overflow-y-auto">{userInfo.bio}</p>}
-                    </div>
-                </Link>
-            </div>}
-        </>
+                <div className="flex flex-col items-center">
+                    <Link href="/workouts" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/workouts" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                        <FaDumbbell className="mr-2"/>
+                        Workouts
+                    </Link>
+                    {pathname === "/workouts" && <div className="flex flex-col items-center space-y-1 mt-4">
+                        <Link href="/workouts#new-workout" className="hover:text-[var(--muted)]">New Workout</Link>
+                        <Link href="/workouts#review-workouts" className="hover:text-[var(--muted)]">Review Workouts</Link>
+                    </div>}
+                </div>
+            </div>
+            <Link href="/profile" className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl hover:scale-105">
+                <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
+                <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
+                    <h1 className="text-xl w-full truncate">{userInfo.username}</h1>
+                    {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-2/3 overflow-y-auto">{userInfo.bio}</p>}
+                </div>
+            </Link>
+        </aside>
     )
 }

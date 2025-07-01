@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function Login() {
     const [ userInfo, setUserInfo ] = useState({ username: "", password: "" });
     const [ error, setError ] = useState("");
+    const [ loading, setLoading ] = useState(false);
     const { user, login } = useAuth();
     const router = useRouter();
 
@@ -25,11 +26,20 @@ export default function Login() {
         
         const data = await res.json();
         if (res.ok) {
+            setLoading(true);
             login(data.data._id);
             router.push("/dashboard");
         } else {
             setError(data.message);
         }
+    }
+    
+    if (loading) {
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+            </div>
+        )
     }
 
     return (
