@@ -17,7 +17,6 @@ export default function Register() {
 
     const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", password: "", bio: "", sports: [], photo: "" });
     const [ error, setError ] = useState("");
-    const [ loading, setLoading ] = useState(false);
 
     const { user, login } = useAuth();
     const router = useRouter();
@@ -33,11 +32,10 @@ export default function Register() {
             }
         }
     });
-
     
     useEffect(() => {
         if (user) router.replace("/dashboard");
-    }, [user]);
+    }, []);
     
     const handleRegister = async () => {
         const res = await fetch("http://localhost:5000/api/users/register", {
@@ -50,7 +48,6 @@ export default function Register() {
 
         const data = await res.json();
         if (res.ok) {
-            setLoading(true);
             login(data.data._id);
             router.push("/dashboard");
         } else {
@@ -66,7 +63,7 @@ export default function Register() {
         { value: "baseball", label: "Baseball" }
     ];
 
-    if (loading) {
+    if (user) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
