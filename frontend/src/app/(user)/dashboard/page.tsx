@@ -1,4 +1,5 @@
 "use client";
+import DrillCard from "@/components/DrillCard";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -20,7 +21,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="">
+        <div className="p-10">
             <p>dashboard</p>
         </div>
     )

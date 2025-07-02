@@ -6,9 +6,9 @@ const drillSchema = new mongoose.Schema({
     creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
     public: {type: Boolean, default: true},
     media: {type: [String], default: []},
-    length: {type: Number, default: 0}, // suggested length (can be filter tag)
+    time: {type: Number, default: 0}, // suggested length (can be filter tag)
     sports: {type: [String], default: []}, // filter tag
-    difficulty: {type: [String], default: []}, // filter tag
+    difficulty: {type: String, default: ""}, // filter tag
     likes: {type: Number, default: 0}
 }, {
     timestamps: true

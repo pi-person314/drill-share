@@ -11,7 +11,7 @@ export default function Sidebar() {
     const [userInfo, setUserInfo] = useState<{username: string, bio: string, photo: string}>({
         username: "Guest",
         bio: "",
-        photo: "./images/default.png"
+        photo: "./images/defaultPhoto.png"
     });
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Sidebar() {
                     setUserInfo({
                         username: "Guest",
                         bio: "",
-                        photo: "./images/default.png"
+                        photo: "./images/defaultPhoto.png"
                     });
                 }
             }
