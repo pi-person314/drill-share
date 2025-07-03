@@ -4,6 +4,7 @@ const drillSchema = new mongoose.Schema({
     name: {type: String, required: true},
     description: {type: String, required: true},
     creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
+    usersLiked: {type: [mongoose.SchemaTypes.ObjectId], ref: "User", default: []},
     public: {type: Boolean, default: true},
     media: {type: [String], default: []},
     time: {type: Number, default: 0}, // suggested length (can be filter tag)

@@ -12,7 +12,7 @@ export default function Login() {
 
     useEffect(() => {
         if (user) router.replace("/dashboard");
-    }, []);
+    }, [user]);
 
     const handleLogin = async () => {
         const res = await fetch("http://localhost:5000/api/users/login", {

@@ -12,9 +12,11 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Browse() {
     type FullDrillType = {
+        _id: string;
         name: string;
         description: string;
         creator: string;
+        usersLiked: string[],
         public: boolean;
         media: string[];
         time: number;
@@ -24,9 +26,11 @@ export default function Browse() {
     }
 
     type DrillType = {
+        _id: string;
         name: string;
         thumbnail: string;
         creator: string;
+        usersLiked: string[],
         likes: number;
     };
 
@@ -35,10 +39,10 @@ export default function Browse() {
     const [ selectedDrill, setSelectedDrill ] = useState<FullDrillType | null>(null);
     const [ usernames, setUsernames ] = useState<String[]>([]);
     const [ selectedUsername, setSelectedUsername ] = useState<String | null>(null);
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const router = useRouter();
 
-    const getUsername = async ( uid: any ) => {
+    const getUsername = async ( uid: string ) => {
         const res = await fetch(`http://localhost:5000/api/users/${uid}`);
         if (res.ok) {
             const data = await res.json();
@@ -48,8 +52,44 @@ export default function Browse() {
         }
     }
 
+    const handleLike = async () => {
+        if (!selectedDrill) return;
+        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                ...selectedDrill, 
+                likes: selectedDrill.likes + 1, 
+                usersLiked: [...selectedDrill.usersLiked, user]
+            })
+        }); 
+        if (res.ok) {
+            if (user) {
+                setSelectedDrill({
+                    ...selectedDrill,
+                    likes: selectedDrill.likes + 1,
+                    usersLiked: [...selectedDrill.usersLiked, user]
+                });
+                setFullDrills(fullDrills.map(drill =>
+                    (drill._id === selectedDrill._id) ? { 
+                        ...drill, 
+                        likes: drill.likes + 1,
+                        usersLiked: [...drill.usersLiked, user] 
+                    } : drill
+                ));
+                setDrills(drills.map(drill =>
+                    (drill._id === selectedDrill._id) ? { 
+                        ...drill, 
+                        likes: drill.likes + 1,
+                        usersLiked: [...drill.usersLiked, user] 
+                    } : drill
+                ));
+            }
+        }
+    }
+
     useEffect(() => {
-        if (!user) router.replace("/");
+        if (!user && !loading) router.replace("/");
         ReactModal.setAppElement('body');
         const fetchDrills = async () => {
             const res = await fetch("http://localhost:5000/api/drills/public");
@@ -59,9 +99,11 @@ export default function Browse() {
                     data.data.map(async (drill: FullDrillType) => await getUsername(drill.creator))
                 );
                 const filteredData = data.data.map((drill: FullDrillType, index: number) => ({
+                    _id: drill._id,
                     name: drill.name,
                     thumbnail: drill.media[0] || "/images/defaultThumbnail.png",
                     creator: allUsernames[index],
+                    usersLiked: drill.usersLiked,
                     likes: drill.likes
                 }));
                 setFullDrills(data.data);
@@ -70,7 +112,7 @@ export default function Browse() {
             }
         }
         fetchDrills();
-    }, []);
+    }, [user]);
     
     if (!user) {
         return (
@@ -114,7 +156,9 @@ export default function Browse() {
                     }}>x</button>
                     <div className="flex">
                         <h1 className="text-5xl">{selectedDrill.name}</h1>
-                        <button className="flex items-center ml-10 text-xl hover:text-[var(--muted)] cursor-pointer">{selectedDrill.likes}<FaThumbsUp className="ml-2"/></button>
+                        <button onClick={selectedDrill.usersLiked && selectedDrill.usersLiked.includes(user) ? () => {} : handleLike} className="flex items-center ml-10 text-xl">
+                            {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${selectedDrill.usersLiked && selectedDrill.usersLiked.includes(user) ? "text-green-500" : "hover:text-[var(--muted)] cursor-pointer"}`}/>
+                        </button>
                     </div>
                     <div className="flex space-x-3 -mt-8">
                         {selectedDrill.sports.map((sport, index) => (

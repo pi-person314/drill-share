@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Dashboard() {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (!user) router.replace("/");
-    }, []);
+        if (!user && !loading) router.replace("/");
+    }, [user]);
     
     if (!user) {
         return (

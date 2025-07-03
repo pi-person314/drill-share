@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user) router.replace("/dashboard");
-  }, []);
+  }, [user]);
 
   return (
     <main className="flex-1 flex flex-col justify-center items-center text-center p-10 space-y-5">

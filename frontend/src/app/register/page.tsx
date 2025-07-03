@@ -35,7 +35,7 @@ export default function Register() {
     
     useEffect(() => {
         if (user) router.replace("/dashboard");
-    }, []);
+    }, [user]);
     
     const handleRegister = async () => {
         const res = await fetch("http://localhost:5000/api/users/register", {
