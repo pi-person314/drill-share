@@ -55,9 +55,10 @@ export default function Sidebar() {
                         <FaBasketballBall className="mr-2"/>
                         Drills
                     </Link>
-                    {pathname === "/drills" && <div className="flex flex-col items-center space-y-1 mt-4">
-                        <Link href="/drills#my-drills" className="hover:text-[var(--muted)]">My Drills</Link>
-                        <Link href="/drills#saved-drills" className="hover:text-[var(--muted)]">Saved Drills</Link>
+                    {pathname === "/drills" && <div className="flex flex-col items-center space-y-2 mt-4">
+                        <Link href="/drills#create" className="hover:text-[var(--muted)]">Create Drill</Link>
+                        <Link href="/drills#mine" className="hover:text-[var(--muted)]">My Drills</Link>
+                        <Link href="/drills#saved" className="hover:text-[var(--muted)]">Saved Drills</Link>
                     </div>}
                 </div>
                 <div className="flex flex-col items-center">
@@ -65,9 +66,9 @@ export default function Sidebar() {
                         <FaDumbbell className="mr-2"/>
                         Workouts
                     </Link>
-                    {pathname === "/workouts" && <div className="flex flex-col items-center space-y-1 mt-4">
-                        <Link href="/workouts#new-workout" className="hover:text-[var(--muted)]">New Workout</Link>
-                        <Link href="/workouts#review-workouts" className="hover:text-[var(--muted)]">Review Workouts</Link>
+                    {pathname === "/workouts" && <div className="flex flex-col items-center space-y-2 mt-4">
+                        <Link href="/workouts#new" className="hover:text-[var(--muted)]">New Workout</Link>
+                        <Link href="/workouts#review" className="hover:text-[var(--muted)]">Review Workouts</Link>
                     </div>}
                 </div>
             </div>

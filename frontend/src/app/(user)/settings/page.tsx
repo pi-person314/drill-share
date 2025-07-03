@@ -9,9 +9,9 @@ export default function Settings() {
 
     useEffect(() => {
         if (!user && !loading) router.replace("/");
-    }, [user]);
+    }, [user, loading]);
         
-    if (!user) {
+    if (loading) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
