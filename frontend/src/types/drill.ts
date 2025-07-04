@@ -4,6 +4,7 @@ export type DrillType = {
     description: string;
     creator: string;
     usersLiked: string[];
+    usersSaved: string[];
     public: boolean;
     media: string[];
     time: number;

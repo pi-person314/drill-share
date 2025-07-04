@@ -57,8 +57,7 @@ export default function Sidebar() {
                     </Link>
                     {pathname === "/drills" && <div className="flex flex-col items-center space-y-2 mt-4">
                         <Link href="/drills#create" className="hover:text-[var(--muted)]">Create Drill</Link>
-                        <Link href="/drills#mine" className="hover:text-[var(--muted)]">My Drills</Link>
-                        <Link href="/drills#saved" className="hover:text-[var(--muted)]">Saved Drills</Link>
+                        <Link href="/drills#collection" className="hover:text-[var(--muted)]">View Collection</Link>
                     </div>}
                 </div>
                 <div className="flex flex-col items-center">

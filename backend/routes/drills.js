@@ -30,6 +30,22 @@ router.get("/created/:id", async (req, res) => {
     }
 });
 
+router.get("/saved/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({message: "User not found."});
+        }
+
+        const drills = await Drill.find({usersSaved: id});
+        res.status(200).json({data: drills, message: `Fetched all drills saved by user!`});
+    } catch (error) {
+        res.status(500).json({message: "Server Error"});
+        console.log(error);
+    }
+});
+
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
     try {

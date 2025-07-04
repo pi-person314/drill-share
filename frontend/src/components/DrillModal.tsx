@@ -4,46 +4,67 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useAuth } from "@/context/auth";
-import { useEffect } from "react";
 import { useDrill } from "@/context/drill";
 
 export default function DrillModal() {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
 
-    const handleLike = async ( increase: boolean ) => {
+    const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
         const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 ...selectedDrill, 
-                likes: selectedDrill.likes + (increase ? 1 : -1), 
-                usersLiked: increase ? [...selectedDrill.usersLiked, user] : selectedDrill.usersLiked.filter(id => id != user)
+                likes: selectedDrill.likes + (add ? 1 : -1), 
+                usersLiked: add ? [...selectedDrill.usersLiked, user] : selectedDrill.usersLiked.filter(id => id != user)
             })
         }); 
         if (res.ok) {
             setSelectedDrill({
                 ...selectedDrill,
-                likes: selectedDrill.likes + (increase ? 1 : -1),
-                usersLiked: increase ? [...selectedDrill.usersLiked, user] : selectedDrill.usersLiked.filter(id => id != user)
+                likes: selectedDrill.likes + (add ? 1 : -1),
+                usersLiked: add ? [...selectedDrill.usersLiked, user] : selectedDrill.usersLiked.filter(id => id != user)
             });
             setDrills(drills.map(drill =>
                 (drill._id === selectedDrill._id) ? { 
                     ...drill, 
-                    likes: drill.likes + (increase ? 1 : -1),
-                    usersLiked: increase ? [...drill.usersLiked, user] : drill.usersLiked.filter(id => id != user)
+                    likes: drill.likes + (add ? 1 : -1),
+                    usersLiked: add ? [...drill.usersLiked, user] : drill.usersLiked.filter(id => id != user)
                 } : drill
             ));
         }
     }
 
-    useEffect(() => ReactModal.setAppElement("body"));
+    const handleSave = async ( add: boolean) => {
+        if (!selectedDrill || !user) return;
+        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                ...selectedDrill, 
+                usersSaved: add ? [...selectedDrill.usersSaved, user] : selectedDrill.usersSaved.filter(id => id != user)
+            })
+        });
+        if (res.ok) {
+            setSelectedDrill({
+                ...selectedDrill,
+                usersSaved: add ? [...selectedDrill.usersSaved, user] : selectedDrill.usersSaved.filter(id => id != user)
+            });
+            setDrills(drills.map(drill =>
+                (drill._id === selectedDrill._id) ? { 
+                    ...drill, 
+                    usersSaved: add ? [...drill.usersSaved, user] : drill.usersSaved.filter(id => id != user)
+                } : drill
+            ));
+        }
+    };
 
     if (!user) return null;
 
     return (
-        // TODO: profile browsing and saving
+        // TODO: profile browsing, add alert when saved
         <ReactModal
             isOpen={!!selectedDrill}
             className="bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto"
@@ -84,7 +105,12 @@ export default function DrillModal() {
                 </div>}
                 <div className="flex justify-between items-center mt-8">
                     <p>Creator:<span className="bg-[var(--accent)] hover:text-[var(--muted)] cursor-pointer ml-3 p-3 rounded-lg">{selectedUsername}</span></p>
-                    <button className="flex items-center bg-[var(--primary)] hover:scale-105 cursor-pointer p-3 rounded-lg"><FaDownload className="mr-2"/>Save</button>
+                    <button 
+                        onClick={() => selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
+                        className="flex items-center bg-[var(--primary)] hover:scale-105 cursor-pointer p-3 rounded-lg"
+                    >
+                        <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) ? "Unsave" : "Save"}
+                    </button>
                 </div>
             </div>}
         </ReactModal>
