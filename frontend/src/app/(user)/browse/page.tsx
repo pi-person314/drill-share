@@ -3,7 +3,7 @@ import DrillCard from "@/components/DrillCard";
 import { useAuth } from "@/context/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DrillModal from "@/components/DrillModal";
 import { DrillType } from "@/types/drill";
 import { useDrill } from "@/context/drill";
@@ -11,6 +11,7 @@ import { useDrill } from "@/context/drill";
 export default function Browse() {
     const { user, loading } = useAuth();
     const { drills, setDrills, usernames, setUsernames } = useDrill();
+    const [ fetching, setFetching ] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
@@ -27,6 +28,7 @@ export default function Browse() {
         }
 
         const fetchDrills = async () => {
+            setFetching(true);
             const res = await fetch("http://localhost:5000/api/drills/public");
             if (res.ok) {
                 const data = await res.json();
@@ -36,11 +38,12 @@ export default function Browse() {
                 setDrills(data.data);
                 setUsernames(allUsernames);
             }
+            setFetching(false);
         }
         fetchDrills();
-    }, [user, loading, router]);
+    }, [user, loading]);
     
-    if (loading) {
+    if (loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
@@ -54,14 +57,14 @@ export default function Browse() {
                 <p className="text-3xl text-[var(--muted)] text-center">
                     No drills have been shared yet.<br/>
                     Become the first by creating your own{" "}
-                    <span onClick={() => router.push("/drills#create")} className="text-[var(--link)] underline">here!</span>
+                    <Link href="/drills#create" className="text-[var(--link)] underline">here!</Link>
                 </p>
             </div>
         )
     }
 
     return (
-        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-12">
+        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-16">
             {drills.map((drill, index) => (
                 <DrillCard key={index} drillInfo={drill} username={usernames[index]} />
             ))}

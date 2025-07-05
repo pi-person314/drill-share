@@ -8,7 +8,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => ReactModal.setAppElement('body'), []);
 
     return (
-        <div className="flex h-full">
+        <div className="flex flex-1 overflow-hidden">
             <DrillProvider>
                 <Sidebar />
                 {children}
