@@ -11,28 +11,27 @@ import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 
 export default function Drills() {
-    const { user, loading } = useAuth();
+    const { user, username, loading } = useAuth();
     const { drills, setDrills } = useDrill();
     const router = useRouter();
     const [ createdDrills, setCreatedDrills ] = useState<DrillType[]>([]);
     const [ savedDrills, setSavedDrills ] = useState<DrillType[]>([]);
-    const [ username, setUsername ] = useState("");
+    const [ savedUsernames, setSavedUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ createOpen, setCreateOpen ] = useState(false);
 
+    const getUsername = async (uid : string) => {
+        const res = await fetch(`http://localhost:5000/api/users/${uid}`);
+        if (res.ok) {
+            const data = await res.json();
+            return data.data.username;
+        } else {
+            return "Deleted User";
+        }
+    }
+
     useEffect(() => {
         if (!user && !loading) router.replace("/");
-
-        const getUsername = async () => {
-            const res = await fetch(`http://localhost:5000/api/users/${user}`);
-            if (res.ok) {
-                const data = await res.json();
-                setUsername(data.data.username);
-            } else {
-                setUsername("Deleted User");
-            }
-        }
-        getUsername();
 
         const fetchDrills = async () => {
             setFetching(true);
@@ -41,9 +40,13 @@ export default function Drills() {
             if (createdRes.ok && savedRes.ok) {
                 const createdData = await createdRes.json();
                 const savedData = await savedRes.json();
+                const usernames = await Promise.all(
+                    savedData.data.map(async (drill: DrillType) => await getUsername(drill.creator))
+                );
                 setDrills([...createdData.data, ...savedData.data]);
                 setCreatedDrills(createdData.data);
                 setSavedDrills(savedData.data);
+                setSavedUsernames(usernames);
             }
             setFetching(false);
         }
@@ -57,14 +60,18 @@ export default function Drills() {
             if (createdRes.ok && savedRes.ok) {
                 const createdData = await createdRes.json();
                 const savedData = await savedRes.json();
+                const usernames = await Promise.all(
+                    savedData.data.map(async (drill: DrillType) => await getUsername(drill.creator))
+                );
                 setCreatedDrills(createdData.data);
                 setSavedDrills(savedData.data);
+                setSavedUsernames(usernames);
             }
         }
         fetchDrills();
     }, [drills])
         
-    if (loading || fetching) {
+    if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
@@ -77,12 +84,12 @@ export default function Drills() {
             <div id="my-drills">
                 <h1 className="text-3xl font-semibold text-center mt-16 mb-4">My Drills</h1>
                 <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
-                    {createdDrills.map((drill, index) => (
-                        <DrillCard key={index} drillInfo={drill} username={username} />
-                    ))}
                     <button onClick={() => setCreateOpen(true)}>
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer h-60"/>
                     </button>
+                    {createdDrills.map((drill, index) => (
+                        <DrillCard key={index} drillInfo={drill} username={username} />
+                    ))}
                 </div>
             </div>
 
@@ -90,7 +97,7 @@ export default function Drills() {
                 <h1 className="text-3xl font-semibold text-center mt-16 mb-4">Saved Drills</h1>
                 {!!savedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     {savedDrills.map((drill, index) => (
-                        <DrillCard key={index} drillInfo={drill} username={username} />
+                        <DrillCard key={index} drillInfo={drill} username={savedUsernames[index]} />
                     ))}
                 </div>}
                 {!savedDrills.length && <div className="flex items-center justify-center h-70">

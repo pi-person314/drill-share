@@ -19,7 +19,7 @@ export default function DrillCard({ drillInfo, username }: { drillInfo: DrillTyp
             <img src={drillInfo.media[0] || "/images/defaultThumbnail.png"} alt="Thumbnail" className="w-3/4 max-h-24 object-contain"/>
             <div className="flex flex-row justify-between items-center w-full">
                 <p className="flex items-center"><IoPerson className="mr-2"/>{username}</p>
-                <p className="flex items-center">{drillInfo.likes}<FaThumbsUp className={`ml-2 ${drillInfo.usersLiked.includes(user) ? "text-green-500" : ""}`}/></p>
+                <p className="flex items-center">{drillInfo.likes}<FaThumbsUp className={`ml-2 ${drillInfo.usersLiked.includes(user) ? "text-[var(--success)]" : ""}`}/></p>
             </div>
         </div>
     )

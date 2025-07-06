@@ -3,17 +3,19 @@ import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
 import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
+import { Switch } from "@headlessui/react";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaUpload } from "react-icons/fa";
 import ReactModal from "react-modal";
 import Select from "react-select";
+import DrillModal from "./DrillModal";
 
 export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (val: boolean) => void}) {
-    const { user } = useAuth();
-    const { drills, setDrills } = useDrill();
+    const { user, username } = useAuth();
+    const { drills, setDrills, setSelectedDrill, setSelectedUsername } = useDrill();
     const [ error, setError ] = useState("");
-    const [ newDrill, setNewDrill ] = useState<DrillType>({
+    const emptyDrill = {
         name: "",
         description: "",
         creator: user || "Deleted User",
@@ -25,7 +27,8 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
         sports: [],
         difficulty: "",
         likes: 0
-    });
+    }
+    const [ newDrill, setNewDrill ] = useState<DrillType>(emptyDrill);
 
     const sportsOptions = [
         { value: "Soccer", label: "Soccer" },
@@ -49,7 +52,10 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
             acceptedFiles = acceptedFiles.slice(0, 5 - newDrill.media.length);
             acceptedFiles.forEach(file => {
                 const reader = new FileReader();
-                reader.onload = () => setNewDrill({...newDrill, media: [...newDrill.media, reader.result as string]});
+                reader.onload = () => {
+                    const res = reader.result as string;
+                    setNewDrill(prev => ({...prev, media: [...prev.media, res]}));
+                };
                 reader.readAsDataURL(file);
             });
         }
@@ -73,6 +79,15 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
         }
     }
 
+    const handlePreview = () => {
+        if (newDrill.name && newDrill.description) {
+            setSelectedDrill(newDrill);
+            setSelectedUsername(username);
+            setError("");
+        }
+        else setError("Please fill in all required fields.");
+    }
+
     return (
         <ReactModal
             isOpen={open}
@@ -86,7 +101,7 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
                     <button type="button" className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}>x</button>
                 </div>
 
-                <h1 className="text-5xl font-medium mb-8">Create Drill</h1>
+                <h1 className="text-5xl font-medium mb-8">New Drill</h1>
 
                 <div className="space-y-1">
                     <p>Title <span className="text-[var(--danger)]">*</span></p>
@@ -109,65 +124,92 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
                     />
                 </div>
 
-                <div className="space-y-1">
-                    <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
-                    <Select 
-                        isMulti 
-                        options={sportsOptions}
-                        value={sportsOptions.filter(option => newDrill.sports.includes(option.value))}
-                        onChange={selected => setNewDrill({
-                            ...newDrill,
-                            sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
-                        })}
-                        className="w-full" 
-                        styles={dropdownStyles}
-                    />
-                </div>
+                <div className="flex justify-between space-x-4">
+                    <div className="space-y-1 w-1/3 2xl:w-1/2">
+                        <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
+                        <Select 
+                            isMulti 
+                            options={sportsOptions}
+                            value={sportsOptions.filter(option => newDrill.sports.includes(option.value))}
+                            onChange={selected => setNewDrill({
+                                ...newDrill,
+                                sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
+                            })}
+                            styles={dropdownStyles}
+                        />
+                    </div>
 
-                <div className="space-y-1">
-                    <p>Difficulty <span className="text-[var(--muted)]">(optional)</span></p>
-                    <Select  
-                        options={difficultyOptions}
-                        value={difficultyOptions.find(option => option.value === newDrill.difficulty) || null}
-                        onChange={selected => setNewDrill({
-                            ...newDrill,
-                            difficulty: selected && selected.value ? selected.value : ""
-                        })}
-                        className="w-full" 
-                        styles={dropdownStyles}
-                    />
-                </div>
+                    <div className="space-y-1">
+                        <p>Difficulty <span className="text-[var(--muted)]">(optional)</span></p>
+                        <Select  
+                            options={difficultyOptions}
+                            value={difficultyOptions.find(option => option.value === newDrill.difficulty) || null}
+                            onChange={selected => setNewDrill({
+                                ...newDrill,
+                                difficulty: selected && selected.value ? selected.value : ""
+                            })} 
+                            styles={dropdownStyles}
+                        />
+                    </div>
 
-                <div className="space-y-1">
-                    <p>Time <span className="text-[var(--muted)]">(minutes)</span></p>
-                    <input 
-                        type="number"
-                        min={0}
-                        value={newDrill.time}
-                        onChange={e => setNewDrill({...newDrill, time: Number(e.target.value)})}
-                        className="w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border"
-                    />
+                    <div className="space-y-1 w-28">
+                        <p>Time <span className="text-[var(--muted)]">(minutes)</span></p>
+                        <input 
+                            type="number"
+                            min={0}
+                            value={newDrill.time}
+                            onChange={e => setNewDrill({...newDrill, time: Number(e.target.value)})}
+                            className="w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border"
+                        />
+                    </div>
                 </div>
-
-                {/* TODO: add toggle for public/private visibility, figure out how to upload multiple images at a time, add preview */}
 
                 <div className="space-y-1">
                     <p>Media <span className="text-[var(--muted)]">(up to 5)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center items-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
                             {!newDrill.media.length && <p className="text-sm">Drag and drop images here</p>}
                             {!!newDrill.media.length && <div className="flex space-x-2 h-1/2">
-                                {newDrill.media.map((image, index) => <img key={index} src={image} alt="Image Preview" className="h-full object-contain"/>)}
+                                {newDrill.media.map((image, index) => 
+                                    <div key={index} className="relative h-full">
+                                        <img src={image} alt="Image Preview" className="h-full w-full object-cover" />
+                                        <button type="button" onClick={e => {
+                                            e.stopPropagation();
+                                            const updated = [...newDrill.media];
+                                            updated.splice(index, 1);
+                                            setNewDrill({ ...newDrill, media: updated });
+                                        }}
+                                            className="absolute top-0 right-0 text-[var(--danger)] w-5 h-5 text-3xl flex items-center justify-center cursor-pointer hover:scale-105"
+                                        >×</button>
+                                    </div>
+                                )}
                             </div>}
                         </div>
                     </div>
                 </div>
 
-                <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Submit</button>
+                <div className="flex space-x-4">
+                    <p>Public</p>
+                    <Switch
+                        checked={newDrill.public}
+                        onChange={() => setNewDrill({...newDrill, public: !newDrill.public})}
+                        className="group inline-flex h-6 w-11 items-center rounded-full bg-[var(--muted)] transition data-checked:bg-[var(--primary)] cursor-pointer"
+                        >
+                        <span className="size-4 translate-x-1 rounded-full bg-[var(--text)] transition group-data-checked:translate-x-6" />
+                    </Switch>
+                </div>
+
+                <div className="space-x-4">
+                    <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Create</button>
+                    <button onClick={handlePreview} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Preview</button>
+                    <button onClick={() => {setNewDrill(emptyDrill); setError("");}} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Clear</button>
+                </div>
+                
                 {error && <p className="text-[var(--danger)]">{error}</p>}
             </form>
+            <DrillModal preview={true}/>
         </ReactModal>
     )
 }

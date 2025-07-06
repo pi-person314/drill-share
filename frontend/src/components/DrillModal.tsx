@@ -1,5 +1,5 @@
 import ReactModal from "react-modal";
-import { FaThumbsUp, FaDownload } from 'react-icons/fa';
+import { FaThumbsUp, FaDownload, FaEdit, FaTrash } from 'react-icons/fa';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -81,7 +81,7 @@ export default function DrillModal({ preview } : { preview: boolean }) {
                 <div className="flex">
                     <h1 className="text-5xl font-medium">{selectedDrill.name}</h1>
                     <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
-                        {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : selectedDrill.usersLiked.includes(user) ? "cursor-pointer text-green-500" : "cursor-pointer hover:text-[var(--muted)]"}`}/>
+                        {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : selectedDrill.usersLiked.includes(user) ? "cursor-pointer text-[var(--success)]" : "cursor-pointer hover:text-[var(--muted)]"}`}/>
                     </button>
                 </div>
                 <div className="flex space-x-3 -mt-8">
@@ -105,12 +105,29 @@ export default function DrillModal({ preview } : { preview: boolean }) {
                 </div>}
                 <div className="flex justify-between items-center mt-8">
                     <p>Creator:<span className={`bg-[var(--accent)] ml-3 p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:text-[var(--muted)]"}`}>{selectedUsername}</span></p>
-                    <button 
-                        onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
-                        className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105"}`}
-                    >
-                        <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) ? "Unsave" : "Save"}
-                    </button>
+                    <div className="flex space-x-4">
+                        {user === selectedDrill.creator && !preview && <div className="flex space-x-4">
+                            <button 
+                                onClick={() => {}} 
+                                className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"
+                            >
+                                <FaEdit className="mr-2"/>Edit
+                            </button>
+                            <button 
+                                onClick={() => {}} 
+                                className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--danger)]"
+                            >
+                                <FaTrash className="mr-2"/>Delete
+                            </button>
+                        </div>}
+                        <button 
+                            onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
+                            className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
+                        >
+                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) ? "Unsave" : "Save"}
+                        </button>
+                    </div>
+                    
                 </div>
             </div>}
         </ReactModal>

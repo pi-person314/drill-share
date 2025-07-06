@@ -43,7 +43,7 @@ export default function Browse() {
         fetchDrills();
     }, [user, loading]);
     
-    if (loading || fetching) {
+    if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>

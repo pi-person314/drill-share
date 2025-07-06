@@ -1,6 +1,6 @@
 const dropdownStyles = {
     placeholder: (base: any) => ({...base, color: "var(--muted)"}),
-    control: (base: any) => ({...base, backgroundColor: "var(--secondary)"}),
+    control: (base: any) => ({...base, backgroundColor: "var(--secondary)", borderColor: "var(--text)"}),
     menu: (base: any) => ({...base, backgroundColor: "var(--secondary)"}),
     option: (base: any, state: any) => ({
         ...base, 
