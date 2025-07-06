@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
 
-export default function DrillModal() {
+export default function DrillModal({ preview } : { preview: boolean }) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
 
@@ -20,7 +20,7 @@ export default function DrillModal() {
                 likes: selectedDrill.likes + (add ? 1 : -1), 
                 usersLiked: add ? [...selectedDrill.usersLiked, user] : selectedDrill.usersLiked.filter(id => id != user)
             })
-        }); 
+        });
         if (res.ok) {
             setSelectedDrill({
                 ...selectedDrill,
@@ -79,9 +79,9 @@ export default function DrillModal() {
                 </div>
                 
                 <div className="flex">
-                    <h1 className="text-5xl">{selectedDrill.name}</h1>
-                    <button onClick={() => selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
-                        {selectedDrill.likes}<FaThumbsUp className={`ml-2 cursor-pointer ${selectedDrill.usersLiked.includes(user) ? "text-green-500" : "hover:text-[var(--muted)]"}`}/>
+                    <h1 className="text-5xl font-medium">{selectedDrill.name}</h1>
+                    <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
+                        {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : selectedDrill.usersLiked.includes(user) ? "cursor-pointer text-green-500" : "cursor-pointer hover:text-[var(--muted)]"}`}/>
                     </button>
                 </div>
                 <div className="flex space-x-3 -mt-8">
@@ -104,10 +104,10 @@ export default function DrillModal() {
                     </Slider>
                 </div>}
                 <div className="flex justify-between items-center mt-8">
-                    <p>Creator:<span className="bg-[var(--accent)] hover:text-[var(--muted)] cursor-pointer ml-3 p-3 rounded-lg">{selectedUsername}</span></p>
+                    <p>Creator:<span className={`bg-[var(--accent)] ml-3 p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:text-[var(--muted)]"}`}>{selectedUsername}</span></p>
                     <button 
-                        onClick={() => selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
-                        className="flex items-center bg-[var(--primary)] hover:scale-105 cursor-pointer p-3 rounded-lg"
+                        onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
+                        className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105"}`}
                     >
                         <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) ? "Unsave" : "Save"}
                     </button>

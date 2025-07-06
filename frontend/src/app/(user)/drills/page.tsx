@@ -1,4 +1,5 @@
 "use client";
+import CreateModal from "@/components/CreateModal";
 import DrillCard from "@/components/DrillCard";
 import DrillModal from "@/components/DrillModal";
 import { useAuth } from "@/context/auth";
@@ -17,6 +18,7 @@ export default function Drills() {
     const [ savedDrills, setSavedDrills ] = useState<DrillType[]>([]);
     const [ username, setUsername ] = useState("");
     const [ fetching, setFetching ] = useState(true);
+    const [ createOpen, setCreateOpen ] = useState(false);
 
     useEffect(() => {
         if (!user && !loading) router.replace("/");
@@ -71,21 +73,21 @@ export default function Drills() {
     }
 
     return (
-        <div className="flex-1 flex flex-col justify-evenly p-16 pt-0 overflow-y-auto">
+        <main className="flex-1 flex flex-col justify-evenly p-16 pt-0 overflow-y-auto">
             <div id="my-drills">
-                <h1 className="text-3xl text-center mt-16 mb-4">My Drills</h1>
+                <h1 className="text-3xl font-semibold text-center mt-16 mb-4">My Drills</h1>
                 <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     {createdDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={username} />
                     ))}
-                    <Link href="/drills#create">
+                    <button onClick={() => setCreateOpen(true)}>
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer h-60"/>
-                    </Link>
+                    </button>
                 </div>
             </div>
 
             <div id="saved-drills">
-                <h1 className="text-3xl text-center mt-16 mb-4">Saved Drills</h1>
+                <h1 className="text-3xl font-semibold text-center mt-16 mb-4">Saved Drills</h1>
                 {!!savedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     {savedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={username} />
@@ -100,7 +102,8 @@ export default function Drills() {
                 </div>}
             </div>
 
-            <DrillModal /> 
-        </div>
+            <DrillModal preview={false}/> 
+            <CreateModal open={createOpen} setOpen={setCreateOpen}/>
+        </main>
     )
 }

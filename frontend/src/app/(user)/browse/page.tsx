@@ -57,18 +57,18 @@ export default function Browse() {
                 <p className="text-3xl text-[var(--muted)] text-center">
                     No drills have been shared yet.<br/>
                     Become the first by creating your own{" "}
-                    <Link href="/drills#create" className="text-[var(--link)] underline">here!</Link>
+                    <Link href="/drills" className="text-[var(--link)] underline">here!</Link>
                 </p>
             </div>
         )
     }
 
     return (
-        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-16">
+        <main className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-16">
             {drills.map((drill, index) => (
                 <DrillCard key={index} drillInfo={drill} username={usernames[index]} />
             ))}
-            <DrillModal />
-        </div>
+            <DrillModal preview={false}/>
+        </main>
     )
 }

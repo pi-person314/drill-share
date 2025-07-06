@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
 import { FaUpload } from "react-icons/fa";
+import dropdownStyles from "@/styles/dropdown";
 
 export default function Register() {
     type UserInfo = {
@@ -56,11 +57,11 @@ export default function Register() {
     }
 
     const options = [
-        { value: "soccer", label: "Soccer" },
-        { value: "basketball", label: "Basketball" },
-        { value: "tennis", label: "Tennis" },
-        { value: "volleyball", label: "Volleyball" },
-        { value: "baseball", label: "Baseball" }
+        { value: "Soccer", label: "Soccer" },
+        { value: "Basketball", label: "Basketball" },
+        { value: "Tennis", label: "Tennis" },
+        { value: "Volleyball", label: "Volleyball" },
+        { value: "Baseball", label: "Baseball" }
     ];
 
     if (user) {
@@ -124,19 +125,7 @@ export default function Register() {
                             sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
                         })}
                         className="w-full" 
-                        styles={{
-                            placeholder: base => ({...base, color: "var(--muted)"}),
-                            control: base => ({...base, backgroundColor: "var(--secondary)"}),
-                            menu: base => ({...base, backgroundColor: "var(--secondary)"}),
-                            option: (base, state) => ({
-                                ...base, 
-                                backgroundColor: state.isFocused ? "var(--primary)" : "var(--secondary)", 
-                                color: "var(--text)",
-                                ":active": {backgroundColor: "var(--accent)"}
-                            }),
-                            multiValue: base => ({...base, backgroundColor: "var(--primary)"}),
-                            multiValueLabel: base => ({...base, color: "var(--text)"})
-                        }}
+                        styles={dropdownStyles}
                     />
                 </div>
 

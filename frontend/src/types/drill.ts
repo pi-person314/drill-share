@@ -1,5 +1,5 @@
 export type DrillType = {
-    _id: string;
+    _id?: string;
     name: string;
     description: string;
     creator: string;
