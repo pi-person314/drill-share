@@ -5,10 +5,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
+import { useState } from "react";
+import CreateModal from "./CreateModal";
 
-export default function DrillModal({ preview } : { preview: boolean }) {
+export default function DrillModal({ open, setOpen, preview } : { open?: boolean, setOpen?: (val: boolean) => void, preview: boolean }) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
+    const [ updateOpen, setUpdateOpen ] = useState(false);
 
     const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
@@ -37,7 +40,7 @@ export default function DrillModal({ preview } : { preview: boolean }) {
         }
     }
 
-    const handleSave = async ( add: boolean) => {
+    const handleSave = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
         const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
             method: "PUT",
@@ -61,21 +64,30 @@ export default function DrillModal({ preview } : { preview: boolean }) {
         }
     };
 
+    const handleDelete = async () => {
+        if (!selectedDrill) return;
+        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {method: "DELETE"});
+        if (res.ok) {
+            setDrills(drills.filter(drill => drill._id != selectedDrill._id));
+            setSelectedDrill(null);
+            setSelectedUsername(null);
+        }
+    }
+
     if (!user) return null;
 
     return (
-        // TODO: profile browsing, add alert when saved
+        // TODO: add alert when saved and deleted
         <ReactModal
-            isOpen={!!selectedDrill}
-            className="bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto"
-            overlayClassName="fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]"
+            isOpen={typeof open !== "undefined" ? open : !!selectedDrill}
+            className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
+            overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
             {selectedDrill && <div className="flex flex-col space-y-12 h-full">
                 <div className="flex justify-end mb-0">
-                    <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {
-                        setSelectedDrill(null);
-                        setSelectedUsername(null);
-                    }}>x</button>
+                    <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={
+                        setOpen ? () => setOpen(false) : () => {setSelectedDrill(null); setSelectedUsername(null)}
+                    }>x</button>
                 </div>
                 
                 <div className="flex">
@@ -104,17 +116,17 @@ export default function DrillModal({ preview } : { preview: boolean }) {
                     </Slider>
                 </div>}
                 <div className="flex justify-between items-center mt-8">
-                    <p>Creator:<span className={`bg-[var(--accent)] ml-3 p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:text-[var(--muted)]"}`}>{selectedUsername}</span></p>
+                    <p>Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg">{selectedUsername}</span></p>
                     <div className="flex space-x-4">
                         {user === selectedDrill.creator && !preview && <div className="flex space-x-4">
                             <button 
-                                onClick={() => {}} 
+                                onClick={() => setUpdateOpen(true)} 
                                 className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"
                             >
                                 <FaEdit className="mr-2"/>Edit
                             </button>
                             <button 
-                                onClick={() => {}} 
+                                onClick={handleDelete} 
                                 className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--danger)]"
                             >
                                 <FaTrash className="mr-2"/>Delete
@@ -124,12 +136,12 @@ export default function DrillModal({ preview } : { preview: boolean }) {
                             onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
                             className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
                         >
-                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) ? "Unsave" : "Save"}
+                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Unsave" : "Save"}
                         </button>
                     </div>
-                    
                 </div>
             </div>}
+            <CreateModal open={updateOpen} setOpen={setUpdateOpen} update={true} />
         </ReactModal>
     )
 }

@@ -109,8 +109,8 @@ export default function Drills() {
                 </div>}
             </div>
 
-            <DrillModal preview={false}/> 
-            <CreateModal open={createOpen} setOpen={setCreateOpen}/>
+            {!createOpen && <DrillModal preview={false}/>}
+            <CreateModal open={createOpen} setOpen={setCreateOpen} update={false}/>
         </main>
     )
 }

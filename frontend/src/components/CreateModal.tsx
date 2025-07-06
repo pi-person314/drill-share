@@ -4,17 +4,18 @@ import { useDrill } from "@/context/drill";
 import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
 import { Switch } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaUpload } from "react-icons/fa";
 import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
 
-export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (val: boolean) => void}) {
+export default function CreateModal({open, setOpen, update} : {open: boolean, setOpen: (val: boolean) => void, update: boolean}) {
     const { user, username } = useAuth();
-    const { drills, setDrills, setSelectedDrill, setSelectedUsername } = useDrill();
+    const { drills, setDrills, selectedDrill, setSelectedDrill, setSelectedUsername } = useDrill();
     const [ error, setError ] = useState("");
+    const [ previewOpen, setPreviewOpen ] = useState(false);
     const emptyDrill = {
         name: "",
         description: "",
@@ -79,29 +80,54 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
         }
     }
 
+    const handleUpdate = async () => {
+        if (!selectedDrill) return;
+        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newDrill)
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+            setOpen(false);
+            setDrills(drills.map(drill => drill._id === selectedDrill._id ? data.data : drill));
+            setSelectedDrill(data.data);
+        } else {
+            setError(data.message);
+        }
+    }
+
     const handlePreview = () => {
         if (newDrill.name && newDrill.description) {
             setSelectedDrill(newDrill);
             setSelectedUsername(username);
             setError("");
+            setPreviewOpen(true);
         }
         else setError("Please fill in all required fields.");
     }
+
+    useEffect(() => {
+        if (update && selectedDrill) setNewDrill(selectedDrill);
+    }, [update, selectedDrill]);
 
     return (
         <ReactModal
             isOpen={open}
             ariaHideApp={false}
             shouldFocusAfterRender={true}
-            className="bg-[var(--secondary)] rounded-2xl shadow-lg p-12 py-8 w-1/2 max-h-5/6 overflow-y-auto"
-            overlayClassName="fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]"
+            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg p-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
+            overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
-            <form onSubmit={e => {e.preventDefault(); handleCreate();}} className="flex flex-col h-full space-y-4">
+            <form onSubmit={e => {e.preventDefault(); update ? handleUpdate() : handleCreate();}} className="flex flex-col h-full space-y-4">
                 <div className="flex justify-end mb-0">
                     <button type="button" className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}>x</button>
                 </div>
 
-                <h1 className="text-5xl font-medium mb-8">New Drill</h1>
+                <h1 className="text-5xl font-medium mb-8">{update ? "Update Drill" : "New Drill"}</h1>
 
                 <div className="space-y-1">
                     <p>Title <span className="text-[var(--danger)]">*</span></p>
@@ -202,14 +228,15 @@ export default function CreateModal({open, setOpen} : {open: boolean, setOpen: (
                 </div>
 
                 <div className="space-x-4">
-                    <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Create</button>
+                    <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">{update ? "Update" : "Create"}</button>
                     <button onClick={handlePreview} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Preview</button>
                     <button onClick={() => {setNewDrill(emptyDrill); setError("");}} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Clear</button>
                 </div>
                 
                 {error && <p className="text-[var(--danger)]">{error}</p>}
             </form>
-            <DrillModal preview={true}/>
+            {update && previewOpen && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen}/>}
+            {!update && previewOpen && <DrillModal preview={true}/>}
         </ReactModal>
     )
 }

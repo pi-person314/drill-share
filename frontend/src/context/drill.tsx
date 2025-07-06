@@ -1,12 +1,10 @@
 "use client";
 import { DrillType } from "@/types/drill";
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 type DrillContextType = {
     drills: DrillType[];
     setDrills: (newDrills: DrillType[]) => void;
-    usernames: string[];
-    setUsernames: (newUsernames: string[]) => void;
     selectedDrill: DrillType | null;
     setSelectedDrill: (newDrill: DrillType | null) => void;
     selectedUsername: string | null;
@@ -16,8 +14,6 @@ type DrillContextType = {
 const DrillContext = createContext<DrillContextType>({
     drills: [],
     setDrills: () => {},
-    usernames: [],
-    setUsernames: () => {},
     selectedDrill: null,
     setSelectedDrill: () => {},
     selectedUsername: null,
@@ -26,13 +22,12 @@ const DrillContext = createContext<DrillContextType>({
 
 export function DrillProvider({ children }: { children: ReactNode }) {
     const [ drills, setDrills ] = useState<DrillType[]>([]);
-    const [ usernames, setUsernames ] = useState<string[]>([]);
     const [ selectedDrill, setSelectedDrill ] = useState<DrillType | null>(null);
     const [ selectedUsername, setSelectedUsername ] = useState<string | null>(null);
 
     return (
         <DrillContext.Provider value={{ 
-            drills, setDrills, usernames, setUsernames, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername 
+            drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername 
         }}>
             {children}
         </DrillContext.Provider>

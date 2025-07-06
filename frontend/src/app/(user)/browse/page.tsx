@@ -10,7 +10,8 @@ import { useDrill } from "@/context/drill";
 
 export default function Browse() {
     const { user, loading } = useAuth();
-    const { drills, setDrills, usernames, setUsernames } = useDrill();
+    const { drills, setDrills } = useDrill();
+    const [ usernames, setUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const router = useRouter();
 
