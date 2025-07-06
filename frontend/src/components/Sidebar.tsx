@@ -23,7 +23,7 @@ export default function Sidebar() {
                     setUserInfo({
                         username: data.data.username,
                         bio: data.data.bio,
-                        photo: data.data.photo || "./images/default.png"
+                        photo: data.data.photo || "./images/defaultPhoto.png"
                     });
                 } else {
                     setUserInfo({

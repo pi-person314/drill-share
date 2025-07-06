@@ -222,7 +222,7 @@ export default function CreateModal({open, setOpen, update} : {open: boolean, se
                         checked={newDrill.public}
                         onChange={() => setNewDrill({...newDrill, public: !newDrill.public})}
                         className="group inline-flex h-6 w-11 items-center rounded-full bg-[var(--muted)] transition data-checked:bg-[var(--primary)] cursor-pointer"
-                        >
+                    >
                         <span className="size-4 translate-x-1 rounded-full bg-[var(--text)] transition group-data-checked:translate-x-6" />
                     </Switch>
                 </div>
@@ -235,8 +235,8 @@ export default function CreateModal({open, setOpen, update} : {open: boolean, se
                 
                 {error && <p className="text-[var(--danger)]">{error}</p>}
             </form>
-            {update && previewOpen && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen}/>}
-            {!update && previewOpen && <DrillModal preview={true}/>}
+            {update && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen}/>}
+            {!update && <DrillModal preview={true}/>}
         </ReactModal>
     )
 }

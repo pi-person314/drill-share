@@ -77,9 +77,9 @@ export default function DrillModal({ open, setOpen, preview } : { open?: boolean
     if (!user) return null;
 
     return (
-        // TODO: add alert when saved and deleted
+        // TODO: add alerts for create, update, delete, and save
         <ReactModal
-            isOpen={typeof open !== "undefined" ? open : !!selectedDrill}
+            isOpen={open ?? !!selectedDrill}
             className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
             overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
