@@ -11,7 +11,9 @@ import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
 
-export default function CreateModal({open, setOpen, update} : {open: boolean, setOpen: (val: boolean) => void, update: boolean}) {
+export default function CreateModal({update, open, setOpen, setAlert} : {
+    update: boolean, open: boolean, setOpen: (val: boolean) => void, setAlert?: (val: string) => void
+}) {
     const { user, username } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, setSelectedUsername } = useDrill();
     const [ error, setError ] = useState("");
@@ -73,6 +75,7 @@ export default function CreateModal({open, setOpen, update} : {open: boolean, se
 
         const data = await res.json();
         if (res.ok) {
+            if (setAlert) setAlert("Created!");
             setOpen(false);
             setDrills([...drills, data.data]);
         } else {
@@ -92,6 +95,7 @@ export default function CreateModal({open, setOpen, update} : {open: boolean, se
 
         const data = await res.json();
         if (res.ok) {
+            if (setAlert) setAlert("Updated!");
             setOpen(false);
             setDrills(drills.map(drill => drill._id === selectedDrill._id ? data.data : drill));
             setSelectedDrill(data.data);

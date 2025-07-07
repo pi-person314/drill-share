@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
+import Alert from "@mui/material/Alert";
 
 export default function Drills() {
     const { user, username, loading } = useAuth();
@@ -19,6 +20,7 @@ export default function Drills() {
     const [ savedUsernames, setSavedUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ createOpen, setCreateOpen ] = useState(false);
+    const [ alert, setAlert ] = useState("");
 
     const getUsername = async (uid : string) => {
         const res = await fetch(`http://localhost:5000/api/users/${uid}`);
@@ -85,7 +87,7 @@ export default function Drills() {
                 <h1 className="text-3xl font-semibold text-center mt-16 mb-4">My Drills</h1>
                 <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     <button onClick={() => setCreateOpen(true)}>
-                        <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer h-60"/>
+                        <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer"/>
                     </button>
                     {createdDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={username} />
@@ -109,8 +111,13 @@ export default function Drills() {
                 </div>}
             </div>
 
-            <DrillModal preview={false}/>
-            <CreateModal open={createOpen} setOpen={setCreateOpen} update={false}/>
+            <DrillModal preview={false} setAlert={setAlert}/>
+            <CreateModal update={false} open={createOpen} setOpen={setCreateOpen} setAlert={setAlert}/>
+            {alert && <div className="fixed top-4 left-1/2 -translate-x-1/2 z-10">
+                <Alert severity="success" variant="filled" onClose={() => setAlert("")}
+                    color={alert === "Deleted!" ? "error" : alert === "Removed!" ? "warning" : alert === "Updated!" ? "info" : "success"}
+                >{alert}</Alert>
+            </div>}
         </main>
     )
 }

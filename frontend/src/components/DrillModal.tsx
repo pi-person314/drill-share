@@ -8,7 +8,9 @@ import { useDrill } from "@/context/drill";
 import { useState } from "react";
 import CreateModal from "./CreateModal";
 
-export default function DrillModal({ open, setOpen, preview } : { open?: boolean, setOpen?: (val: boolean) => void, preview: boolean }) {
+export default function DrillModal({ preview, open, setOpen, setAlert } : { 
+    preview: boolean, open?: boolean, setOpen?: (val: boolean) => void, setAlert?: (val: string) => void
+}) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
     const [ updateOpen, setUpdateOpen ] = useState(false);
@@ -51,6 +53,7 @@ export default function DrillModal({ open, setOpen, preview } : { open?: boolean
             })
         });
         if (res.ok) {
+            if (setAlert) setAlert(add ? "Saved!" : "Removed!");
             setSelectedDrill({
                 ...selectedDrill,
                 usersSaved: add ? [...selectedDrill.usersSaved, user] : selectedDrill.usersSaved.filter(id => id != user)
@@ -68,6 +71,7 @@ export default function DrillModal({ open, setOpen, preview } : { open?: boolean
         if (!selectedDrill) return;
         const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {method: "DELETE"});
         if (res.ok) {
+            if (setAlert) setAlert("Deleted!");
             setDrills(drills.filter(drill => drill._id != selectedDrill._id));
             setSelectedDrill(null);
             setSelectedUsername(null);
@@ -77,7 +81,6 @@ export default function DrillModal({ open, setOpen, preview } : { open?: boolean
     if (!user) return null;
 
     return (
-        // TODO: add alerts for create, update, delete, and save
         <ReactModal
             isOpen={open ?? !!selectedDrill}
             className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
@@ -136,12 +139,12 @@ export default function DrillModal({ open, setOpen, preview } : { open?: boolean
                             onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
                             className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
                         >
-                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Unsave" : "Save"}
+                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Remove" : "Save"}
                         </button>
                     </div>
                 </div>
             </div>}
-            <CreateModal open={updateOpen} setOpen={setUpdateOpen} update={true} />
+            <CreateModal update={true} open={updateOpen} setOpen={setUpdateOpen} setAlert={setAlert}/>
         </ReactModal>
     )
 }
