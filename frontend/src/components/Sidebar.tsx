@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { FaHome, FaSearch, FaBasketballBall, FaDumbbell } from "react-icons/fa";
 
 export default function Sidebar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const pathname = usePathname();
     const [userInfo, setUserInfo] = useState<{username: string, bio: string, photo: string}>({
         username: "Guest",
@@ -40,7 +40,7 @@ export default function Sidebar() {
     if (!user) return null;
 
     return (
-        <aside className="flex flex-col w-80 h-full bg-[var(--primary)] justify-between items-center py-10 px-6">
+        <aside className="flex flex-col w-80 h-full bg-[var(--primary)] justify-between items-center p-8 pt-16 rounded-2xl">
             <Link href="/dashboard" className={`flex items-center text-3xl font-semibold hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
                 <FaHome className="mr-2"/>
                 Dashboard
@@ -71,13 +71,17 @@ export default function Sidebar() {
                     </div>}
                 </div>
             </div>
-            <Link href="/profile" className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl hover:scale-105">
+            <div className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl">
                 <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
                 <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
                     <h1 className="text-xl font-medium w-full truncate">{userInfo.username}</h1>
-                    {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-2/3 overflow-y-auto">{userInfo.bio}</p>}
+                    {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-1/2 overflow-y-auto">{userInfo.bio}</p>}
+                    <div className="flex space-x-2 text-sm mt-1">
+                        <Link href="/profile" className="underline hover:text-[var(--muted)]">Edit</Link>
+                        <Link href="/" onClick={logout} className="underline hover:text-[var(--muted)]">Logout</Link>
+                    </div>
                 </div>
-            </Link>
+            </div>
         </aside>
     )
 }

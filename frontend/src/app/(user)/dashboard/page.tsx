@@ -12,7 +12,7 @@ export default function Dashboard() {
         if (!user && !loading) router.replace("/");
     }, [user, loading]);
     
-    if (loading) {
+    if (!user || loading) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
