@@ -10,10 +10,9 @@ import { FaUpload } from "react-icons/fa";
 import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
+import { toast, ToastContainer } from "react-toastify";
 
-export default function CreateModal({update, open, setOpen, setAlert} : {
-    update: boolean, open: boolean, setOpen: (val: boolean) => void, setAlert?: (val: string) => void
-}) {
+export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {
     const { user, username } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, setSelectedUsername } = useDrill();
     const [ error, setError ] = useState("");
@@ -75,9 +74,10 @@ export default function CreateModal({update, open, setOpen, setAlert} : {
 
         const data = await res.json();
         if (res.ok) {
-            if (setAlert) setAlert("Created!");
+            toast.success("Created!");
             setOpen(false);
             setDrills([...drills, data.data]);
+            setError("");
         } else {
             setError(data.message);
         }
@@ -95,10 +95,11 @@ export default function CreateModal({update, open, setOpen, setAlert} : {
 
         const data = await res.json();
         if (res.ok) {
-            if (setAlert) setAlert("Updated!");
+            toast.info("Updated!");
             setOpen(false);
             setDrills(drills.map(drill => drill._id === selectedDrill._id ? data.data : drill));
             setSelectedDrill(data.data);
+            setError("");
         } else {
             setError(data.message);
         }

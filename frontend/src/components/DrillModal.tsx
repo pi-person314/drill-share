@@ -7,10 +7,9 @@ import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
 import { useState } from "react";
 import CreateModal from "./CreateModal";
+import { toast, ToastContainer } from "react-toastify";
 
-export default function DrillModal({ preview, open, setOpen, setAlert } : { 
-    preview: boolean, open?: boolean, setOpen?: (val: boolean) => void, setAlert?: (val: string) => void
-}) {
+export default function DrillModal({ preview, open, setOpen } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void }) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
     const [ updateOpen, setUpdateOpen ] = useState(false);
@@ -53,7 +52,8 @@ export default function DrillModal({ preview, open, setOpen, setAlert } : {
             })
         });
         if (res.ok) {
-            if (setAlert) setAlert(add ? "Saved!" : "Removed!");
+            if (add) toast.success("Saved!");
+            else toast.warning("Removed!");
             setSelectedDrill({
                 ...selectedDrill,
                 usersSaved: add ? [...selectedDrill.usersSaved, user] : selectedDrill.usersSaved.filter(id => id != user)
@@ -71,7 +71,7 @@ export default function DrillModal({ preview, open, setOpen, setAlert } : {
         if (!selectedDrill) return;
         const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {method: "DELETE"});
         if (res.ok) {
-            if (setAlert) setAlert("Deleted!");
+            toast.error("Deleted!");
             setDrills(drills.filter(drill => drill._id != selectedDrill._id));
             setSelectedDrill(null);
             setSelectedUsername(null);
@@ -144,7 +144,7 @@ export default function DrillModal({ preview, open, setOpen, setAlert } : {
                     </div>
                 </div>
             </div>}
-            <CreateModal update={true} open={updateOpen} setOpen={setUpdateOpen} setAlert={setAlert}/>
+            <CreateModal update={true} open={updateOpen} setOpen={setUpdateOpen} />
         </ReactModal>
     )
 }

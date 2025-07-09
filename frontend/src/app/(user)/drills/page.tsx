@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
-import Alert from "@mui/material/Alert";
 
 export default function Drills() {
     const { user, username, loading } = useAuth();
@@ -20,7 +19,6 @@ export default function Drills() {
     const [ savedUsernames, setSavedUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ createOpen, setCreateOpen ] = useState(false);
-    const [ alert, setAlert ] = useState("");
 
     const getUsername = async (uid : string) => {
         const res = await fetch(`http://localhost:5000/api/users/${uid}`);
@@ -111,13 +109,8 @@ export default function Drills() {
                 </div>}
             </div>
 
-            <DrillModal preview={false} setAlert={setAlert}/>
-            <CreateModal update={false} open={createOpen} setOpen={setCreateOpen} setAlert={setAlert}/>
-            {alert && <div className="fixed top-4 left-1/2 -translate-x-1/2 z-10">
-                <Alert severity="success" variant="filled" onClose={() => setAlert("")}
-                    color={alert === "Deleted!" ? "error" : alert === "Removed!" ? "warning" : alert === "Updated!" ? "info" : "success"}
-                >{alert}</Alert>
-            </div>}
+            <DrillModal preview={false}/>
+            <CreateModal update={false} open={createOpen} setOpen={setCreateOpen}/>
         </main>
     )
 }
