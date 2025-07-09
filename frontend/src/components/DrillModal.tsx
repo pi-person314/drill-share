@@ -7,7 +7,7 @@ import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
 import { useState } from "react";
 import CreateModal from "./CreateModal";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function DrillModal({ preview, open, setOpen } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void }) {
     const { user } = useAuth();

@@ -1,10 +1,10 @@
 const dropdownStyles = {
-    placeholder: (base: any) => ({...base, color: "var(--muted)"}),
+    placeholder: (base: any) => ({...base, color: "var(--muted)",}),
     control: (base: any) => ({...base, backgroundColor: "var(--secondary)", borderColor: "var(--text)"}),
     menu: (base: any) => ({...base, backgroundColor: "var(--secondary)"}),
     option: (base: any, state: any) => ({
         ...base, 
-        backgroundColor: state.isFocused ? "var(--primary)" : "var(--secondary)", 
+        backgroundColor: state.isFocused ? "var(--accent)" : "var(--secondary)", 
         color: "var(--text)",
         ":active": {backgroundColor: "var(--accent)"}
     }),

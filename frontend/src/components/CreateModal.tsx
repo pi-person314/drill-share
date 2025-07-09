@@ -10,7 +10,7 @@ import { FaUpload } from "react-icons/fa";
 import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {
     const { user, username } = useAuth();
@@ -188,6 +188,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                         <input 
                             type="number"
                             min={0}
+                            max={60}
                             value={newDrill.time}
                             onChange={e => setNewDrill({...newDrill, time: Number(e.target.value)})}
                             className="w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border"
