@@ -187,10 +187,10 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                         <p>Time <span className="text-[var(--muted)]">(minutes)</span></p>
                         <input 
                             type="number"
-                            min={0}
-                            max={60}
-                            value={newDrill.time}
-                            onChange={e => setNewDrill({...newDrill, time: Number(e.target.value)})}
+                            min={1}
+                            max={9999}
+                            value={newDrill.time > 0 ? newDrill.time : ""}
+                            onChange={e => setNewDrill({...newDrill, time: e.target.value === "" ? 0 : Number(e.target.value)})}
                             className="w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border"
                         />
                     </div>

@@ -15,7 +15,9 @@ export default function Browse() {
     const { drills, setDrills } = useDrill();
     const [ usernames, setUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
-    const [ filters, setFilters ] = useState<{sport: string | null, difficulty: string | null, length: number[] | null}>({sport: null, difficulty: null, length: null});
+    const [ filters, setFilters ] = useState<{sport: string | null, difficulty: string | null, time: number[] | null, query: string | null}>({
+        sport: null, difficulty: null, time: null, query: null
+    });
     const router = useRouter();
 
     const sportsOptions = [
@@ -34,13 +36,16 @@ export default function Browse() {
         { value: "Pro", label: "Pro" }
     ];
 
-    const lengthOptions = [
+    const timeOptions = [
         { value: null, label: "All Lengths"},
         { value: [1, 2], label: "1-2 min" },
         { value: [2, 5], label: "2-5 min" },
         { value: [5, 10], label: "5-10 min" },
-        { value: [10, 30], label: "10-30 min" },
-        { value: [30, 60], label: ">30 min" },
+        { value: [10, 20], label: "10-20 min" },
+        { value: [20, 30], label: "20-30 min" },
+        { value: [30, 60], label: "30-60 min" },
+        { value: [60, 120], label: "1-2 hrs" },
+        { value: [120, 9999], label: "2+ hrs" }
     ]
 
     const getUsername = async ( uid: string ) => {
@@ -51,6 +56,30 @@ export default function Browse() {
         } else {
             return "Deleted User";
         }
+    }
+
+    const arraysEqual = (a: number[] | null, b: number[] | null): boolean => {
+        return a !== null && b !== null && a[0] === b[0] && a[1] === b[1];
+    };
+
+    const editDistance = (a: string, b: string): number => {
+        a = a.toLowerCase(); 
+        b = b.toLowerCase();
+        const n = a.length;
+        const m = b.length;
+        const dp = Array.from({length: n+1}, () => Array(m+1).fill(0));
+
+        for (let i=0; i<=n; i++) dp[i][0] = i;
+        for (let j=0; j<=m; j++) dp[0][j] = j;
+        
+        for (let i=1; i<=n; i++) {
+            for (let j=1; j<=m; j++) {
+                if (a[i-1] === b[j-1]) dp[i][j] = dp[i-1][j-1];
+                else dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1;
+            }
+        }
+        
+        return dp[n][m] / Math.max(n, m);
     }
 
     useEffect(() => {
@@ -81,7 +110,8 @@ export default function Browse() {
                 const filteredDrills = data.data.filter((drill : DrillType) => (
                     (!filters.sport || drill.sports.includes(filters.sport)) && 
                     (!filters.difficulty || drill.difficulty === filters.difficulty) &&
-                    (!filters.length || drill.time >= filters.length[0] && drill.time <= filters.length[1])
+                    (!filters.time || drill.time >= filters.time[0] && drill.time <= filters.time[1]) &&  
+                    (!filters.query || editDistance(drill.name, filters.query) <= 0.3)
                 ));
                 const filteredUsernames = await Promise.all(
                     filteredDrills.map(async (drill: DrillType) => await getUsername(drill.creator))
@@ -94,7 +124,7 @@ export default function Browse() {
         filterDrills();
     }, [filters])
     
-    if (!user || loading || fetching) {
+    if (!user || loading) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
@@ -123,35 +153,39 @@ export default function Browse() {
                         className="w-1/4 min-w-44 max-w-80"
                     />
                     <Select 
-                        options={lengthOptions}
+                        options={timeOptions}
                         placeholder="All Lengths"
-                        value={filters.length ? lengthOptions.find(option => option && option.value && filters.length && option.value[0] === filters.length[0] && option.value[1] === filters.length[1]) : null}
-                        onChange={selected => setFilters({...filters, length: selected ? selected.value : null})}
+                        value={filters.time ? timeOptions.find(option => arraysEqual(option.value, filters.time)) : null}
+                        onChange={selected => setFilters({...filters, time: selected ? selected.value : null})}
                         styles={dropdownStyles}
                         className="w-1/4 min-w-44 max-w-80"
                     />
                 </div>
                 
-                {/* TODO: make search functional */}
                 <input 
                     placeholder="Search"
-                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-100 h-[38px] border"
+                    value={filters.query || ""}
+                    onChange={e => setFilters({...filters, query: e.target.value || null})}
+                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-120 h-[38px] border"
                 />
             </header>
 
-            {!!drills.length && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20">
+            {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20">
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
                     <DrillCard key={index} drillInfo={drill} username={usernames[index]} />
                 ))}
                 <DrillModal preview={false}/>
             </main>}
-            {!drills.length && <main className="flex-1 flex items-center justify-center">
+            {!drills.length && !fetching && <main className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)] text-center">
-                    No drills have been shared with these filters yet.<br/>
-                    Become the first by creating your own{" "}
+                    No shared drills match these filters yet.<br/>
+                    Create your own{" "}
                     <Link href="/drills" className="text-[var(--link)] underline">here!</Link>
                 </p>
             </main>}
+            {fetching && <div className="flex-1 flex items-center justify-center">
+                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+            </div>}
         </div>
     )
 }
