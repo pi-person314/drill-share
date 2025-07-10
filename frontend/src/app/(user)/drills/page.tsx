@@ -4,11 +4,13 @@ import DrillCard from "@/components/DrillCard";
 import DrillModal from "@/components/DrillModal";
 import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
+import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FaCirclePlus } from "react-icons/fa6";
+import { useEffect, useMemo, useState } from "react";
+import { FaArrowDownUpAcrossLine, FaCirclePlus } from "react-icons/fa6";
+import Select from "react-select";
 
 export default function Drills() {
     const { user, username, loading } = useAuth();
@@ -19,6 +21,23 @@ export default function Drills() {
     const [ savedUsernames, setSavedUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ createOpen, setCreateOpen ] = useState(false);
+    const [ mySort, setMySort ] = useState("created");
+    const [ myReverse, setMyReverse ] = useState(false);
+
+    const mySortOptions = [
+        { value: "created", label: `${myReverse ? "First" : "Last"} Created` },
+        { value: "updated", label: `${myReverse ? "First" : "Last"} Updated` },
+        { value: "likes", label: `${myReverse ? "Least" : "Most"} Likes` },
+        { value: "alpha", label: `${myReverse ? "Reverse" : ""} Alphabetical` }
+    ];
+
+    // TODO: implement these sorts for saved drills
+    const savedSortOptions = [
+        { value: "opened", label: `${myReverse ? "First" : "Last"} Opened` },
+        { value: "creator", label: `Created by ${myReverse ? "Others" : "Me"}` },
+        { value: "likes", label: `${myReverse ? "Least" : "Most"} Likes` },
+        { value: "alpha", label: `${myReverse ? "Reverse" : ""} Alphabetical` }
+    ];
 
     const getUsername = async (uid : string) => {
         const res = await fetch(`http://localhost:5000/api/users/${uid}`);
@@ -69,7 +88,22 @@ export default function Drills() {
             }
         }
         fetchDrills();
-    }, [drills])
+    }, [drills]);
+
+    const sortedCreatedDrills = useMemo(() => {
+        const sorted = [...createdDrills];
+
+        if (mySort === "created") sorted.sort((drill1, drill2) => 
+            (myReverse ? -1 : 1) * (new Date(drill2.createdAt).getTime() - new Date(drill1.createdAt).getTime())
+        );
+        else if (mySort === "updated") sorted.sort((drill1, drill2) => 
+            (myReverse ? -1 : 1) * (new Date(drill2.updatedAt).getTime() - new Date(drill1.updatedAt).getTime())
+        );
+        else if (mySort === "likes") sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * (drill2.likes - drill1.likes));
+        else sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * drill1.name.toLowerCase().localeCompare(drill2.name.toLowerCase()));
+        
+        return sorted;
+    }, [createdDrills, mySort, myReverse]);
         
     if (!user || loading || fetching) {
         return (
@@ -81,13 +115,24 @@ export default function Drills() {
 
     return (
         <main className="flex-1 flex flex-col justify-evenly p-16 pt-0 overflow-y-auto">
-            <div id="my-drills">
-                <h1 className="text-3xl font-semibold text-center mt-16 mb-4">My Drills</h1>
+            <div id="my-drills" className="space-y-6">
+                <h1 className="text-3xl font-semibold text-center mt-16">My Drills</h1>
+                <div className="flex justify-center items-center justify-self-center space-x-4">
+                    <p>Sort By:</p>
+                    <Select 
+                        options={mySortOptions}
+                        value={mySortOptions.find(option => option.value === mySort)}
+                        onChange={selected => setMySort(selected ? selected.value : "created")}
+                        styles={dropdownStyles}
+                        className="w-60"
+                    />
+                    <FaArrowDownUpAcrossLine onClick={() => setMyReverse(!myReverse)} className="text-xl hover:text-[var(--muted)] cursor-pointer"/>
+                </div>
                 <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     <button onClick={() => setCreateOpen(true)}>
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer"/>
                     </button>
-                    {createdDrills.map((drill, index) => (
+                    {sortedCreatedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={username} />
                     ))}
                 </div>

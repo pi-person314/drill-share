@@ -11,4 +11,6 @@ export type DrillType = {
     sports: string[];
     difficulty: string;
     likes: number;
+    createdAt: string;
+    updatedAt: string;
 };

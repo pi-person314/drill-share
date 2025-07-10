@@ -28,7 +28,9 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         time: 0,
         sports: [],
         difficulty: "",
-        likes: 0
+        likes: 0,
+        createdAt: "",
+        updatedAt: ""
     }
     const [ newDrill, setNewDrill ] = useState<DrillType>(emptyDrill);
 
@@ -53,12 +55,18 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         onDrop: (acceptedFiles) => {
             acceptedFiles = acceptedFiles.slice(0, 5 - newDrill.media.length);
             acceptedFiles.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const res = reader.result as string;
-                    setNewDrill(prev => ({...prev, media: [...prev.media, res]}));
-                };
-                reader.readAsDataURL(file);
+                if (file.size > 5 * 1024 * 1024) {
+                    setError("File too large.");
+                } else {
+                    setError("");
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const res = reader.result as string;
+                        setNewDrill(prev => ({...prev, media: [...prev.media, res]}));
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
             });
         }
     });
@@ -77,6 +85,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             toast.success("Created!");
             setOpen(false);
             setDrills([...drills, data.data]);
+            setNewDrill(emptyDrill);
             setError("");
         } else {
             setError(data.message);
