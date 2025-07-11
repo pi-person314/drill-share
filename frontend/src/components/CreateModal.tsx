@@ -94,7 +94,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
     const handleUpdate = async () => {
         if (!selectedDrill) return;
-        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+        const res = await fetch(`http://localhost:5000/api/drills/info/${selectedDrill._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

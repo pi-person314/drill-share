@@ -23,6 +23,8 @@ export default function Drills() {
     const [ createOpen, setCreateOpen ] = useState(false);
     const [ mySort, setMySort ] = useState("created");
     const [ myReverse, setMyReverse ] = useState(false);
+    const [ savedSort, setSavedSort ] = useState("likes");
+    const [ savedReverse, setSavedReverse ] = useState(false);
 
     const mySortOptions = [
         { value: "created", label: `${myReverse ? "First" : "Last"} Created` },
@@ -31,12 +33,11 @@ export default function Drills() {
         { value: "alpha", label: `${myReverse ? "Reverse" : ""} Alphabetical` }
     ];
 
-    // TODO: implement these sorts for saved drills
     const savedSortOptions = [
-        { value: "opened", label: `${myReverse ? "First" : "Last"} Opened` },
-        { value: "creator", label: `Created by ${myReverse ? "Others" : "Me"}` },
-        { value: "likes", label: `${myReverse ? "Least" : "Most"} Likes` },
-        { value: "alpha", label: `${myReverse ? "Reverse" : ""} Alphabetical` }
+        { value: "likes", label: `${savedReverse ? "Least" : "Most"} Likes` },
+        { value: "difficulty", label: `${savedReverse ? "Hardest" : "Easiest"} Difficulty` },
+        { value: "time", label: `${savedReverse ? "Longest" : "Shortest"} Time` },
+        { value: "alpha", label: `${savedReverse ? "Reverse" : ""} Alphabetical` }
     ];
 
     const getUsername = async (uid : string) => {
@@ -104,7 +105,26 @@ export default function Drills() {
         
         return sorted;
     }, [createdDrills, mySort, myReverse]);
+
+    const sortedSavedDrills = useMemo(() => {
+        const sorted = [...savedDrills];
+
+        if (savedSort === "difficulty") {
+            const filtered = sorted.filter(drill => drill.difficulty !== "");
+            filtered.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill2.difficulty.localeCompare(drill1.difficulty)));
+            return filtered;
+        }
+        else if (savedSort === "time") {
+            const filtered = sorted.filter(drill => drill.time > 0);
+            filtered.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.time - drill2.time));
+            return filtered;
+        }
+        else if (savedSort === "likes") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill2.likes - drill1.likes));
+        else sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * drill1.name.toLowerCase().localeCompare(drill2.name.toLowerCase()));
         
+        return sorted;
+    }, [savedDrills, savedSort, savedReverse]);
+
     if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
@@ -116,7 +136,7 @@ export default function Drills() {
     return (
         <main className="flex-1 flex flex-col justify-evenly p-16 pt-0 overflow-y-auto">
             <div id="my-drills" className="space-y-6">
-                <h1 className="text-3xl font-semibold text-center mt-16">My Drills</h1>
+                <h1 className="text-3xl font-semibold text-center mt-16 mb-4">My Drills</h1>
                 <div className="flex justify-center items-center justify-self-center space-x-4">
                     <p>Sort By:</p>
                     <Select 
@@ -138,10 +158,21 @@ export default function Drills() {
                 </div>
             </div>
 
-            <div id="saved-drills">
+            <div id="saved-drills" className="space-y-6">
                 <h1 className="text-3xl font-semibold text-center mt-16 mb-4">Saved Drills</h1>
+                <div className="flex justify-center items-center justify-self-center space-x-4">
+                    <p>Sort By:</p>
+                    <Select 
+                        options={savedSortOptions}
+                        value={savedSortOptions.find(option => option.value === savedSort)}
+                        onChange={selected => setSavedSort(selected ? selected.value : "likes")}
+                        styles={dropdownStyles}
+                        className="w-60"
+                    />
+                    <FaArrowDownUpAcrossLine onClick={() => setSavedReverse(!savedReverse)} className="text-xl hover:text-[var(--muted)] cursor-pointer"/>
+                </div>
                 {!!savedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
-                    {savedDrills.map((drill, index) => (
+                    {sortedSavedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={savedUsernames[index]} />
                     ))}
                 </div>}

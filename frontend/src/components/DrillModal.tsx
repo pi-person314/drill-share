@@ -16,7 +16,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
-        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+        const res = await fetch(`http://localhost:5000/api/drills/interactions/${selectedDrill._id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -43,7 +43,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleSave = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
-        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {
+        const res = await fetch(`http://localhost:5000/api/drills/interactions/${selectedDrill._id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({

@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/info/:id", async (req, res) => {
     const id = req.params.id;
     const newData = req.body;
     if (!newData.name || !newData.description || !newData.creator) {
@@ -97,6 +97,25 @@ router.put("/:id", async (req, res) => {
         await Drill.findByIdAndUpdate(id, newData);
         
         res.status(200).json({data: newData, message: "Drill updated!"});
+    } catch (error) {
+        res.status(500).json({message: "Server Error"});
+        console.log(error);
+    }
+});
+
+router.put("/interactions/:id", async (req, res) => {
+    const id = req.params.id;
+    const { usersLiked, usersSaved, likes } = req.body;
+
+    try {
+        const drill = await Drill.findById(id);
+        if (!drill) {
+            return res.status(404).json({message: "Drill not found."});
+        }
+
+        await Drill.findByIdAndUpdate(id, { $set: { usersLiked, usersSaved, likes } }, { timestamps: false });
+        
+        res.status(200).json({data: {usersLiked, usersSaved, likes}, message: "Drill updated!"});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
         console.log(error);
