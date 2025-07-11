@@ -80,12 +80,13 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     });
 
     const handleCreate = async () => {
+        const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
         const res = await fetch("http://localhost:5000/api/drills", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newDrill)
+            body: JSON.stringify(drillToSubmit)
         });
 
         const data = await res.json();
@@ -102,12 +103,13 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
     const handleUpdate = async () => {
         if (!selectedDrill) return;
+        const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
         const res = await fetch(`http://localhost:5000/api/drills/info/${selectedDrill._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newDrill)
+            body: JSON.stringify(drillToSubmit)
         });
 
         const data = await res.json();

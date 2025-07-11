@@ -22,6 +22,7 @@ export default function Browse() {
 
     const sportsOptions = [
         { value: null, label: "Any Sport"},
+        { value: "General", label: "General" },
         { value: "Soccer", label: "Soccer" },
         { value: "Basketball", label: "Basketball" },
         { value: "Tennis", label: "Tennis" },
