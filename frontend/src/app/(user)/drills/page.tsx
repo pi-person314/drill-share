@@ -23,7 +23,7 @@ export default function Drills() {
     const [ createOpen, setCreateOpen ] = useState(false);
     const [ mySort, setMySort ] = useState("created");
     const [ myReverse, setMyReverse ] = useState(false);
-    const [ savedSort, setSavedSort ] = useState("likes");
+    const [ savedSort, setSavedSort ] = useState("difficulty");
     const [ savedReverse, setSavedReverse ] = useState(false);
 
     const mySortOptions = [
@@ -34,9 +34,9 @@ export default function Drills() {
     ];
 
     const savedSortOptions = [
-        { value: "likes", label: `${savedReverse ? "Least" : "Most"} Likes` },
         { value: "difficulty", label: `${savedReverse ? "Hardest" : "Easiest"} Difficulty` },
         { value: "time", label: `${savedReverse ? "Longest" : "Shortest"} Time` },
+        { value: "likes", label: `${savedReverse ? "Least" : "Most"} Likes` },
         { value: "alpha", label: `${savedReverse ? "Reverse" : ""} Alphabetical` }
     ];
 
@@ -94,14 +94,10 @@ export default function Drills() {
     const sortedCreatedDrills = useMemo(() => {
         const sorted = [...createdDrills];
 
-        if (mySort === "created") sorted.sort((drill1, drill2) => 
-            (myReverse ? -1 : 1) * (new Date(drill2.createdAt).getTime() - new Date(drill1.createdAt).getTime())
-        );
-        else if (mySort === "updated") sorted.sort((drill1, drill2) => 
-            (myReverse ? -1 : 1) * (new Date(drill2.updatedAt).getTime() - new Date(drill1.updatedAt).getTime())
-        );
+        if (mySort === "created") sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * (new Date(drill2.createdAt).getTime() - new Date(drill1.createdAt).getTime()));
+        else if (mySort === "updated") sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * (new Date(drill2.updatedAt).getTime() - new Date(drill1.updatedAt).getTime()));
         else if (mySort === "likes") sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * (drill2.likes - drill1.likes));
-        else sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * drill1.name.toLowerCase().localeCompare(drill2.name.toLowerCase()));
+        else sorted.sort((drill1, drill2) => (myReverse ? -1 : 1) * drill1.title.toLowerCase().localeCompare(drill2.title.toLowerCase()));
         
         return sorted;
     }, [createdDrills, mySort, myReverse]);
@@ -109,18 +105,10 @@ export default function Drills() {
     const sortedSavedDrills = useMemo(() => {
         const sorted = [...savedDrills];
 
-        if (savedSort === "difficulty") {
-            const filtered = sorted.filter(drill => drill.difficulty !== "");
-            filtered.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill2.difficulty.localeCompare(drill1.difficulty)));
-            return filtered;
-        }
-        else if (savedSort === "time") {
-            const filtered = sorted.filter(drill => drill.time > 0);
-            filtered.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.time - drill2.time));
-            return filtered;
-        }
+        if (savedSort === "difficulty") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.difficulty.localeCompare(drill2.difficulty)));
+        else if (savedSort === "time") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.time - drill2.time));
         else if (savedSort === "likes") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill2.likes - drill1.likes));
-        else sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * drill1.name.toLowerCase().localeCompare(drill2.name.toLowerCase()));
+        else sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * drill1.title.toLowerCase().localeCompare(drill2.title.toLowerCase()));
         
         return sorted;
     }, [savedDrills, savedSort, savedReverse]);

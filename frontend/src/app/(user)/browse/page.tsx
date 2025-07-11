@@ -15,13 +15,13 @@ export default function Browse() {
     const { drills, setDrills } = useDrill();
     const [ usernames, setUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
-    const [ filters, setFilters ] = useState<{sport: string | null, difficulty: string | null, time: number[] | null, query: string | null}>({
-        sport: null, difficulty: null, time: null, query: null
+    const [ filters, setFilters ] = useState<{sport: string | null, type: string | null, difficulty: string | null, time: number[] | null, query: string | null}>({
+        sport: null, type: null, difficulty: null, time: null, query: null
     });
     const router = useRouter();
 
     const sportsOptions = [
-        { value: null, label: "All Sports"},
+        { value: null, label: "Any Sport"},
         { value: "Soccer", label: "Soccer" },
         { value: "Basketball", label: "Basketball" },
         { value: "Tennis", label: "Tennis" },
@@ -29,15 +29,24 @@ export default function Browse() {
         { value: "Baseball", label: "Baseball" }
     ];
 
+    const typeOptions = [
+        { value: null, label: "Any Type"},
+        { value: "Warmup", label: "Warmup" },
+        { value: "Technique", label: "Technique" },
+        { value: "Conditioning", label: "Conditioning" },
+        { value: "Strategy", label: "Strategy" },
+        { value: "Cooldown", label: "Cooldown" }
+    ];
+
     const difficultyOptions = [
-        { value: null, label: "All Difficulties"},
+        { value: null, label: "Any Difficulty"},
         { value: "Beginner", label: "Beginner" },
-        { value: "Amateur", label: "Amateur" },
+        { value: "Intermediate", label: "Intermediate" },
         { value: "Pro", label: "Pro" }
     ];
 
     const timeOptions = [
-        { value: null, label: "All Lengths"},
+        { value: null, label: "Any Length"},
         { value: [1, 2], label: "1-2 min" },
         { value: [2, 5], label: "2-5 min" },
         { value: [5, 10], label: "5-10 min" },
@@ -109,9 +118,10 @@ export default function Browse() {
                 const data = await res.json();
                 const filteredDrills = data.data.filter((drill : DrillType) => (
                     (!filters.sport || drill.sports.includes(filters.sport)) && 
+                    (!filters.type || drill.type === filters.type) &&
                     (!filters.difficulty || drill.difficulty === filters.difficulty) &&
                     (!filters.time || drill.time >= filters.time[0] && drill.time <= filters.time[1]) &&  
-                    (!filters.query || editDistance(drill.name, filters.query) <= 0.3)
+                    (!filters.query || editDistance(drill.title, filters.query) <= 0.3)
                 ));
                 const filteredUsernames = await Promise.all(
                     filteredDrills.map(async (drill: DrillType) => await getUsername(drill.creator))
@@ -138,27 +148,35 @@ export default function Browse() {
                 <div className="flex w-full space-x-4">
                     <Select 
                         options={sportsOptions}
-                        placeholder="All Sports"
+                        placeholder="Any Sport"
                         value={filters.sport ? sportsOptions.find(option => option.value === filters.sport) : null}
                         onChange={selected => setFilters({...filters, sport: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/4 min-w-44 max-w-80"
+                        className="w-1/5 min-w-44 max-w-80"
+                    />
+                    <Select 
+                        options={typeOptions}
+                        placeholder="Any Type"
+                        value={filters.type ? typeOptions.find(option => option.value === filters.type) : null}
+                        onChange={selected => setFilters({...filters, type: selected ? selected.value : null})}
+                        styles={dropdownStyles}
+                        className="w-1/5 min-w-44 max-w-80"
                     />
                     <Select 
                         options={difficultyOptions}
-                        placeholder="All Difficulties"
+                        placeholder="Any Difficulty"
                         value={filters.difficulty ? difficultyOptions.find(option => option.value === filters.difficulty) : null}
                         onChange={selected => setFilters({...filters, difficulty: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/4 min-w-44 max-w-80"
+                        className="w-1/5 min-w-44 max-w-80"
                     />
                     <Select 
                         options={timeOptions}
-                        placeholder="All Lengths"
+                        placeholder="Any Length"
                         value={filters.time ? timeOptions.find(option => arraysEqual(option.value, filters.time)) : null}
                         onChange={selected => setFilters({...filters, time: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/4 min-w-44 max-w-80"
+                        className="w-1/5 min-w-44 max-w-80"
                     />
                 </div>
                 
@@ -166,7 +184,7 @@ export default function Browse() {
                     placeholder="Search"
                     value={filters.query || ""}
                     onChange={e => setFilters({...filters, query: e.target.value || null})}
-                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-120 h-[38px] border"
+                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-1/3 max-w-120 h-[38px] border"
                 />
             </header>
 

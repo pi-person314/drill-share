@@ -61,13 +61,13 @@ export default function Sidebar() {
                     </div>}
                 </div>
                 <div className="flex flex-col items-center">
-                    <Link href="/workouts" className={`flex items-center text-2xl font-medium hover:text-[var(--muted)] px-5 py-8 ${pathname === "/workouts" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                    <Link href="/training" className={`flex items-center text-2xl font-medium hover:text-[var(--muted)] px-5 py-8 ${pathname === "/training" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
                         <FaDumbbell className="mr-2"/>
-                        Workouts
+                        Training
                     </Link>
-                    {pathname === "/workouts" && <div className="flex flex-col items-center space-y-2 mt-4">
-                        <Link href="/workouts#new" className="hover:text-[var(--muted)]">New Workout</Link>
-                        <Link href="/workouts#review" className="hover:text-[var(--muted)]">Review Workouts</Link>
+                    {pathname === "/training" && <div className="flex flex-col items-center space-y-2 mt-4">
+                        <Link href="/training#new" className="hover:text-[var(--muted)]">New Session</Link>
+                        <Link href="/training#review" className="hover:text-[var(--muted)]">Review Sessions</Link>
                     </div>}
                 </div>
             </div>

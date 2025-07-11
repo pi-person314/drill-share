@@ -1,16 +1,17 @@
 export type DrillType = {
     _id?: string;
-    name: string;
+    title: string;
     description: string;
     creator: string;
-    usersLiked: string[];
-    usersSaved: string[];
-    public: boolean;
-    media: string[];
+    type: string;
+    difficulty: string;
     time: number;
     sports: string[];
-    difficulty: string;
+    media: string[];
+    public: boolean;
     likes: number;
+    usersLiked: string[];
+    usersSaved: string[];
     createdAt: string;
     updatedAt: string;
 };

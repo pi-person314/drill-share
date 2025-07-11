@@ -18,17 +18,18 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     const [ error, setError ] = useState("");
     const [ previewOpen, setPreviewOpen ] = useState(false);
     const emptyDrill = {
-        name: "",
+        title: "",
         description: "",
         creator: user || "Deleted User",
+        type: "Technique",
+        difficulty: "Beginner",
+        time: 1,
+        sports: [],
+        media: [],
+        public: false,
+        likes: 0,
         usersLiked: [],
         usersSaved: [],
-        public: false,
-        media: [],
-        time: 0,
-        sports: [],
-        difficulty: "",
-        likes: 0,
         createdAt: "",
         updatedAt: ""
     }
@@ -43,10 +44,17 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     ];
 
     const difficultyOptions = [
-        { value: null, label: "None" },
         { value: "Beginner", label: "Beginner" },
-        { value: "Amateur", label: "Amateur" },
+        { value: "Intermediate", label: "Intermediate" },
         { value: "Pro", label: "Pro" }
+    ];
+
+    const typeOptions = [
+        { value: "Warmup", label: "Warmup" },
+        { value: "Technique", label: "Technique" },
+        { value: "Conditioning", label: "Conditioning" },
+        { value: "Strategy", label: "Strategy" },
+        { value: "Cooldown", label: "Cooldown" }
     ];
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -115,7 +123,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     }
 
     const handlePreview = () => {
-        if (newDrill.name && newDrill.description) {
+        if (newDrill.title && newDrill.description) {
             setSelectedDrill(newDrill);
             setSelectedUsername(username);
             setError("");
@@ -147,9 +155,9 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     <p>Title <span className="text-[var(--danger)]">*</span></p>
                     <input 
                         placeholder="Title"
-                        value={newDrill.name}
-                        onChange={e => setNewDrill({...newDrill, name: e.target.value})}
-                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !newDrill.name ? "border-[var(--danger)]" : ""}`}
+                        value={newDrill.title}
+                        onChange={e => setNewDrill({...newDrill, title: e.target.value})}
+                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !newDrill.title ? "border-[var(--danger)]" : ""}`}
                     />
                 </div>
 
@@ -165,44 +173,57 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                 </div>
 
                 <div className="flex justify-between space-x-4">
-                    <div className="space-y-1 w-1/3 2xl:w-1/2">
-                        <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
+                    <div className="space-y-1 w-1/3">
+                        <p>Type <span className="text-[var(--danger)]">*</span></p>
                         <Select 
-                            isMulti 
-                            options={sportsOptions}
-                            value={sportsOptions.filter(option => newDrill.sports.includes(option.value))}
+                            options={typeOptions}
+                            value={typeOptions.find(option => option.value === newDrill.type)}
                             onChange={selected => setNewDrill({
                                 ...newDrill,
-                                sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
-                            })}
-                            styles={dropdownStyles}
-                        />
-                    </div>
-
-                    <div className="space-y-1">
-                        <p>Difficulty <span className="text-[var(--muted)]">(optional)</span></p>
-                        <Select  
-                            options={difficultyOptions}
-                            value={difficultyOptions.find(option => option.value === newDrill.difficulty) || null}
-                            onChange={selected => setNewDrill({
-                                ...newDrill,
-                                difficulty: selected && selected.value ? selected.value : ""
+                                type: selected?.value || "Technique"
                             })} 
                             styles={dropdownStyles}
                         />
                     </div>
 
-                    <div className="space-y-1 w-28">
-                        <p>Time <span className="text-[var(--muted)]">(minutes)</span></p>
+                    <div className="space-y-1 w-1/3">
+                        <p>Difficulty <span className="text-[var(--danger)]">*</span></p>
+                        <Select  
+                            options={difficultyOptions}
+                            value={difficultyOptions.find(option => option.value === newDrill.difficulty)}
+                            onChange={selected => setNewDrill({
+                                ...newDrill,
+                                difficulty: selected?.value || "Beginner"
+                            })} 
+                            styles={dropdownStyles}
+                        />
+                    </div>
+
+                    <div className="space-y-1 w-32">
+                        <p>Time (minutes) <span className="text-[var(--danger)]">*</span></p>
                         <input 
                             type="number"
                             min={1}
                             max={9999}
-                            value={newDrill.time > 0 ? newDrill.time : ""}
+                            value={newDrill.time}
                             onChange={e => setNewDrill({...newDrill, time: e.target.value === "" ? 0 : Number(e.target.value)})}
                             className="w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border"
                         />
                     </div>
+                </div>
+
+                <div className="space-y-1">
+                    <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
+                    <Select 
+                        isMulti 
+                        options={sportsOptions}
+                        value={sportsOptions.filter(option => newDrill.sports.includes(option.value))}
+                        onChange={selected => setNewDrill({
+                            ...newDrill,
+                            sports: (selected as readonly { value: string; label: string }[]).map(option => option.value)
+                        })}
+                        styles={dropdownStyles}
+                    />
                 </div>
 
                 <div className="space-y-1">

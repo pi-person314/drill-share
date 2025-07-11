@@ -62,7 +62,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
     const drill = req.body;
-    if (!drill.name || !drill.description || !drill.creator) {
+    if (!drill.title || !drill.description || !drill.creator || !drill.type || !drill.difficulty || !drill.time) {
         return res.status(400).json({message: "Please fill in all required fields."});
     }
 
@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
 router.put("/info/:id", async (req, res) => {
     const id = req.params.id;
     const newData = req.body;
-    if (!newData.name || !newData.description || !newData.creator) {
+    if (!newData.title || !newData.description || !newData.creator || !newData.type || !newData.difficulty || !newData.time) {
         return res.status(400).json({message: "Please fill in all required fields."});
     }
 

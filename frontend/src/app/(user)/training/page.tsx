@@ -3,7 +3,7 @@ import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Workouts() {
+export default function Training() {
     const { user, loading } = useAuth();
     const router = useRouter();
 
@@ -21,7 +21,7 @@ export default function Workouts() {
 
     return (
         <div className="">
-            <p>workouts</p>
+            <p>training</p>
         </div>
     )
 }

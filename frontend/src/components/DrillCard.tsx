@@ -15,7 +15,7 @@ export default function DrillCard({ drillInfo, username }: { drillInfo: DrillTyp
             setSelectedDrill(drillInfo); 
             setSelectedUsername(username);
         }}>
-            <h1 className="text-2xl font-medium text-center w-full truncate mt-2">{drillInfo.name}</h1>
+            <h1 className="text-2xl font-medium text-center w-full truncate mt-2">{drillInfo.title}</h1>
             <img src={drillInfo.media[0] || "/images/defaultThumbnail.png"} alt="Thumbnail" className="w-3/4 max-h-24 object-contain"/>
             <div className="flex flex-row justify-between items-center w-full">
                 <p className="flex items-center"><IoPerson className="mr-2"/>{username}</p>

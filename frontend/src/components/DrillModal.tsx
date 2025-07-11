@@ -94,7 +94,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                 </div>
                 
                 <div className="flex">
-                    <h1 className="text-5xl font-medium">{selectedDrill.name}</h1>
+                    <h1 className="text-5xl font-medium">{selectedDrill.title}</h1>
                     <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
                         {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : selectedDrill.usersLiked.includes(user) ? "cursor-pointer text-[var(--success)]" : "cursor-pointer hover:text-[var(--muted)]"}`}/>
                     </button>
@@ -103,8 +103,9 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                     {selectedDrill.sports.map((sport, index) => (
                         <h2 key={index} className="bg-[var(--accent)] p-2 rounded-xl">{sport}</h2>
                     ))}
-                    {selectedDrill.difficulty && <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.difficulty}</h2>}
-                    {selectedDrill.time > 0 && <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.time} min</h2>}
+                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.type}</h2>
+                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.difficulty}</h2>
+                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.time} min</h2>
                 </div>
                 <div>
                     <h2 className="text-2xl mb-2">Description</h2>
