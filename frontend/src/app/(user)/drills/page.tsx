@@ -148,14 +148,19 @@ export default function Drills() {
                     />
                     <FaArrowDownUpAcrossLine onClick={() => setMyReverse(!myReverse)} className="text-xl hover:text-[var(--muted)] cursor-pointer"/>
                 </div>
-                <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
+                {!!sortedCreatedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     <button onClick={() => setCreateOpen(true)}>
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer"/>
                     </button>
                     {sortedCreatedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={username} />
                     ))}
-                </div>
+                </div>}
+                {!sortedCreatedDrills.length && <div className="flex items-center justify-center h-70">
+                    <button onClick={() => setCreateOpen(true)}>
+                        <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer"/>
+                    </button>
+                </div>}
             </div>
 
             <div id="saved-drills" className="space-y-6">
@@ -171,12 +176,12 @@ export default function Drills() {
                     />
                     <FaArrowDownUpAcrossLine onClick={() => setSavedReverse(!savedReverse)} className="text-xl hover:text-[var(--muted)] cursor-pointer"/>
                 </div>
-                {!!savedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
+                {!!sortedSavedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border">
                     {sortedSavedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} username={savedUsernames[index]} />
                     ))}
                 </div>}
-                {!savedDrills.length && <div className="flex items-center justify-center h-70">
+                {!sortedSavedDrills.length && <div className="flex items-center justify-center h-70">
                     <p className="text-xl text-[var(--muted)] text-center">
                         No drills have been saved yet.<br/>
                         Feel free to browse through shared drills{" "}
