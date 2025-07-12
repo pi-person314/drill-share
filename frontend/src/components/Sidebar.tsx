@@ -35,7 +35,7 @@ export default function Sidebar() {
             }
         }
         getUserInfo();
-    }, [user]);
+    }, [user, pathname]);
 
     if (!user) return null;
 
@@ -71,7 +71,7 @@ export default function Sidebar() {
                     </div>}
                 </div>
             </div>
-            <div className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-2 px-3 py-5 rounded-2xl">
+            <div className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-4 p-4 rounded-2xl">
                 <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
                 <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
                     <h1 className="text-xl font-medium w-full truncate">{userInfo.username}</h1>

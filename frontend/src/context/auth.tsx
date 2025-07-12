@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const getUsername = async () => {
+            if (!user) return;
             const res = await fetch(`http://localhost:5000/api/users/${user}`);
             if (res.ok) {
                 const data = await res.json();

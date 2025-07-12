@@ -26,7 +26,10 @@ export default function Register() {
         accept: {"image/*": []},
         onDrop: (acceptedFiles) => {
             const file = acceptedFiles[0];
-            if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                setError("File too large.");
+            } else {
+                setError("");
                 const reader = new FileReader();
                 reader.onload = () => setUserInfo({...userInfo, photo: reader.result as string});
                 reader.readAsDataURL(file);
@@ -75,10 +78,7 @@ export default function Register() {
     return (
         <main className="flex-1 flex justify-center items-center p-10">
             <form className="flex flex-col w-1/2 min-w-72 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
-                onSubmit={e => {
-                    e.preventDefault();
-                    handleRegister();
-                }}
+                onSubmit={e => {e.preventDefault(); handleRegister();}}
             >
                 <h1 className="text-5xl mb-10 font-medium">Register</h1>
 
@@ -133,10 +133,18 @@ export default function Register() {
                     <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center items-center h-full cursor-pointer ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
                             {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
-                            {userInfo.photo && <img src={userInfo.photo} alt="Photo Preview" className="h-1/2 object-contain"/>}
+                            {userInfo.photo && <div className="relative h-1/2">
+                                <img src={userInfo.photo} alt="Image Preview" className="h-full w-full object-cover" />
+                                <button type="button" onClick={e => {
+                                    e.stopPropagation();
+                                    setUserInfo({ ...userInfo, photo: "" });
+                                }}
+                                    className="absolute top-0 right-0 text-[var(--danger)] w-5 h-5 text-3xl flex items-center justify-center cursor-pointer hover:scale-105"
+                                >×</button>
+                            </div>}
                         </div>
                     </div>
                 </div>

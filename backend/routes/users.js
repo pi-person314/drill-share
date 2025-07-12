@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
 router.put("/:id", async (req, res) => {
     const id = req.params.id;
     const newData = req.body;
-    if (!newData.username || !newData.password) {
+    if (!newData.username) {
         return res.status(400).json({message: "Please fill in all required fields."});
     }
 
@@ -74,7 +74,6 @@ router.put("/:id", async (req, res) => {
             return res.status(404).json({message: "User not found."});
         }
 
-        newData.password = user.generateHash(newData.password);
         await User.findByIdAndUpdate(id, newData);
         
         res.status(200).json({data: newData, message: "User updated!"});
