@@ -3,6 +3,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 
 type AuthContextType = {
     user: string | null;
+    username: string;
     loading: boolean;
     login: (uid: string) => void;
     logout: () => void;
@@ -10,6 +11,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
+    username: "Deleted User",
     loading: true,
     login: () => {},
     logout: () => {}
@@ -17,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<string | null>(null);
+    const [username, setUsername] = useState<string>("Deleted User");
     const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
@@ -26,6 +29,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        const getUsername = async () => {
+            if (!user) return;
+            const res = await fetch(`http://localhost:5000/api/users/${user}`);
+            if (res.ok) {
+                const data = await res.json();
+                setUsername(data.data.username);
+            } else {
+                setUsername("Deleted User");
+            }
+        }
+        getUsername();
+    }, [user]);
 
     const login = (uid: string) => {
         setUser(uid);
@@ -37,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, username, loading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

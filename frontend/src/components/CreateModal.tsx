@@ -10,15 +10,17 @@ import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/auth";
 
 export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {
+    const { user, username } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill } = useDrill();
     const [ error, setError ] = useState("");
     const [ previewOpen, setPreviewOpen ] = useState(false);
     const emptyDrill = {
         title: "",
         description: "",
-        creator: { _id: "", username: "Deleted User" }, 
+        creator: { _id: user || "", username: username || "Deleted User" }, 
         type: "Technique",
         difficulty: "Beginner",
         time: 1,
