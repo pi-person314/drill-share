@@ -1,5 +1,4 @@
 "use client";
-import { useAuth } from "@/context/auth";
 import { useDrill } from "@/context/drill";
 import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
@@ -13,14 +12,13 @@ import DrillModal from "./DrillModal";
 import { toast } from "react-toastify";
 
 export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {
-    const { user, username } = useAuth();
-    const { drills, setDrills, selectedDrill, setSelectedDrill, setSelectedUsername } = useDrill();
+    const { drills, setDrills, selectedDrill, setSelectedDrill } = useDrill();
     const [ error, setError ] = useState("");
     const [ previewOpen, setPreviewOpen ] = useState(false);
     const emptyDrill = {
         title: "",
         description: "",
-        creator: user || "Deleted User",
+        creator: { _id: "", username: "Deleted User" }, 
         type: "Technique",
         difficulty: "Beginner",
         time: 1,
@@ -127,7 +125,6 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     const handlePreview = () => {
         if (newDrill.title && newDrill.description) {
             setSelectedDrill(newDrill);
-            setSelectedUsername(username);
             setError("");
             setPreviewOpen(true);
         }
@@ -245,7 +242,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                                             updated.splice(index, 1);
                                             setNewDrill({ ...newDrill, media: updated });
                                         }}
-                                            className="absolute top-0 right-0 text-[var(--danger)] w-5 h-5 text-3xl flex items-center justify-center cursor-pointer hover:scale-105"
+                                            className="absolute top-0 right-0 w-5 h-5 text-3xl flex items-center justify-center cursor-pointer bg-[var(--danger)] text-white hover:scale-105 rounded-full"
                                         >×</button>
                                     </div>
                                 )}

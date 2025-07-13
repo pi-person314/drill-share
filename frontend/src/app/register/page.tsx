@@ -142,7 +142,7 @@ export default function Register() {
                                     e.stopPropagation();
                                     setUserInfo({ ...userInfo, photo: "" });
                                 }}
-                                    className="absolute top-0 right-0 text-[var(--danger)] w-5 h-5 text-3xl flex items-center justify-center cursor-pointer hover:scale-105"
+                                    className="absolute top-0 right-0 w-5 h-5 text-3xl flex items-center justify-center cursor-pointer bg-[var(--danger)] text-white hover:scale-105 rounded-full"
                                 >×</button>
                             </div>}
                         </div>

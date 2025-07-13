@@ -13,12 +13,11 @@ import { FaArrowDownUpAcrossLine, FaCirclePlus } from "react-icons/fa6";
 import Select from "react-select";
 
 export default function Drills() {
-    const { user, username, loading } = useAuth();
+    const { user, loading } = useAuth();
     const { drills, setDrills } = useDrill();
     const router = useRouter();
     const [ createdDrills, setCreatedDrills ] = useState<DrillType[]>([]);
     const [ savedDrills, setSavedDrills ] = useState<DrillType[]>([]);
-    const [ savedUsernames, setSavedUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ createOpen, setCreateOpen ] = useState(false);
     const [ mySort, setMySort ] = useState("created");
@@ -40,16 +39,6 @@ export default function Drills() {
         { value: "alpha", label: `${savedReverse ? "Reverse" : ""} Alphabetical` }
     ];
 
-    const getUsername = async (uid : string) => {
-        const res = await fetch(`http://localhost:5000/api/users/${uid}`);
-        if (res.ok) {
-            const data = await res.json();
-            return data.data.username;
-        } else {
-            return "Deleted User";
-        }
-    }
-
     useEffect(() => {
         if (!user && !loading) router.replace("/");
 
@@ -60,13 +49,9 @@ export default function Drills() {
             if (createdRes.ok && savedRes.ok) {
                 const createdData = await createdRes.json();
                 const savedData = await savedRes.json();
-                const usernames = await Promise.all(
-                    savedData.data.map(async (drill: DrillType) => await getUsername(drill.creator))
-                );
                 setDrills([...createdData.data, ...savedData.data]);
                 setCreatedDrills(createdData.data);
                 setSavedDrills(savedData.data);
-                setSavedUsernames(usernames);
             }
             setFetching(false);
         }
@@ -80,12 +65,8 @@ export default function Drills() {
             if (createdRes.ok && savedRes.ok) {
                 const createdData = await createdRes.json();
                 const savedData = await savedRes.json();
-                const usernames = await Promise.all(
-                    savedData.data.map(async (drill: DrillType) => await getUsername(drill.creator))
-                );
                 setCreatedDrills(createdData.data);
                 setSavedDrills(savedData.data);
-                setSavedUsernames(usernames);
             }
         }
         fetchDrills();
@@ -141,7 +122,7 @@ export default function Drills() {
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] hover:scale-105 cursor-pointer"/>
                     </button>
                     {sortedCreatedDrills.map((drill, index) => (
-                        <DrillCard key={index} drillInfo={drill} username={username} />
+                        <DrillCard key={index} drillInfo={drill} />
                     ))}
                 </div>}
                 {!sortedCreatedDrills.length && <div className="flex items-center justify-center h-70">
@@ -166,7 +147,7 @@ export default function Drills() {
                 </div>
                 {!!sortedSavedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border rounded-2xl">
                     {sortedSavedDrills.map((drill, index) => (
-                        <DrillCard key={index} drillInfo={drill} username={savedUsernames[index]} />
+                        <DrillCard key={index} drillInfo={drill} />
                     ))}
                 </div>}
                 {!sortedSavedDrills.length && <div className="flex items-center justify-center h-70">

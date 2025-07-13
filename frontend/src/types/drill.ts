@@ -2,7 +2,10 @@ export type DrillType = {
     _id?: string;
     title: string;
     description: string;
-    creator: string;
+    creator: {
+        _id: string;
+        username: string;
+    };
     type: string;
     difficulty: string;
     time: number;

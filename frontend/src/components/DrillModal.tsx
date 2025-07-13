@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 export default function DrillModal({ preview, open, setOpen } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void }) {
     const { user } = useAuth();
-    const { drills, setDrills, selectedDrill, setSelectedDrill, selectedUsername, setSelectedUsername } = useDrill();
+    const { drills, setDrills, selectedDrill, setSelectedDrill } = useDrill();
     const [ updateOpen, setUpdateOpen ] = useState(false);
 
     const handleLike = async ( add: boolean ) => {
@@ -74,7 +74,6 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
             toast.error("Deleted!");
             setDrills(drills.filter(drill => drill._id != selectedDrill._id));
             setSelectedDrill(null);
-            setSelectedUsername(null);
         }
     }
 
@@ -89,7 +88,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
             {selectedDrill && <div className="flex flex-col space-y-12 h-full">
                 <div className="flex justify-end mb-0">
                     <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={
-                        setOpen ? () => setOpen(false) : () => {setSelectedDrill(null); setSelectedUsername(null)}
+                        setOpen ? () => setOpen(false) : () => {setSelectedDrill(null)}
                     }>x</button>
                 </div>
                 
@@ -120,9 +119,9 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                     </Slider>
                 </div>}
                 <div className="flex justify-between items-center mt-8">
-                    <p>Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg">{selectedUsername}</span></p>
+                    <p>Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg">{selectedDrill.creator.username}</span></p>
                     <div className="flex space-x-4">
-                        {user === selectedDrill.creator && !preview && <div className="flex space-x-4">
+                        {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
                             <button 
                                 onClick={() => setUpdateOpen(true)} 
                                 className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"

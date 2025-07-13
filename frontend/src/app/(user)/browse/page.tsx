@@ -13,7 +13,6 @@ import dropdownStyles from "@/styles/dropdown";
 export default function Browse() {
     const { user, loading } = useAuth();
     const { drills, setDrills } = useDrill();
-    const [ usernames, setUsernames ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ filters, setFilters ] = useState<{sport: string | null, type: string | null, difficulty: string | null, time: number[] | null, query: string | null}>({
         sport: null, type: null, difficulty: null, time: null, query: null
@@ -58,16 +57,6 @@ export default function Browse() {
         { value: [120, 9999], label: "2+ hrs" }
     ]
 
-    const getUsername = async ( uid: string ) => {
-        const res = await fetch(`http://localhost:5000/api/users/${uid}`);
-        if (res.ok) {
-            const data = await res.json();
-            return data.data.username;
-        } else {
-            return "Deleted User";
-        }
-    }
-
     const arraysEqual = (a: number[] | null, b: number[] | null): boolean => {
         return a !== null && b !== null && a[0] === b[0] && a[1] === b[1];
     };
@@ -100,11 +89,7 @@ export default function Browse() {
             const res = await fetch("http://localhost:5000/api/drills/public");
             if (res.ok) {
                 const data = await res.json();
-                const allUsernames = await Promise.all(
-                    data.data.map(async (drill: DrillType) => await getUsername(drill.creator))
-                );
                 setDrills(data.data);
-                setUsernames(allUsernames);
             }
             setFetching(false);
         }
@@ -124,11 +109,7 @@ export default function Browse() {
                     (!filters.time || drill.time >= filters.time[0] && drill.time <= filters.time[1]) &&  
                     (!filters.query || editDistance(drill.title, filters.query) <= 0.3)
                 ));
-                const filteredUsernames = await Promise.all(
-                    filteredDrills.map(async (drill: DrillType) => await getUsername(drill.creator))
-                );
                 setDrills(filteredDrills);
-                setUsernames(filteredUsernames);
             }
             setFetching(false);
         }
@@ -191,7 +172,7 @@ export default function Browse() {
 
             {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20">
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
-                    <DrillCard key={index} drillInfo={drill} username={usernames[index]} />
+                    <DrillCard key={index} drillInfo={drill} />
                 ))}
                 <DrillModal preview={false}/>
             </main>}

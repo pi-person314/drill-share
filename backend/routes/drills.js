@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/public", async (req, res) => {
     try {
-        const drills = await Drill.find({public: true});
+        const drills = await Drill.find({public: true}).populate("creator", "username");
         res.status(200).json({data: drills, message: "Fetched all public drills!"});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
@@ -22,7 +22,7 @@ router.get("/created/:id", async (req, res) => {
             return res.status(404).json({message: "User not found."});
         }
 
-        const drills = await Drill.find({creator: id});
+        const drills = await Drill.find({creator: id}).populate("creator", "username");
         res.status(200).json({data: drills, message: `Fetched all drills created by user!`});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
@@ -38,7 +38,7 @@ router.get("/saved/:id", async (req, res) => {
             return res.status(404).json({message: "User not found."});
         }
 
-        const drills = await Drill.find({usersSaved: id});
+        const drills = await Drill.find({usersSaved: id}).populate("creator", "username");
         res.status(200).json({data: drills, message: `Fetched all drills saved by user!`});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
@@ -49,7 +49,7 @@ router.get("/saved/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const drill = await Drill.findById(id);
+        const drill = await Drill.findById(id).populate("creator", "username");
         if (!drill) {
             return res.status(404).json({message: "Drill not found."});
         }
