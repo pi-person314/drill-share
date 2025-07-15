@@ -131,9 +131,9 @@ export default function Register() {
 
                 <div className="w-5/6 min-w-60 space-y-1">
                     <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
-                    <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
+                    <div {...getRootProps()} className="text-center bg-[var(--secondary)] border-2 border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
                             {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
                             {userInfo.photo && <div className="relative h-1/2">

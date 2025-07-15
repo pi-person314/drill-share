@@ -11,6 +11,7 @@ import Select from "react-select";
 import DrillModal from "./DrillModal";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/auth";
+import { FaXmark } from "react-icons/fa6";
 
 export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {
     const { user, username } = useAuth();
@@ -147,7 +148,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         >
             <form onSubmit={e => {e.preventDefault(); update ? handleUpdate() : handleCreate();}} className="flex flex-col h-full space-y-4">
                 <div className="flex justify-end mb-0">
-                    <button type="button" className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}>x</button>
+                    <button type="button" className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}><FaXmark /></button>
                 </div>
 
                 <h1 className="text-5xl font-medium mb-8">{update ? "Update Drill" : "New Drill"}</h1>
@@ -229,9 +230,9 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
                 <div className="space-y-1">
                     <p>Media <span className="text-[var(--muted)]">(up to 5)</span></p>
-                    <div {...getRootProps()} className="text-center bg-[var(--secondary)] border border-dashed rounded-lg p-3 w-full h-32">
+                    <div {...getRootProps()} className="text-center bg-[var(--secondary)] border-2 border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)] hover:text-[var(--link)]"}`}>
+                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
                             {!newDrill.media.length && <p className="text-sm">Drag and drop images here</p>}
                             {!!newDrill.media.length && <div className="flex space-x-2 h-1/2">
