@@ -5,8 +5,9 @@ import { useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { MdCopyAll } from "react-icons/md";
 
-export default function TrainingSection({ type, onClick, handleRemove }: { type: string, onClick: () => void, handleRemove?: () => void }) {
-    const [ drillInfo, setDrillInfo ] = useState<DrillType | null>(null);
+export default function TrainingSection({ type, drillInfo, setDrillInfo, onClick, handleRemove }: { 
+    type: string, drillInfo: DrillType | null, setDrillInfo: (drill: DrillType | null) => void, onClick: () => void, handleRemove?: () => void 
+}) {
     const [ hovering, setHovering ] = useState(false);
     
     const handleDrop = (e: React.DragEvent) => {
@@ -17,7 +18,7 @@ export default function TrainingSection({ type, onClick, handleRemove }: { type:
     }
 
     return (
-        <div tabIndex={0} onClick={onClick} className="flex flex-col items-center bg-[var(--primary)] space-y-4 p-8 w-full min-w-80 max-w-160 rounded-xl focus:border focus:border-[var(--link)] relative">
+        <div tabIndex={0} onClick={onClick} className="flex flex-col items-center bg-[var(--primary)] space-y-4 p-8 w-full rounded-xl focus:border focus:border-[var(--link)] relative">
             {handleRemove && <button className="absolute top-3 left-3 cursor-pointer text-[var(--danger)] text-2xl" onClick={(e) => {e.stopPropagation(); handleRemove();}}><FaXmark /></button>}
             <h1 className="text-2xl font-medium">{type}</h1>
             <div 

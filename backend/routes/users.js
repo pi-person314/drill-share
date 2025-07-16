@@ -1,7 +1,7 @@
 import { Router } from "express";
 import User from "../schema/User.js";
 import Drill from "../schema/Drill.js";
-import Workout from "../schema/Workout.js";
+import Training from "../schema/Training.js";
 
 const router = Router();
 
@@ -94,10 +94,10 @@ router.delete("/:id", async (req, res) => {
         const drills = await Drill.find({creator: id});
         drills.forEach(async drill => await Drill.findByIdAndDelete(drill.id));
 
-        const workouts = await Workout.find({creator: id});
-        workouts.forEach(async workout => await Workout.findByIdAndDelete(workout.id));
+        const trainings = await Training.find({creator: id});
+        trainings.forEach(async training => await Training.findByIdAndDelete(training.id));
 
-        res.status(200).json({data: {user, drills, workouts}, message: "User deleted!"});
+        res.status(200).json({data: {user, drills, trainings}, message: "User deleted!"});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
         console.log(error);
