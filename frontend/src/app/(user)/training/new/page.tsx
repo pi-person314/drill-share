@@ -2,8 +2,8 @@
 import DrillCard from "@/components/DrillCard";
 import DrillModal from "@/components/DrillModal";
 import TrainingSection from "@/components/TrainingSection";
-import { useAuth } from "@/context/auth";
-import { useDrill } from "@/context/drill";
+import { useAuth } from "@/hooks/auth";
+import { useDrill } from "@/hooks/drill";
 import { DrillType } from "@/types/drill";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,7 +51,13 @@ export default function NewSession() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({title: title || `Untitled ${sport} Session`, drills: [warmup._id, ...sections.map((s) => s.drillInfo?._id), cooldown._id], creator: user}),
+            body: JSON.stringify({
+                title: title || `Untitled ${sport} Session`, 
+                drills: [warmup._id, ...sections.map((s) => s.drillInfo?._id), cooldown._id], 
+                creator: user,
+                videos: Array.from({length: sections.length + 2}, () => ""),
+                notes: Array.from({length: sections.length + 2}, () => "")
+            })
         });
 
         const data = await res.json();
@@ -112,7 +118,7 @@ export default function NewSession() {
 
     return (
         <main className="flex-1 flex justify-center w-full h-full p-16">
-            <div className="flex flex-col items-center w-full h-full max-w-400 space-y-16">
+            <div className="flex flex-col items-center justify-between w-full h-full max-w-400 space-y-16">
                 <div className="flex justify-center w-1/3">
                     <input 
                         placeholder={`Untitled ${sport} Session`} 
@@ -122,7 +128,7 @@ export default function NewSession() {
                     />
                 </div>
 
-                <div className="flex-1 flex justify-center w-full h-4/5 space-x-16">
+                <div className="flex w-full h-4/5 space-x-16">
                     <div className="flex flex-col items-center w-2/5 min-w-130 space-y-8 px-4 overflow-y-auto" style={{scrollbarWidth: "none", msOverflowStyle: "none"}}>
                         <TrainingSection type="Warmup" drillInfo={warmup} setDrillInfo={setWarmup} onClick={() => setType("Warmup")}/>
                         {sections.map((section) => (

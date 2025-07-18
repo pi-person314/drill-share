@@ -13,7 +13,7 @@ router.get("/created/:id", async (req, res) => {
             return res.status(404).json({message: "User not found."});
         }
 
-        const trainings = await Training.find({creator: id}).populate("drills");
+        const trainings = await Training.find({creator: id}).populate({path: "drills", populate: {path: "creator", select: "username"}});
         res.status(200).json({data: trainings, message: `Fetched all training sessions created by user!`});
     } catch (error) {
         res.status(500).json({message: "Server Error"});
@@ -24,7 +24,7 @@ router.get("/created/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const training = await Training.findById(id).populate("drills");
+        const training = await Training.findById(id).populate({path: "drills", populate: {path: "creator", select: "username"}});
         if (!training) {
             return res.status(404).json({message: "Training session not found."});
         }

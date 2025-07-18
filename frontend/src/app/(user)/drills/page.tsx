@@ -2,8 +2,8 @@
 import CreateModal from "@/components/CreateModal";
 import DrillCard from "@/components/DrillCard";
 import DrillModal from "@/components/DrillModal";
-import { useAuth } from "@/context/auth";
-import { useDrill } from "@/context/drill";
+import { useAuth } from "@/hooks/auth";
+import { useDrill } from "@/hooks/drill";
 import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
 import Link from "next/link";

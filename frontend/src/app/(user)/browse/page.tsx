@@ -1,12 +1,12 @@
 "use client";
 import DrillCard from "@/components/DrillCard";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DrillModal from "@/components/DrillModal";
 import { DrillType } from "@/types/drill";
-import { useDrill } from "@/context/drill";
+import { useDrill } from "@/hooks/drill";
 import Select from "react-select";
 import dropdownStyles from "@/styles/dropdown";
 

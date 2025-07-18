@@ -1,5 +1,5 @@
 "use client";
-import { useDrill } from "@/context/drill";
+import { useDrill } from "@/hooks/drill";
 import dropdownStyles from "@/styles/dropdown";
 import { DrillType } from "@/types/drill";
 import { Switch } from "@headlessui/react";
@@ -10,7 +10,7 @@ import ReactModal from "react-modal";
 import Select from "react-select";
 import DrillModal from "./DrillModal";
 import { toast } from "react-toastify";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import { FaXmark } from "react-icons/fa6";
 
 export default function CreateModal({ update, open, setOpen } : { update: boolean, open: boolean, setOpen: (val: boolean) => void }) {

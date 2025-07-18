@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 
 export default function NotFound() {
     const { user } = useAuth();

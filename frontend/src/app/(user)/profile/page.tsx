@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import dropdownStyles from "@/styles/dropdown";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

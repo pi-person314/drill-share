@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import Link from "next/link";
 
 export default function Header() {

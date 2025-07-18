@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ export default function Sidebar() {
     const [userInfo, setUserInfo] = useState<{username: string, bio: string, photo: string}>({
         username: "Guest",
         bio: "",
-        photo: "./images/defaultPhoto.png"
+        photo: "/images/defaultPhoto.png"
     });
 
     useEffect(() => {
@@ -23,13 +23,13 @@ export default function Sidebar() {
                     setUserInfo({
                         username: data.data.username,
                         bio: data.data.bio,
-                        photo: data.data.photo || "./images/defaultPhoto.png"
+                        photo: data.data.photo || "/images/defaultPhoto.png"
                     });
                 } else {
                     setUserInfo({
                         username: "Guest",
                         bio: "",
-                        photo: "./images/defaultPhoto.png"
+                        photo: "/images/defaultPhoto.png"
                     });
                 }
             }

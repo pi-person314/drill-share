@@ -7,7 +7,7 @@ import training from "./routes/training.js";
 
 const app = express();
 
-app.use(express.json({ limit: "5mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(cors());
 app.use("/api/users", users);
 app.use("/api/drills", drills);

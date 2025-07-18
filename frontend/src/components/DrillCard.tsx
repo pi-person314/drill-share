@@ -1,5 +1,5 @@
-import { useAuth } from '@/context/auth';
-import { useDrill } from '@/context/drill';
+import { useAuth } from '@/hooks/auth';
+import { useDrill } from '@/hooks/drill';
 import { DrillType } from '@/types/drill';
 import { FaThumbsUp } from 'react-icons/fa';
 import { IoPerson } from 'react-icons/io5';

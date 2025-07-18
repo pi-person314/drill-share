@@ -2,7 +2,7 @@
 import Select from "react-select";
 import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/auth";
+import { useAuth } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { FaUpload } from "react-icons/fa";
 import dropdownStyles from "@/styles/dropdown";
