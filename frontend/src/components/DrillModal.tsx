@@ -8,6 +8,7 @@ import { useDrill } from "@/hooks/drill";
 import { useState } from "react";
 import CreateModal from "./CreateModal";
 import { toast } from "react-toastify";
+import { FaXmark } from "react-icons/fa6";
 
 export default function DrillModal({ preview, open, setOpen } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void }) {
     const { user } = useAuth();
@@ -80,71 +81,74 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
     if (!user) return null;
 
     return (
-        <ReactModal
-            isOpen={open ?? !!selectedDrill}
-            className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
-            overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
-        >
-            {selectedDrill && <div className="flex flex-col space-y-12 h-full">
-                <div className="flex justify-end mb-0">
-                    <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={
-                        setOpen ? () => setOpen(false) : () => {setSelectedDrill(null)}
-                    }>x</button>
-                </div>
+        <div onClick={e => e.stopPropagation()}>
+            <ReactModal
+                isOpen={open ?? !!selectedDrill}
+                className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
+                overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+            >
                 
-                <div className="flex">
-                    <h1 className="text-5xl font-medium">{selectedDrill.title}</h1>
-                    <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
-                        {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : selectedDrill.usersLiked.includes(user) ? "cursor-pointer text-[var(--success)]" : "cursor-pointer hover:text-[var(--muted)]"}`}/>
-                    </button>
-                </div>
-                <div className="flex space-x-3 -mt-8">
-                    {selectedDrill.sports.map((sport, index) => (
-                        <h2 key={index} className="bg-[var(--accent)] p-2 rounded-xl">{sport}</h2>
-                    ))}
-                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.type}</h2>
-                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.difficulty}</h2>
-                    <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.time} min</h2>
-                </div>
-                <div>
-                    <h2 className="text-2xl mb-2">Description</h2>
-                    <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{selectedDrill.description}</p>
-                </div>
-                {!!selectedDrill.media.length && <div>
-                    <h2 className="text-2xl mb-2">Media</h2>
-                    <Slider infinite={false} speed={1000} arrows={false} dots={true} className="w-1/2 bg-[var(--primary)] py-8 rounded-xl">
-                        {selectedDrill.media.map((image, index) => (
-                            <img key={index} src={image} alt={`Image ${index}`} className="h-40 object-contain"/>
-                        ))}
-                    </Slider>
-                </div>}
-                <div className="flex justify-between items-center mt-8">
-                    <p>Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg">{selectedDrill.creator.username}</span></p>
-                    <div className="flex space-x-4">
-                        {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
-                            <button 
-                                onClick={() => setUpdateOpen(true)} 
-                                className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"
-                            >
-                                <FaEdit className="mr-2"/>Edit
-                            </button>
-                            <button 
-                                onClick={handleDelete} 
-                                className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--danger)]"
-                            >
-                                <FaTrash className="mr-2"/>Delete
-                            </button>
-                        </div>}
-                        <button 
-                            onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
-                            className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
-                        >
-                            <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Remove" : "Save"}
+                {selectedDrill && <div className="flex flex-col space-y-12 h-full">
+                    <div className="flex justify-end mb-0">
+                        <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={
+                            () => {setOpen ? setOpen(false) : setSelectedDrill(null)}
+                        }><FaXmark /></button>
+                    </div>
+                    
+                    <div className="flex">
+                        <h1 className="text-5xl font-medium">{selectedDrill.title}</h1>
+                        <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
+                            {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : "cursor-pointer"} ${selectedDrill.usersLiked.includes(user) ? "text-[var(--success)]" : "hover:text-[var(--muted)]"}`}/>
                         </button>
                     </div>
-                </div>
-            </div>}
-            <CreateModal update={true} open={updateOpen} setOpen={setUpdateOpen} />
-        </ReactModal>
+                    <div className="flex space-x-3 -mt-8">
+                        {selectedDrill.sports.map((sport, index) => (
+                            <h2 key={index} className="bg-[var(--accent)] p-2 rounded-xl">{sport}</h2>
+                        ))}
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.type}</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.difficulty}</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.time} min</h2>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl mb-2">Description</h2>
+                        <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{selectedDrill.description}</p>
+                    </div>
+                    {!!selectedDrill.media.length && <div>
+                        <h2 className="text-2xl mb-2">Media</h2>
+                        <Slider infinite={false} speed={1000} arrows={false} dots={true} className="w-1/2 bg-[var(--primary)] py-8 rounded-xl">
+                            {selectedDrill.media.map((image, index) => (
+                                <img key={index} src={image} alt={`Image ${index}`} className="h-40 object-contain"/>
+                            ))}
+                        </Slider>
+                    </div>}
+                    <div className="flex justify-between items-center mt-8">
+                        <p>Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg">{selectedDrill.creator.username}</span></p>
+                        <div className="flex space-x-4">
+                            {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
+                                <button 
+                                    onClick={() => setUpdateOpen(true)} 
+                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"
+                                >
+                                    <FaEdit className="mr-2"/>Edit
+                                </button>
+                                <button 
+                                    onClick={handleDelete} 
+                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--danger)]"
+                                >
+                                    <FaTrash className="mr-2"/>Delete
+                                </button>
+                            </div>}
+                            <button 
+                                onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
+                                className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
+                            >
+                                <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Remove" : "Save"}
+                            </button>
+                        </div>
+                    </div>
+                </div>}
+                <CreateModal update={true} open={updateOpen} setOpen={setUpdateOpen} />
+            </ReactModal>
+        </div>
     )
 }

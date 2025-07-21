@@ -19,8 +19,11 @@ export default function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
         <div 
             draggable={true}
             onDragStart={handleDrag}
-            className="flex flex-col justify-between items-center bg-[var(--secondary)] rounded-xl p-5 w-80 h-60 hover:shadow-xl cursor-pointer"
-            onClick={() => setSelectedDrill(drillInfo)}
+            className="flex flex-col justify-between items-center bg-[var(--secondary)] rounded-xl p-5 w-80 h-60 min-h-60 duration-300 hover:shadow-xl cursor-pointer"
+            onClick={(e) => {
+                e.stopPropagation();
+                setSelectedDrill(drillInfo);
+            }}
         >
             <h1 className="text-2xl font-medium text-center w-full truncate mt-2">{drillInfo.title}</h1>
             <img src={drillInfo.media[0] || "/images/defaultThumbnail.png"} alt="Thumbnail" className="w-3/4 max-h-24 object-contain"/>

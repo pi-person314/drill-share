@@ -6,8 +6,11 @@ import { FaEye, FaLongArrowAltLeft, FaLongArrowAltRight, FaMicrophone, FaPause, 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { useRecorder } from "@/hooks/recorder";
+import { TrainingType } from "@/types/training";
+import { useAuth } from "@/hooks/auth";
 
 export default function RecordPage() {
+    const { user, loading } = useAuth();
     const { sessionId, drillIndex } = useParams();
     const router = useRouter();
     const { setSelectedDrill } = useDrill();
@@ -17,14 +20,6 @@ export default function RecordPage() {
     const [ fetching, setFetching ] = useState(true);
     const { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream } = useRecorder();
     const videoRef = useRef<HTMLVideoElement>(null);
-
-    type TrainingType = {
-        _id: string;
-        title: string;
-        drills: DrillType[];
-        videos: string[];
-        notes: string[];
-    }
 
     const handleUpdate = async () => {
         await fetch(`http://localhost:5000/api/training/${sessionId}`, {
@@ -39,6 +34,10 @@ export default function RecordPage() {
             })
         });
     }
+
+    useEffect(() => {
+        if (!user && !loading) router.replace("/");
+    }, [user, loading]);
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -60,7 +59,7 @@ export default function RecordPage() {
         if (videoRef.current && stream) videoRef.current.srcObject = stream;
     }, [stream]);
 
-    if (fetching) {
+    if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>

@@ -129,7 +129,7 @@ export default function NewSession() {
                 </div>
 
                 <div className="flex w-full h-4/5 space-x-16">
-                    <div className="flex flex-col items-center w-2/5 min-w-130 space-y-8 px-4 overflow-y-auto" style={{scrollbarWidth: "none", msOverflowStyle: "none"}}>
+                    <div className="flex flex-col items-center w-2/5 min-w-130 space-y-8 px-4 overflow-y-auto" style={{scrollbarWidth: "none"}}>
                         <TrainingSection type="Warmup" drillInfo={warmup} setDrillInfo={setWarmup} onClick={() => setType("Warmup")}/>
                         {sections.map((section) => (
                             <TrainingSection 

@@ -40,7 +40,7 @@ export default function Sidebar() {
     if (!user) return null;
 
     return (
-        <aside className="flex flex-col w-80 h-full bg-[var(--primary)] justify-between items-center p-8 pt-16 rounded-2xl">
+        <aside className="flex flex-col w-80 h-full bg-[var(--primary)] justify-between items-center p-8 pt-16 rounded-2xl shadow-lg">
             <Link href="/dashboard" className={`flex items-center text-3xl font-semibold hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
                 <FaHome className="mr-2"/>
                 Dashboard
@@ -71,7 +71,7 @@ export default function Sidebar() {
                     </div>}
                 </div>
             </div>
-            <div className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-4 p-4 rounded-2xl">
+            <div className="flex bg-[var(--secondary)] items-center w-full h-36 space-x-4 p-4 rounded-2xl shadow-lg">
                 <img src={userInfo.photo} alt="Profile Picture" className="w-1/3 h-full object-contain"/>
                 <div className="flex-1 flex flex-col min-w-0 h-full justify-center">
                     <h1 className="text-xl font-medium w-full truncate">{userInfo.username}</h1>
