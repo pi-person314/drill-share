@@ -20,7 +20,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
     <html lang="en">
       <body className={`${exo.variable} antialiased`}>
         <AuthProvider>
-          <div className="flex flex-col w-full h-screen">
+          <div className="flex flex-col w-screen h-screen">
             <Header />
             {children}
           </div>

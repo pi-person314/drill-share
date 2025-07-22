@@ -6,5 +6,5 @@ export type TrainingType = {
     drills: DrillType[];
     videos: string[];
     notes: string[];
-    createdAt: string;
+    updatedAt: string;
 }

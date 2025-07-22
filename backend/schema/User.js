@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true},
     photo: {type: String, default: ""},
     bio: {type: String, default: ""},
-    sports: {type: [String], default: []}, // used for drill suggestions
-    streak: {type: Number, default: 0}
+    sports: {type: [String], default: []},
+    streak: {type: Number, default: 0},
+    contribution: {type: Number, default: 0}
 }, {
     timestamps: true
 });

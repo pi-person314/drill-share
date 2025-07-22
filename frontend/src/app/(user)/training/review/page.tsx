@@ -37,7 +37,7 @@ export default function ReviewSessions() {
 
     return (
         <main className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(50rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-16">
-            {sessions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((session, index) => (
+            {sessions.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).map((session, index) => (
                 <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
             ))}
         </main>
