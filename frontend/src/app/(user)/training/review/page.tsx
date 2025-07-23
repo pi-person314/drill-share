@@ -2,6 +2,7 @@
 import TrainingCard from "@/components/TrainingCard";
 import { useAuth } from "@/hooks/auth";
 import { TrainingType } from "@/types/training";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -31,6 +32,18 @@ export default function ReviewSessions() {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
+            </div>
+        )
+    }
+
+    if (!sessions.length) {
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                <p className="text-3xl text-[var(--muted)] text-center">
+                    No training sessions have been created yet.<br/>
+                    Begin{" "}
+                    <Link href="/training/new" className="text-[var(--link)] underline">here!</Link>
+                </p>
             </div>
         )
     }

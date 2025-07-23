@@ -6,6 +6,7 @@ const trainingSchema = new mongoose.Schema({
     creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
     videos: {type: [String], default: []},
     notes: {type: [String], default: []},
+    visited: {type: Number, default: 1},
 }, {
     timestamps: true
 });

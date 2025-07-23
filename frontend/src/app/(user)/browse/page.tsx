@@ -180,7 +180,7 @@ export default function Browse() {
                 <p className="text-3xl text-[var(--muted)] text-center">
                     No shared drills match these filters yet.<br/>
                     Create your own{" "}
-                    <Link href="/drills" className="text-[var(--link)] underline">here!</Link>
+                    <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>
                 </p>
             </main>}
             {fetching && <div className="flex-1 flex items-center justify-center">

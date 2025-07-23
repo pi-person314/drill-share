@@ -19,7 +19,7 @@ export default function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
         <div 
             draggable={true}
             onDragStart={handleDrag}
-            className="flex flex-col justify-between items-center bg-[var(--secondary)] rounded-xl p-5 w-80 h-60 min-h-60 min-w-80 duration-300 hover:shadow-xl cursor-pointer"
+            className="flex flex-col justify-between items-center bg-[var(--secondary)] rounded-xl p-5 w-70 h-60 min-h-60 min-w-70 duration-300 hover:shadow-xl cursor-pointer"
             onClick={(e) => {
                 e.stopPropagation();
                 setSelectedDrill(drillInfo);

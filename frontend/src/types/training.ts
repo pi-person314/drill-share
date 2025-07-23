@@ -7,4 +7,5 @@ export type TrainingType = {
     videos: string[];
     notes: string[];
     updatedAt: string;
+    visited: number;
 }

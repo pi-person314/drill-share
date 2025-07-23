@@ -26,7 +26,7 @@ export default function TrainingSection({ type, drillInfo, setDrillInfo, onClick
                 onDragLeave={e => {e.preventDefault(); setHovering(false);}}
                 onDrop={handleDrop}
             >
-                {!drillInfo && <div className={`flex flex-col justify-center items-center bg-[var(--secondary)] border-2 border-dashed h-60 w-80 space-y-2 rounded-xl ${hovering ? "text-[var(--link)]" : "text-[var(--muted)]"}`}>
+                {!drillInfo && <div className={`flex flex-col justify-center items-center bg-[var(--secondary)] border-2 border-dashed h-60 w-70 space-y-2 rounded-xl ${hovering ? "text-[var(--link)]" : "text-[var(--muted)]"}`}>
                     <MdCopyAll className={`text-3xl`}/>
                     <p>Drag and drop a drill here!</p>
                 </div>}
