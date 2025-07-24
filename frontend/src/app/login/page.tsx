@@ -42,7 +42,7 @@ export default function Login() {
 
     return (
         <main className="flex-1 flex justify-center items-center p-10">
-            <form className="flex flex-col w-1/2 min-w-72 max-w-[40rem] items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
+            <form className="flex flex-col w-1/2 min-w-76 max-w-[40rem] items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
                 onSubmit={e => {
                     e.preventDefault(); 
                     handleLogin();
@@ -62,7 +62,7 @@ export default function Login() {
                     onChange={e => setUserInfo({...userInfo, password: e.target.value})}
                     className={`w-5/6 min-w-60 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
                 />
-                <button className="bg-[var(--accent)] duration-300 hover:scale-105 rounded-lg cursor-pointer p-3 mt-5">Sign In</button>
+                <button className="bg-[var(--accent)] duration-300 hover:scale-110 rounded-lg cursor-pointer p-3 mt-5">Sign In</button>
                 {error && <p className="text-center text-[var(--danger)]">
                     {error}<br/>If this is your first time here, 
                     <Link href="/register" className="text-[var(--link)]"> <u>create an account!</u></Link>

@@ -77,12 +77,12 @@ export default function Register() {
 
     return (
         <main className="flex-1 flex justify-center items-center p-10">
-            <form className="flex flex-col w-1/2 min-w-72 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
+            <form className="flex flex-col w-1/2 min-w-76 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
                 onSubmit={e => {e.preventDefault(); handleRegister();}}
             >
-                <h1 className="text-5xl mb-10 font-medium">Register</h1>
+                <h1 className="text-4xl md:text-5xl mb-10 font-medium">Register</h1>
 
-                <div className="w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
                     <p>Username <span className="text-[var(--danger)]">*</span></p>
                     <input 
                         placeholder="Username"
@@ -92,7 +92,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
                     <p>Password <span className="text-[var(--danger)]">*</span></p>
                     <input 
                         placeholder="Password" 
@@ -103,7 +103,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
                     <p>Bio <span className="text-[var(--muted)]">(optional)</span></p>
                     <textarea 
                         placeholder="Experience, location, fun facts, etc." 
@@ -114,7 +114,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
                     <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
                     <Select 
                         isMulti 
@@ -129,13 +129,13 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
                     <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border-2 border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
                         <div className={`flex flex-col justify-center items-center h-full duration-300 ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
-                            {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
+                            {!userInfo.photo && <p className="text-xs md:text-sm">Drag and drop an image here</p>}
                             {userInfo.photo && <div className="relative h-1/2">
                                 <img src={userInfo.photo} alt="Image Preview" className="h-full w-full object-cover" />
                                 <button type="button" onClick={e => {
@@ -149,7 +149,7 @@ export default function Register() {
                     </div>
                 </div>
 
-                <button className="bg-[var(--accent)] duration-300 hover:scale-105 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
+                <button className="bg-[var(--accent)] text-sm md:text-base duration-300 hover:scale-110 rounded-lg p-3 mt-5 cursor-pointer">Create Account</button>
                 {error && <p className="text-center text-[var(--danger)]">{error}</p>}
             </form>
         </main>

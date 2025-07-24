@@ -80,8 +80,8 @@ export default function Dashboard() {
     }
 
     return (
-        <main className="flex-1 p-16 min-w-0">
-            <div className="flex flex-col space-y-28 h-full">
+        <main className="flex-1 flex justify-center p-16 min-w-0 overflow-y-auto">
+            <div className="flex flex-col space-y-28 max-w-300 w-full h-full">
                 <div className="flex flex-col space-y-4">
                     <h1 className="text-2xl font-semibold">Recommended For You</h1>
                     <div className="flex space-x-8 overflow-x-auto p-4 border rounded-lg shadow-lg">
@@ -93,14 +93,14 @@ export default function Dashboard() {
                         </p>}
                     </div>
                 </div>
-                <div className="flex-1 flex justify-between space-x-16 min-h-0">
+                <div className="flex-1 flex flex-col 2xl:flex-row justify-between space-x-0 2xl:space-x-16 space-y-16 2xl:space-y-0 min-h-0">
                     <div className="flex flex-col space-y-2">
                         <h1 className="flex text-2xl font-semibold">
                             Your Trending Drills
                             <span className="flex items-center ml-4 text-xl text-[var(--link)]"><FaArrowUp className="mr-1"/>{contribution}</span>
                         </h1>
                         <p className="text-[var(--muted)]">Create drills with 10+ likes to increase your contribution!</p>
-                        <div className="flex-1 flex flex-col items-center space-y-6 p-6 mt-4 border rounded-lg shadow-lg overflow-y-auto">
+                        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20 p-6 mt-4 border rounded-lg shadow-lg">
                             {myDrills.map((drill, index) => <DrillCard key={index} drillInfo={drill} />)}
                             {!myDrills.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-8">
                                 No drills have been created yet.<br/>

@@ -117,7 +117,7 @@ export default function Drills() {
                     />
                     <FaArrowDownUpAcrossLine onClick={() => setMyReverse(!myReverse)} className="text-xl duration-300 hover:text-[var(--muted)] cursor-pointer"/>
                 </div>
-                {!!sortedCreatedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border rounded-2xl">
+                {!!sortedCreatedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(20rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 py-8 px-2 border rounded-2xl">
                     <button onClick={() => setCreateOpen(true)}>
                         <FaCirclePlus className="text-[var(--accent)] text-[10rem] duration-300 hover:scale-105 cursor-pointer"/>
                     </button>
@@ -145,7 +145,7 @@ export default function Drills() {
                     />
                     <FaArrowDownUpAcrossLine onClick={() => setSavedReverse(!savedReverse)} className="text-xl duration-300 hover:text-[var(--muted)] cursor-pointer"/>
                 </div>
-                {!!sortedSavedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 p-8 border rounded-2xl">
+                {!!sortedSavedDrills.length && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(20rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-10 py-8 px-2 border rounded-2xl">
                     {sortedSavedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} />
                     ))}
