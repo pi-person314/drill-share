@@ -41,17 +41,17 @@ export default function Sidebar() {
 
     return (
         <aside className="flex flex-col shrink-0 w-80 h-full bg-[var(--primary)] justify-between items-center p-8 pt-16 rounded-2xl shadow-lg">
-            <Link href="/dashboard" className={`flex items-center text-3xl font-semibold hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+            <Link href="/dashboard" className={`flex items-center text-3xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
                 <FaHome className="mr-2"/>
                 Dashboard
             </Link>
             <div className="flex flex-col items-center">
-                <Link href="/browse" className={`flex items-center text-2xl font-medium hover:text-[var(--muted)] px-5 py-8 ${pathname === "/browse" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                <Link href="/browse" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/browse" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
                     <FaSearch className="mr-2"/>
                     Browse
                 </Link>
                 <div className="flex flex-col items-center">
-                    <Link href="/drills" className={`flex items-center text-2xl font-medium hover:text-[var(--muted)] px-5 py-8 ${pathname === "/drills" ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                    <Link href="/drills" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/drills" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
                         <FaBasketballBall className="mr-2"/>
                         Drills
                     </Link>
@@ -61,7 +61,7 @@ export default function Sidebar() {
                     </div>}
                 </div>
                 <div className="flex flex-col items-center">
-                    <Link href="/training" className={`flex items-center text-2xl font-medium hover:text-[var(--muted)] px-5 py-8 ${pathname.startsWith("/training") ? "bg-[var(--accent)] rounded-4xl shadow-lg" : ""}`}>
+                    <Link href="/training" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname.startsWith("/training") ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
                         <FaDumbbell className="mr-2"/>
                         Training
                     </Link>

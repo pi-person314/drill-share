@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRecorder } from "@/hooks/recorder";
 import { TrainingType } from "@/types/training";
 import { useAuth } from "@/hooks/auth";
+import { toast } from "react-toastify";
 
 export default function RecordPage() {
     const { user, loading } = useAuth();
@@ -21,7 +22,7 @@ export default function RecordPage() {
     const { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream } = useRecorder();
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const handleUpdate = async () => {
+    const handleUpdate = async (finish?: boolean) => {
         await fetch(`http://localhost:5000/api/training/${sessionId}`, {
             method: "PUT",
             headers: {
@@ -33,6 +34,28 @@ export default function RecordPage() {
                 videos: session?.videos.map((video, index) => index === Number(drillIndex) ? mediaUrl || "" : video)
             })
         });
+
+        if (finish) {
+            const today = new Date().toLocaleDateString();
+            const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
+            const res = await fetch(`http://localhost:5000/api/users/${user}`);
+            if (res.ok) {
+                const userData = await res.json();
+                const oldDailyAt = userData.data.dailyAt;
+                const res2 = await fetch(`http://localhost:5000/api/users/${user}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        ...userData.data,
+                        streak: userData.data.dailyAt === today ? userData.data.streak : userData.data.dailyAt === yesterday ? userData.data.streak + 1 : 1,
+                        dailyAt: today
+                    })
+                });
+                if (res2.ok && oldDailyAt !== today) {
+                    toast.success("Daily training completed!");
+                }
+            }
+        }
     }
 
     useEffect(() => {
@@ -133,7 +156,7 @@ export default function RecordPage() {
                     </button>
 
                     <button 
-                        onClick={() => {handleUpdate(); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
+                        onClick={() => {handleUpdate(true); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
                         className="flex items-center bg-[var(--accent)] rounded-lg shadow-lg p-4 cursor-pointer hover:scale-105"
                     >
                         {Number(drillIndex) === session.drills.length - 1 ? "Finish" : "Next"}

@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     bio: {type: String, default: ""},
     sports: {type: [String], default: []},
     streak: {type: Number, default: 0},
-    contribution: {type: Number, default: 0}
+    dailyAt: {type: String, default: ""}
 }, {
     timestamps: true
 });

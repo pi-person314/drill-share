@@ -29,10 +29,11 @@ export default function Dashboard() {
             setFetching(true);
             const res = await fetch(`http://localhost:5000/api/users/${user}`);
             if (res.ok) {
+                const today = new Date().toLocaleDateString();
+                const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
                 const data = await res.json();
                 setUserSports(data.data.sports);
-                setStreak(data.data.streak);
-                setContribution(data.data.contribution);
+                setStreak(data.data.dailyAt === today || data.data.dailyAt === yesterday ? data.data.streak : 0);
             }
         }
         fetchUser();
@@ -56,13 +57,13 @@ export default function Dashboard() {
             const myRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
             if (publicRes.ok && myRes.ok) {
                 const publicData = await publicRes.json();
-                const filteredDrills = publicData.data.filter((drill: DrillType) => userSports.some((sport) => drill.sports.includes(sport)));
+                const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
                 const sortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
                 setRecDrills(sortedDrills.slice(0, 5));
 
                 const myData = await myRes.json();
                 setMyDrills(myData.data.sort((a: DrillType, b: DrillType) => b.likes - a.likes).slice(0, 5));
-
+                setContribution(myData.data.filter((drill: DrillType) => drill.likes >= 10).length);
                 setDrills([...recDrills, ...myDrills]);
             }
             setFetching(false);
@@ -78,7 +79,6 @@ export default function Dashboard() {
         )
     }
 
-    // TODO: implement streak and contribution
     return (
         <main className="flex-1 p-16 min-w-0">
             <div className="flex flex-col space-y-28 h-full">
