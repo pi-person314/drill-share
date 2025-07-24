@@ -5,7 +5,7 @@ import TrainingSection from "@/components/TrainingSection";
 import { useAuth } from "@/hooks/auth";
 import { useDrill } from "@/hooks/drill";
 import { DrillType } from "@/types/drill";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlay, FaRunning, FaTrash } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
@@ -13,11 +13,13 @@ import { PiStrategy } from "react-icons/pi";
 import { v4 as uuidv4 } from "uuid";
 
 export default function NewSession() {
+    const searchParams = useSearchParams();
     const { user, loading } = useAuth();
     const { drills, setDrills } = useDrill();
     const router = useRouter();
     const [ sport, setSport ] = useState("");
     const [ type, setType ] = useState("");
+    const [ fetchingTraining, setFetchingTraining ] = useState(true);
     const [ fetching, setFetching ] = useState(true);
     const [ sections, setSections ] = useState<{id: string, type: string, drillInfo: DrillType | null}[]>([]);
     const [ warmup, setWarmup ] = useState<DrillType | null>(null);
@@ -55,6 +57,7 @@ export default function NewSession() {
                 title: title || `Untitled ${sport} Session`, 
                 drills: [warmup._id, ...sections.map((s) => s.drillInfo?._id), cooldown._id], 
                 creator: user,
+                sport: sport,
                 videos: Array.from({length: sections.length + 2}, () => ""),
                 notes: Array.from({length: sections.length + 2}, () => "")
             })
@@ -70,6 +73,20 @@ export default function NewSession() {
 
     useEffect(() => {
         if (!user && !loading) router.replace("/");
+        const fetchTraining = async () => {
+            setFetchingTraining(true);
+            const res = await fetch(`http://localhost:5000/api/training/${searchParams.get("id")}`);
+            if (res.ok) {
+                const data = await res.json();
+                setSport(data.data.sport);
+                setWarmup(data.data.drills[0]);
+                setCooldown(data.data.drills[data.data.drills.length - 1]);
+                setSections(data.data.drills.slice(1, data.data.drills.length - 1).map((drill: DrillType) => ({id: drill._id, type: drill.type, drillInfo: drill})));
+                setTitle(data.data.title + " (Copy)");
+            }
+            setFetchingTraining(false);
+        }
+        fetchTraining();
     }, [user, loading]);
 
     useEffect(() => {

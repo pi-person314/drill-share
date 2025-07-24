@@ -148,7 +148,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         >
             <form onSubmit={e => {e.preventDefault(); update ? handleUpdate() : handleCreate();}} className="flex flex-col h-full space-y-4">
                 <div className="flex justify-end mb-0">
-                    <button type="button" className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}><FaXmark /></button>
+                    <button type="button" className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}><FaXmark /></button>
                 </div>
 
                 <h1 className="text-5xl font-medium mb-8">{update ? "Update Drill" : "New Drill"}</h1>
@@ -232,7 +232,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     <p>Media <span className="text-[var(--muted)]">(up to 5)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border-2 border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />
-                        <div className={`flex flex-col justify-center items-center h-full ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
+                        <div className={`flex flex-col justify-center items-center h-full duration-300 ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
                             {!newDrill.media.length && <p className="text-sm">Drag and drop images here</p>}
                             {!!newDrill.media.length && <div className="flex space-x-2 h-1/2">
@@ -266,9 +266,9 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                 </div>
 
                 <div className="space-x-4">
-                    <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">{update ? "Update" : "Create"}</button>
-                    <button onClick={handlePreview} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Preview</button>
-                    <button onClick={() => {setNewDrill(emptyDrill); setError("");}} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min cursor-pointer">Clear</button>
+                    <button className="bg-[var(--accent)] hover:scale-105 rounded-lg mt-4 p-3 w-min duration-300 cursor-pointer">{update ? "Update" : "Create"}</button>
+                    <button onClick={handlePreview} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min duration-300 cursor-pointer">Preview</button>
+                    <button onClick={() => {setNewDrill(emptyDrill); setError("");}} type="button" className="bg-[var(--primary)] hover:scale-105 rounded-lg mt-4 p-3 w-min duration-300 cursor-pointer">Clear</button>
                 </div>
                 
                 {error && <p className="text-[var(--danger)]">{error}</p>}

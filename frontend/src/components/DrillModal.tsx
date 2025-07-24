@@ -90,7 +90,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                 
                 {selectedDrill && <div className="flex flex-col space-y-12 h-full">
                     <div className="flex justify-end mb-0">
-                        <button className="cursor-pointer hover:text-[var(--danger)] text-3xl" onClick={
+                        <button className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={
                             () => {setOpen ? setOpen(false) : setSelectedDrill(null)}
                         }><FaXmark /></button>
                     </div>
@@ -98,7 +98,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                     <div className="flex">
                         <h1 className="text-5xl font-medium">{selectedDrill.title}</h1>
                         <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
-                            {selectedDrill.likes}<FaThumbsUp className={`ml-2 ${preview ? "" : "cursor-pointer"} ${selectedDrill.usersLiked.includes(user) ? "text-[var(--success)]" : "hover:text-[var(--muted)]"}`}/>
+                            {selectedDrill.likes}<FaThumbsUp className={`ml-2 duration-300 ${preview ? "" : "cursor-pointer"} ${selectedDrill.usersLiked.includes(user) ? "text-[var(--success)]" : "hover:text-[var(--muted)]"}`}/>
                         </button>
                     </div>
                     <div className="flex space-x-3 -mt-8">
@@ -127,20 +127,20 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                             {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
                                 <button 
                                     onClick={() => setUpdateOpen(true)} 
-                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--success)]"
+                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer duration-300 hover:scale-105 hover:text-[var(--success)]"
                                 >
                                     <FaEdit className="mr-2"/>Edit
                                 </button>
                                 <button 
                                     onClick={handleDelete} 
-                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer hover:scale-105 hover:text-[var(--danger)]"
+                                    className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer duration-300 hover:scale-105 hover:text-[var(--danger)]"
                                 >
                                     <FaTrash className="mr-2"/>Delete
                                 </button>
                             </div>}
                             <button 
                                 onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
-                                className={`flex items-center bg-[var(--primary)] p-3 rounded-lg ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
+                                className={`flex items-center bg-[var(--primary)] p-3 rounded-lg duration-300 ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
                             >
                                 <FaDownload className="mr-2"/>{selectedDrill.usersSaved.includes(user) && !preview ? "Remove" : "Save"}
                             </button>

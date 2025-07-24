@@ -19,10 +19,13 @@ export default function RecordPage() {
     const [ drill, setDrill ] = useState<DrillType | null>(null);
     const [ notes, setNotes ] = useState("");
     const [ fetching, setFetching ] = useState(true);
+    const [ changed, setChanged ] = useState(false);
     const { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream } = useRecorder();
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const handleUpdate = async (finish?: boolean) => {
+        if (!changed) return;
+
         await fetch(`http://localhost:5000/api/training/${sessionId}`, {
             method: "PUT",
             headers: {
@@ -129,7 +132,7 @@ export default function RecordPage() {
                                 {paused ? <FaPlay className="mr-2 text-xl" /> : <FaPause className="mr-2 text-xl" />}
                                 {paused ? "Resume" : "Pause"}
                             </button>
-                            <button onClick={stop} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
+                            <button onClick={() => {stop(); setChanged(true);}} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
                                 <FaSave className="mr-2 text-2xl" />Save
                             </button>
                         </div>}
@@ -141,7 +144,7 @@ export default function RecordPage() {
                         placeholder="Take notes here..." 
                         className="flex-1 bg-[var(--secondary)] rounded-xl shadow-lg border p-4 whitespace-pre-line resize-none" 
                         value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
+                        onChange={(e) => {setNotes(e.target.value); setChanged(true);}}
                     />
                 </div>
 
@@ -157,7 +160,8 @@ export default function RecordPage() {
 
                     <button 
                         onClick={() => {handleUpdate(true); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
-                        className="flex items-center bg-[var(--accent)] rounded-lg shadow-lg p-4 cursor-pointer hover:scale-105"
+                        disabled={recording || !mediaUrl}
+                        className={`flex items-center bg-[var(--accent)] rounded-lg shadow-lg p-4 ${recording || !mediaUrl ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                         {Number(drillIndex) === session.drills.length - 1 ? "Finish" : "Next"}
                         <FaLongArrowAltRight className="ml-2 text-2xl" />

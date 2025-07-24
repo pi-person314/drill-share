@@ -2,7 +2,7 @@ import { TrainingType } from "@/types/training";
 import { useRouter } from "next/navigation";
 import DrillCard from "./DrillCard";
 import DrillModal from "./DrillModal";
-import { FaTrash } from "react-icons/fa6";
+import { FaCopy, FaTrash } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { trainingInfo: TrainingType, trigger?: boolean, setTrigger?: (val: boolean) => void }) {
@@ -10,6 +10,11 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
     const created = new Date(trainingInfo.updatedAt).toLocaleDateString();
     const today = new Date().toLocaleDateString();
     const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
+
+    const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        router.push(`/training/new?id=${trainingInfo._id}`);
+    }
 
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -34,8 +39,11 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
                 onClick={() => {handleVisit(); router.push(`/training/${trainingInfo._id}/0`)}} 
                 className="flex justify-between bg-[var(--primary)] rounded-xl cursor-pointer p-8 pl-0 w-130 h-100 duration-300 hover:shadow-xl relative"
             >
-                {setTrigger && <div className="absolute top-5 left-4">
-                    <button onClick={handleDelete} className="text-2xl cursor-pointer text-[var(--muted)] hover:text-[var(--danger)]"><FaTrash /></button>
+                <div className="absolute top-5 left-4">
+                    <button onClick={handleCopy} className="text-2xl cursor-pointer duration-300 text-[var(--muted)] hover:text-[var(--link)]"><FaCopy /></button>
+                </div>
+                {setTrigger && <div className="absolute top-5 left-12">
+                    <button onClick={handleDelete} className="text-2xl cursor-pointer duration-300 text-[var(--muted)] hover:text-[var(--danger)]"><FaTrash /></button>
                 </div>}
                 <div className="flex-1 flex flex-col justify-center space-y-2 p-6">
                     <h1 className="text-3xl font-semibold text-center w-full break-words line-clamp-3">{trainingInfo.title}</h1>

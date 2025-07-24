@@ -62,7 +62,7 @@ export default function Login() {
                     onChange={e => setUserInfo({...userInfo, password: e.target.value})}
                     className={`w-5/6 min-w-60 bg-[var(--secondary)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
                 />
-                <button className="bg-[var(--accent)] hover:scale-105 rounded-lg cursor-pointer p-3 mt-5">Sign In</button>
+                <button className="bg-[var(--accent)] duration-300 hover:scale-105 rounded-lg cursor-pointer p-3 mt-5">Sign In</button>
                 {error && <p className="text-center text-[var(--danger)]">
                     {error}<br/>If this is your first time here, 
                     <Link href="/register" className="text-[var(--link)]"> <u>create an account!</u></Link>

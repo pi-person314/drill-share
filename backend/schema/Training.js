@@ -4,6 +4,7 @@ const trainingSchema = new mongoose.Schema({
     title: {type: String, required: true},
     drills: {type: [mongoose.SchemaTypes.ObjectId], ref: "Drill", required: true},
     creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
+    sport: {type: String, required: true},
     videos: {type: [String], default: []},
     notes: {type: [String], default: []},
     visited: {type: Number, default: 1},

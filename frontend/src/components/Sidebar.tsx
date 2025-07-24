@@ -41,33 +41,33 @@ export default function Sidebar() {
 
     return (
         <aside className="flex flex-col shrink-0 w-80 h-full bg-[var(--primary)] justify-between items-center p-8 pt-16 rounded-2xl shadow-lg">
-            <Link href="/dashboard" className={`flex items-center text-3xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/dashboard" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
+            <Link href="/dashboard" className={`flex items-center text-3xl hover:text-[var(--muted)] px-5 py-8 rounded-4xl duration-300 ${pathname === "/dashboard" ? "font-bold bg-[var(--accent)] shadow-lg" : "font-semibold"}`}>
                 <FaHome className="mr-2"/>
                 Dashboard
             </Link>
             <div className="flex flex-col items-center">
-                <Link href="/browse" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/browse" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
+                <Link href="/browse" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 rounded-4xl duration-300 ${pathname === "/browse" ? "font-bold bg-[var(--accent)] shadow-lg" : "font-semibold"}`}>
                     <FaSearch className="mr-2"/>
                     Browse
                 </Link>
                 <div className="flex flex-col items-center">
-                    <Link href="/drills" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname === "/drills" ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
+                    <Link href="/drills" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 rounded-4xl duration-300 ${pathname === "/drills" ? "font-bold bg-[var(--accent)] shadow-lg" : "font-semibold"}`}>
                         <FaBasketballBall className="mr-2"/>
                         Drills
                     </Link>
                     {pathname === "/drills" && <div className="flex flex-col items-center space-y-2 mt-4">
-                        <Link href="/drills#my-drills" className="hover:text-[var(--muted)]">My Drills</Link>
-                        <Link href="/drills#saved-drills" className="hover:text-[var(--muted)]">Saved Drills</Link>
+                        <Link href="/drills#my-drills" className="hover:text-[var(--muted)] duration-300">My Drills</Link>
+                        <Link href="/drills#saved-drills" className="hover:text-[var(--muted)] duration-300">Saved Drills</Link>
                     </div>}
                 </div>
                 <div className="flex flex-col items-center">
-                    <Link href="/training" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 ${pathname.startsWith("/training") ? "font-bold bg-[var(--accent)] rounded-4xl shadow-lg" : "font-semibold"}`}>
+                    <Link href="/training" className={`flex items-center text-2xl hover:text-[var(--muted)] px-5 py-8 rounded-4xl duration-300 ${pathname.startsWith("/training") ? "font-bold bg-[var(--accent)] shadow-lg" : "font-semibold"}`}>
                         <FaDumbbell className="mr-2"/>
                         Training
                     </Link>
                     {pathname.startsWith("/training") && <div className="flex flex-col items-center space-y-2 mt-4">
-                        <Link href="/training/new" className="hover:text-[var(--muted)]">New Session</Link>
-                        <Link href="/training/review" className="hover:text-[var(--muted)]">Review Sessions</Link>
+                        <Link href="/training/new" className="hover:text-[var(--muted)] duration-300">New Session</Link>
+                        <Link href="/training/review" className="hover:text-[var(--muted)] duration-300">Review Sessions</Link>
                     </div>}
                 </div>
             </div>
@@ -77,8 +77,8 @@ export default function Sidebar() {
                     <h1 className="text-xl font-medium w-full truncate">{userInfo.username}</h1>
                     {userInfo.bio && <p className="text-sm text-[var(--muted)] whitespace-pre-line max-h-1/2 overflow-y-auto">{userInfo.bio}</p>}
                     <div className="flex space-x-2 text-sm mt-1">
-                        <Link href="/profile" className="underline hover:text-[var(--muted)]">Edit</Link>
-                        <Link href="/" onClick={logout} className="underline hover:text-[var(--muted)]">Logout</Link>
+                        <Link href="/profile" className="underline hover:text-[var(--muted)] duration-300">Edit</Link>
+                        <Link href="/" onClick={logout} className="underline hover:text-[var(--muted)] duration-300">Logout</Link>
                     </div>
                 </div>
             </div>
