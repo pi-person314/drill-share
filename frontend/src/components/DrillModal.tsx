@@ -86,6 +86,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                 isOpen={open ?? !!selectedDrill}
                 className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
                 overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+                ariaHideApp={false}
             >
                 
                 {selectedDrill && <div className="flex flex-col space-y-12 h-full">

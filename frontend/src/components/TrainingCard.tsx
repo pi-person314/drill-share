@@ -1,12 +1,17 @@
+"use client";
 import { TrainingType } from "@/types/training";
 import { useRouter } from "next/navigation";
 import DrillCard from "./DrillCard";
 import DrillModal from "./DrillModal";
 import { FaCopy, FaTrash } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { useDrill } from "@/hooks/drill";
 
 export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { trainingInfo: TrainingType, trigger?: boolean, setTrigger?: (val: boolean) => void }) {
     const router = useRouter();
+    const { drills } = useDrill();
+    const [ trainingDrills, setTrainingDrills ] = useState(trainingInfo.drills);
     const created = new Date(trainingInfo.updatedAt).toLocaleDateString();
     const today = new Date().toLocaleDateString();
     const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
@@ -33,6 +38,10 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
         });
     }
 
+    useEffect(() => {
+        setTrainingDrills(trainingDrills.map(trainingDrill => drills.find(drill => drill._id === trainingDrill._id) || trainingDrill));
+    }, [drills]);
+
     return (
         <div>
             <div 
@@ -53,12 +62,12 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
                     </p>
                 </div> 
                 <div className="flex flex-col space-y-6 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
-                    {trainingInfo.drills.map((drill, index) => (
+                    {trainingDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} />
                     ))}
                 </div>
             </div>
-            <DrillModal preview={true} /> 
+            <DrillModal preview={false} /> 
         </div>
     )
 }

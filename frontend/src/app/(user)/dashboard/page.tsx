@@ -14,7 +14,7 @@ import { FaArrowUp, FaFire } from "react-icons/fa";
 export default function Dashboard() {
     const { user, loading } = useAuth();
     const router = useRouter(); 
-    const { setDrills } = useDrill();
+    const { drills, setDrills } = useDrill();
     const [ fetching, setFetching ] = useState(false);
     const [ userSports, setUserSports ] = useState<string[] | null>(null);
     const [ streak, setStreak ] = useState<number>(0);
@@ -22,6 +22,24 @@ export default function Dashboard() {
     const [ recDrills, setRecDrills ] = useState<DrillType[]>([]);
     const [ myDrills, setMyDrills ] = useState<DrillType[]>([]);
     const [ sessions, setSessions ] = useState<TrainingType[]>([]);
+
+    const fetchDrills = async (first: boolean) => {
+        if (!userSports) return;
+        const publicRes = await fetch("http://localhost:5000/api/drills/public");
+        const myRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
+        if (publicRes.ok && myRes.ok) {
+            const publicData = await publicRes.json();
+            const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
+            const sortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            setRecDrills(sortedDrills.slice(0, 5));
+
+            const myData = await myRes.json();
+            setMyDrills(myData.data.sort((a: DrillType, b: DrillType) => b.likes - a.likes).slice(0, 5));
+            setContribution(myData.data.filter((drill: DrillType) => drill.likes >= 10).length);
+            if (first) setDrills([...recDrills, ...myDrills, ...sessions.flatMap((session: TrainingType) => session.drills)]);
+        }
+        setFetching(false);
+    }
 
     useEffect(() => {
         if (!user && !loading) router.replace("/");
@@ -51,25 +69,12 @@ export default function Dashboard() {
     }, [user, loading]);
 
     useEffect(() => {
-        if (!userSports) return;
-        const fetchDrills = async () => {
-            const publicRes = await fetch("http://localhost:5000/api/drills/public");
-            const myRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
-            if (publicRes.ok && myRes.ok) {
-                const publicData = await publicRes.json();
-                const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
-                const sortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-                setRecDrills(sortedDrills.slice(0, 5));
-
-                const myData = await myRes.json();
-                setMyDrills(myData.data.sort((a: DrillType, b: DrillType) => b.likes - a.likes).slice(0, 5));
-                setContribution(myData.data.filter((drill: DrillType) => drill.likes >= 10).length);
-                setDrills([...recDrills, ...myDrills]);
-            }
-            setFetching(false);
-        }
-        fetchDrills();
+        fetchDrills(true);
     }, [userSports]);
+
+    useEffect(() => {
+        fetchDrills(false);
+    }, [drills]);
     
     if (!user || loading || fetching) {
         return (

@@ -39,37 +39,27 @@ export default function Drills() {
         { value: "alpha", label: `${savedReverse ? "Reverse" : ""} Alphabetical` }
     ];
 
+    const fetchDrills = async (first: boolean) => {
+        if (first) setFetching(true);
+        const createdRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
+        const savedRes = await fetch(`http://localhost:5000/api/drills/saved/${user}`);
+        if (createdRes.ok && savedRes.ok) {
+            const createdData = await createdRes.json();
+            const savedData = await savedRes.json();
+            setCreatedDrills(createdData.data);
+            setSavedDrills(savedData.data);
+            if (first) setDrills([...createdData.data, ...savedData.data]);
+        }
+        if (first) setFetching(false);
+    }
+
     useEffect(() => {
         if (!user && !loading) router.replace("/");
-
-        const fetchDrills = async () => {
-            setFetching(true);
-            const createdRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
-            const savedRes = await fetch(`http://localhost:5000/api/drills/saved/${user}`);
-            if (createdRes.ok && savedRes.ok) {
-                const createdData = await createdRes.json();
-                const savedData = await savedRes.json();
-                setDrills([...createdData.data, ...savedData.data]);
-                setCreatedDrills(createdData.data);
-                setSavedDrills(savedData.data);
-            }
-            setFetching(false);
-        }
-        fetchDrills();
+        fetchDrills(true);
     }, [user, loading]);
 
     useEffect(() => {
-        const fetchDrills = async () => {
-            const createdRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
-            const savedRes = await fetch(`http://localhost:5000/api/drills/saved/${user}`);
-            if (createdRes.ok && savedRes.ok) {
-                const createdData = await createdRes.json();
-                const savedData = await savedRes.json();
-                setCreatedDrills(createdData.data);
-                setSavedDrills(savedData.data);
-            }
-        }
-        fetchDrills();
+        fetchDrills(false);
     }, [drills]);
 
     const sortedCreatedDrills = useMemo(() => {
