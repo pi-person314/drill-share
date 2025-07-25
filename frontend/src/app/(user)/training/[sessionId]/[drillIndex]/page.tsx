@@ -102,47 +102,47 @@ export default function RecordPage() {
     }
 
     return (
-        <main className="flex-1 flex items-center justify-center w-full h-full p-16">
-            <div className="flex flex-col items-center justify-between w-full h-full max-w-400 space-y-16 relative">
+        <main className="flex-1 flex items-center justify-center w-full h-full p-16 pr-0">
+            <div className="flex flex-col items-center justify-between w-full h-full max-w-300 space-y-8 xl:space-y-16 pr-16 overflow-y-auto relative">
                 <div className="text-center">
-                    <h1 className="text-5xl font-semibold">{drill.title}</h1>
-                    <h2 className="text-2xl font-medium text-[var(--muted)]">{drill.type}</h2>
+                    <h1 className="text-4xl xl:text-5xl font-semibold">{drill.title}</h1>
+                    <h2 className="text-xl xl:text-2xl font-medium text-[var(--muted)]">{drill.type}</h2>
                 </div>
 
-                <div className="absolute top-0 right-0">
-                    <button onClick={() => setSelectedDrill(drill)} className="flex items-center bg-[var(--primary)] rounded-lg shadow-lg p-4 cursor-pointer hover:scale-105">
-                        View Drill<FaEye className="ml-2 text-2xl" />
+                <div className="absolute top-0 right-16">
+                    <button onClick={() => setSelectedDrill(drill)} className="flex items-center bg-[var(--primary)] text-sm xl:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:scale-105">
+                        <p className="hidden md:block">View Drill</p><FaEye className="md:ml-2 text-xl xl:text-2xl" />
                     </button>
                 </div>
 
-                <div className="flex w-full h-full space-x-16">
-                    <div className="flex flex-col items-center justify-center bg-[var(--primary)] rounded-xl shadow-lg w-2/3 p-8 space-y-8">
+                <div className="flex flex-col xl:flex-row w-full xl:h-full space-y-8 xl:space-y-0 xl:space-x-16">
+                    <div className="flex flex-col items-center justify-center bg-[var(--primary)] rounded-xl shadow-lg min-h-80 xl:w-2/3 p-8 space-y-8">
                         {recording ? 
-                            <video ref={videoRef} autoPlay className={`w-full ${paused ? "opacity-50" : ""}`} /> 
+                            <video ref={videoRef} autoPlay className={`w-full h-3/4 ${paused ? "opacity-50" : ""}`} /> 
                         : mediaUrl ? 
-                            <video src={mediaUrl} controls className="w-full" />
+                            <video src={mediaUrl} controls className="w-full h-3/4" />
                         : 
-                            <button onClick={start} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
-                                <FaMicrophone className="mr-2 text-2xl" />Record
+                            <button onClick={start} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
+                                <FaMicrophone className="mr-2 text-xl md:text-2xl" />Record
                             </button>
                         }
                         
                         {recording && <div className="flex justify-center w-full space-x-4">
-                            <button onClick={() => paused ? resume() : pause()} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--muted)]">
-                                {paused ? <FaPlay className="mr-2 text-xl" /> : <FaPause className="mr-2 text-xl" />}
+                            <button onClick={() => paused ? resume() : pause()} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--muted)]">
+                                {paused ? <FaPlay className="mr-2 text-lg md:text-xl" /> : <FaPause className="mr-2 text-lg md:text-xl" />}
                                 {paused ? "Resume" : "Pause"}
                             </button>
-                            <button onClick={() => {stop(); setChanged(true);}} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
-                                <FaSave className="mr-2 text-2xl" />Save
+                            <button onClick={() => {stop(); setChanged(true);}} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
+                                <FaSave className="mr-2 text-lg md:text-2xl" />Save
                             </button>
                         </div>}
-                        {!recording && mediaUrl && <button onClick={restart} className="flex items-center bg-[var(--secondary)] rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
-                            <FaRedo className="mr-2 text-xl" />Restart
+                        {!recording && mediaUrl && <button onClick={restart} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
+                            <FaRedo className="mr-2 text-lg md:text-xl" />Restart
                         </button>}
                     </div>
                     <textarea 
                         placeholder="Take notes here..." 
-                        className="flex-1 bg-[var(--secondary)] rounded-xl shadow-lg border p-4 whitespace-pre-line resize-none" 
+                        className="xl:flex-1 bg-[var(--secondary)] rounded-xl shadow-lg border p-4 min-h-80 whitespace-pre-line resize-none" 
                         value={notes}
                         onChange={(e) => {setNotes(e.target.value); setChanged(true);}}
                     />
@@ -152,19 +152,19 @@ export default function RecordPage() {
                     <button 
                         onClick={() => {handleUpdate(); router.push(`/training/${sessionId}/${Number(drillIndex) - 1}`)}} 
                         disabled={Number(drillIndex) === 0}
-                        className={`flex items-center bg-[var(--accent)] rounded-lg shadow-lg p-4 ${Number(drillIndex) === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:scale-105"}`}
+                        className={`flex items-center bg-[var(--accent)] text-sm xl:text-base rounded-lg shadow-lg p-4 ${Number(drillIndex) === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:scale-105"}`}
                     >
-                        <FaLongArrowAltLeft className="mr-2 text-2xl" />
+                        <FaLongArrowAltLeft className="mr-2 text-xl xl:text-2xl" />
                         Previous
                     </button>
 
                     <button 
                         onClick={() => {handleUpdate(true); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
                         disabled={recording || !mediaUrl}
-                        className={`flex items-center bg-[var(--accent)] rounded-lg shadow-lg p-4 ${recording || !mediaUrl ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`flex items-center bg-[var(--accent)] text-sm xl:text-base rounded-lg shadow-lg p-4 ${recording || !mediaUrl ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                         {Number(drillIndex) === session.drills.length - 1 ? "Finish" : "Next"}
-                        <FaLongArrowAltRight className="ml-2 text-2xl" />
+                        <FaLongArrowAltRight className="ml-2 text-xl xl:text-2xl" />
                     </button>
                 </div>
             </div>

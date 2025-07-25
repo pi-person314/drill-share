@@ -123,18 +123,18 @@ export default function Browse() {
             </div>
         )
     }
-
     return (
-        <div className="flex-1 flex flex-col p-16 space-y-8">
-            <header className="flex justify-between w-full p-6 rounded-xl bg-[var(--primary)]">
-                <div className="flex w-full space-x-4">
+        <div className="flex-1 flex flex-col items-center space-y-4 p-16">
+            <header className="flex flex-col justify-evenly [@media(min-width:90rem)]:w-full max-w-300 [@media(min-width:90rem)]:h-auto space-y-20 [@media(min-width:90rem)]:space-y-6 p-8 rounded-xl bg-[var(--primary)]">
+                <div className="flex flex-col [@media(min-width:90rem)]:flex-row items-center w-full space-y-4 [@media(min-width:90rem)]:space-y-0 [@media(min-width:90rem)]:space-x-8">
+                    <h1 className="text-xl">Filters:</h1>
                     <Select 
                         options={sportsOptions}
                         placeholder="Any Sport"
                         value={filters.sport ? sportsOptions.find(option => option.value === filters.sport) : null}
                         onChange={selected => setFilters({...filters, sport: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/5 min-w-44 max-w-80"
+                        className="flex-1 min-w-44"
                     />
                     <Select 
                         options={typeOptions}
@@ -142,7 +142,7 @@ export default function Browse() {
                         value={filters.type ? typeOptions.find(option => option.value === filters.type) : null}
                         onChange={selected => setFilters({...filters, type: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/5 min-w-44 max-w-80"
+                        className="flex-1 min-w-44"
                     />
                     <Select 
                         options={difficultyOptions}
@@ -150,7 +150,7 @@ export default function Browse() {
                         value={filters.difficulty ? difficultyOptions.find(option => option.value === filters.difficulty) : null}
                         onChange={selected => setFilters({...filters, difficulty: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/5 min-w-44 max-w-80"
+                        className="flex-1 min-w-44"
                     />
                     <Select 
                         options={timeOptions}
@@ -158,19 +158,18 @@ export default function Browse() {
                         value={filters.time ? timeOptions.find(option => arraysEqual(option.value, filters.time)) : null}
                         onChange={selected => setFilters({...filters, time: selected ? selected.value : null})}
                         styles={dropdownStyles}
-                        className="w-1/5 min-w-44 max-w-80"
+                        className="flex-1 min-w-44"
                     />
                 </div>
-                
                 <input 
                     placeholder="Search"
                     value={filters.query || ""}
                     onChange={e => setFilters({...filters, query: e.target.value || null})}
-                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-1/3 max-w-120 h-[38px] border"
+                    className="bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 w-full h-[38px] border"
                 />
             </header>
 
-            {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center overflow-y-auto auto-rows-max gap-y-20">
+            {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center h-full w-full overflow-x-hidden overflow-y-auto auto-rows-max pt-20 gap-y-20">
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
                     <DrillCard key={index} drillInfo={drill} />
                 ))}

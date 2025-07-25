@@ -59,6 +59,7 @@ export default function Register() {
         }
     }
 
+    // TODO: add 5 more sports
     const options = [
         { value: "Soccer", label: "Soccer" },
         { value: "Basketball", label: "Basketball" },
@@ -82,7 +83,7 @@ export default function Register() {
             >
                 <h1 className="text-4xl md:text-5xl mb-10 font-medium">Register</h1>
 
-                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-full min-w-60 space-y-1">
                     <p>Username <span className="text-[var(--danger)]">*</span></p>
                     <input 
                         placeholder="Username"
@@ -92,7 +93,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-full min-w-60 space-y-1">
                     <p>Password <span className="text-[var(--danger)]">*</span></p>
                     <input 
                         placeholder="Password" 
@@ -103,7 +104,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-full min-w-60 space-y-1">
                     <p>Bio <span className="text-[var(--muted)]">(optional)</span></p>
                     <textarea 
                         placeholder="Experience, location, fun facts, etc." 
@@ -114,7 +115,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-full min-w-60 space-y-1">
                     <p>Sports <span className="text-[var(--muted)]">(optional)</span></p>
                     <Select 
                         isMulti 
@@ -129,7 +130,7 @@ export default function Register() {
                     />
                 </div>
 
-                <div className="text-sm md:text-base w-5/6 min-w-60 space-y-1">
+                <div className="text-sm md:text-base w-full min-w-60 space-y-1">
                     <p>Photo <span className="text-[var(--muted)]">(optional)</span></p>
                     <div {...getRootProps()} className="text-center bg-[var(--secondary)] border-2 border-dashed rounded-lg p-3 w-full h-32">
                         <input {...getInputProps()} />

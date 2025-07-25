@@ -40,7 +40,7 @@ export default function Sidebar() {
     if (!user) return null;
 
     return (
-        <aside className="flex flex-col shrink-0 w-32 lg:w-80 h-full bg-[var(--primary)] justify-between items-center px-4 pt-16 pb-8 lg:p-8 lg:pt-16 overflow-y-auto [@media(max-height:50rem)]:pt-8 duration-300 rounded-2xl shadow-lg">
+        <aside className="flex flex-col shrink-0 w-32 lg:w-80 h-full bg-[var(--primary)] justify-between items-center px-4 pt-16 pb-8 lg:p-8 lg:pt-16 overflow-x-hidden overflow-y-auto [@media(max-height:50rem)]:pt-8 duration-300 rounded-2xl shadow-lg">
             <Link href="/dashboard" className={`flex items-center text-3xl [@media(max-height:50rem)]:text-2xl hover:text-[var(--muted)] px-5 py-8 [@media(max-height:50rem)]:py-4 rounded-4xl duration-300 ${pathname === "/dashboard" ? "font-bold bg-[var(--accent)] shadow-lg" : "font-semibold"}`}>
                 <FaHome className="lg:mr-2"/>
                 <p className="hidden lg:block">Dashboard</p>

@@ -49,7 +49,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
                     <h1 className="text-3xl font-semibold text-center w-full break-words line-clamp-3">{trainingInfo.title}</h1>
                     <p className="text-lg text-center text-[var(--muted)] w-full">{trainingInfo.drills.length} drills</p>
                     <p className="text-lg text-center text-[var(--muted)] w-full">
-                        {created === today ? "Today" : created === yesterday ? "Yesterday" : created}
+                        Updated {created === today ? "Today" : created === yesterday ? "Yesterday" : created}
                     </p>
                 </div> 
                 <div className="flex flex-col space-y-6 overflow-y-auto" style={{ scrollbarWidth: "none" }}>

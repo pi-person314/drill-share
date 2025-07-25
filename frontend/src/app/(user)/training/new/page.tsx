@@ -110,7 +110,7 @@ export default function NewSession() {
         fetchDrills();
     }, [sport, type]);
         
-    if (!user || loading) {
+    if (!user || loading || fetchingTraining) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)]">Loading...</p>
@@ -121,22 +121,32 @@ export default function NewSession() {
     if (!sport) {
         return (
             <main className="flex-1 flex flex-col items-center justify-center p-16 space-y-8">
-                <h1 className="text-4xl font-semibold">Select a sport to begin!</h1>
-                <div className="flex justify-center space-x-6 w-2/3 p-8 border rounded-xl">
-                    <img onClick={() => setSport("Soccer")} src="/images/soccer.png" alt="Soccer Ball" className="w-1/5 max-w-30 hover:scale-105 cursor-pointer"/>
-                    <img onClick={() => setSport("Basketball")} src="/images/basketball.png" alt="Basketball" className="w-1/5 max-w-30 hover:scale-105 cursor-pointer"/>
-                    <img onClick={() => setSport("Tennis")} src="/images/tennis.png" alt="Tennis Ball" className="w-1/5 max-w-30 hover:scale-105 cursor-pointer"/>
-                    <img onClick={() => setSport("Volleyball")} src="/images/volleyball.png" alt="Volleyball" className="w-1/5 max-w-30 hover:scale-105 cursor-pointer"/>
-                    <img onClick={() => setSport("Baseball")} src="/images/baseball.png" alt="Baseball" className="w-1/5 max-w-30 hover:scale-105 cursor-pointer"/>
+                <h1 className="text-2xl md:text-4xl text-center font-semibold">Select a sport to begin!</h1>
+                <div className="flex justify-evenly space-x-2 lg:space-x-6 w-full lg:w-2/3 max-w-300 p-4 lg:p-8 border rounded-xl">
+                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                        <img onClick={() => setSport("Soccer")} src="/images/soccer.png" alt="Soccer Ball"/>
+                    </div>
+                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                        <img onClick={() => setSport("Basketball")} src="/images/basketball.png" alt="Basketball"/>
+                    </div>
+                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                        <img onClick={() => setSport("Tennis")} src="/images/tennis.png" alt="Tennis Ball"/>
+                    </div>
+                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                        <img onClick={() => setSport("Volleyball")} src="/images/volleyball.png" alt="Volleyball"/>
+                    </div>
+                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                        <img onClick={() => setSport("Baseball")} src="/images/baseball.png" alt="Baseball"/>
+                    </div>
                 </div>
             </main>
         )
     }
 
     return (
-        <main className="flex-1 flex justify-center w-full h-full p-16">
-            <div className="flex flex-col items-center justify-between w-full h-full max-w-400 space-y-16">
-                <div className="flex justify-center w-1/3">
+        <main className="flex-1 flex justify-center w-full p-16 pr-0">
+            <div className="flex flex-col items-center justify-between w-full max-w-400 space-y-16 pr-16 overflow-y-auto">
+                <div className="flex justify-center w-2/3 xl:w-1/3">
                     <input 
                         placeholder={`Untitled ${sport} Session`} 
                         value={title}
@@ -145,8 +155,8 @@ export default function NewSession() {
                     />
                 </div>
 
-                <div className="flex w-full h-4/5 space-x-16">
-                    <div className="flex flex-col items-center w-2/5 min-w-130 space-y-8 px-4 overflow-y-auto" style={{scrollbarWidth: "none"}}>
+                <div className="flex flex-col xl:flex-row items-center xl:items-start w-full space-y-16 xl:h-4/5 xl:space-y-0 xl:space-x-8">
+                    <div className="flex flex-col items-center w-full h-full xl:w-2/5 min-w-120 max-w-160 space-y-8 px-4 xl:overflow-y-auto" style={{scrollbarWidth: "none"}}>
                         <TrainingSection type="Warmup" drillInfo={warmup} setDrillInfo={setWarmup} onClick={() => setType("Warmup")}/>
                         {sections.map((section) => (
                             <TrainingSection 
@@ -172,7 +182,7 @@ export default function NewSession() {
                         <TrainingSection type="Cooldown" drillInfo={cooldown} setDrillInfo={setCooldown} onClick={() => setType("Cooldown")}/>
                     </div>
 
-                    <div className="flex-1 border p-8 rounded-2xl shadow-lg">
+                    <div className="flex-1 border p-8 px-2 w-full h-full rounded-2xl shadow-lg">
                         {!type && <p className="flex-1 flex items-center justify-center h-full text-xl text-[var(--muted)]">
                             Click a section to see matching drills!
                         </p>}
@@ -184,7 +194,7 @@ export default function NewSession() {
                             {!drills.length && !fetching && <p className="flex-1 flex items-center text-xl text-[var(--muted)]">
                                 No drills found
                             </p>}
-                            {!!drills.length && !fetching && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center w-full space-y-8 overflow-y-auto">
+                            {!!drills.length && !fetching && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(20rem,1fr))] justify-items-center w-full space-y-8 overflow-y-auto">
                                 {drills.map((drill, index) => (
                                     <DrillCard key={index} drillInfo={drill} />
                                 ))}
