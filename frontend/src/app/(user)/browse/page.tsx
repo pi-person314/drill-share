@@ -176,7 +176,7 @@ export default function Browse() {
                 <DrillModal preview={false}/>
             </main>}
             {!drills.length && !fetching && <main className="flex-1 flex items-center justify-center">
-                <p className="text-3xl text-[var(--muted)] text-center">
+                <p className="text-3xl text-[var(--muted)] text-center p-8">
                     No shared drills match these filters yet.<br/>
                     Create your own{" "}
                     <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>

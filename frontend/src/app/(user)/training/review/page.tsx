@@ -39,7 +39,7 @@ export default function ReviewSessions() {
     if (!sessions.length) {
         return (
             <div className="flex-1 flex items-center justify-center">
-                <p className="text-3xl text-[var(--muted)] text-center">
+                <p className="text-3xl text-[var(--muted)] text-center p-8">
                     No training sessions have been created yet.<br/>
                     Begin{" "}
                     <Link href="/training/new" className="text-[var(--link)] underline">here!</Link>

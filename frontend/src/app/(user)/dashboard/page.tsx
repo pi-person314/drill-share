@@ -105,7 +105,7 @@ export default function Dashboard() {
                             <span className="flex items-center ml-4 text-xl text-[var(--link)]"><FaArrowUp className="mr-1"/>{contribution}</span>
                         </h1>
                         <p className="text-[var(--muted)]">Create drills with 10+ likes to increase your contribution!</p>
-                        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))] lg:[grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center overflow-y-auto gap-16 p-8 mt-4 overflow-x-hidden border rounded-lg shadow-lg">
+                        <div className="flex-1 grid [grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))] lg:[grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr))] justify-center justify-items-center overflow-y-auto gap-16 p-8 mt-4 overflow-x-hidden border rounded-lg shadow-lg">
                             {myDrills.map((drill, index) => <DrillCard key={index} drillInfo={drill} />)}
                             {!myDrills.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-8">
                                 No drills have been created yet.<br/>
