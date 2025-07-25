@@ -102,14 +102,14 @@ export default function RecordPage() {
     }
 
     return (
-        <main className="flex-1 flex items-center justify-center w-full h-full p-16 pr-0">
-            <div className="flex flex-col items-center justify-between w-full h-full max-w-300 space-y-8 xl:space-y-16 pr-16 overflow-y-auto relative">
-                <div className="text-center">
-                    <h1 className="text-4xl xl:text-5xl font-semibold">{drill.title}</h1>
+        <main className="flex-1 flex items-center justify-center w-full min-w-0 h-full p-16 pr-0">
+            <div className="flex flex-col items-center justify-between w-full h-full max-w-300 space-y-8 xl:space-y-16 p-1 pr-16 overflow-y-auto relative">
+                <div className="flex flex-col items-center text-center w-full">
+                    <h1 className="text-4xl xl:text-5xl font-semibold w-1/2 truncate">{drill.title}</h1>
                     <h2 className="text-xl xl:text-2xl font-medium text-[var(--muted)]">{drill.type}</h2>
                 </div>
 
-                <div className="absolute top-0 right-16">
+                <div className="absolute top-1 right-16">
                     <button onClick={() => setSelectedDrill(drill)} className="flex items-center bg-[var(--primary)] text-sm xl:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:scale-105">
                         <p className="hidden md:block">View Drill</p><FaEye className="md:ml-2 text-xl xl:text-2xl" />
                     </button>
@@ -159,9 +159,9 @@ export default function RecordPage() {
                     </button>
 
                     <button 
-                        onClick={() => {handleUpdate(true); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
+                        onClick={() => {handleUpdate(Number(drillIndex) === session.drills.length - 1); router.push(`${Number(drillIndex) === session.drills.length - 1 ? "/training/review" : `/training/${sessionId}/${Number(drillIndex) + 1}`}`)}} 
                         disabled={recording || !mediaUrl}
-                        className={`flex items-center bg-[var(--accent)] text-sm xl:text-base rounded-lg shadow-lg p-4 ${recording || !mediaUrl ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`flex items-center bg-[var(--accent)] text-sm xl:text-base rounded-lg shadow-lg p-4 ${recording || !mediaUrl ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:scale-105"}`}
                     >
                         {Number(drillIndex) === session.drills.length - 1 ? "Finish" : "Next"}
                         <FaLongArrowAltRight className="ml-2 text-xl xl:text-2xl" />

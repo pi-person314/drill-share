@@ -93,6 +93,24 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+router.put("/visit/:id", async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const training = await Training.findById(id);
+        if (!training) {
+            return res.status(404).json({message: "Training session not found."});
+        }
+
+        await Training.findByIdAndUpdate(id, {visited: training.visited + 1}, {timestamps: false});
+        
+        res.status(200).json({data: training.visited, message: "Training session visits updated!"});
+    } catch (error) {
+        res.status(500).json({message: "Server Error"});
+        console.log(error);
+    }
+});
+
 router.delete("/:id", async (req, res) => {
     const id = req.params.id;
     try {

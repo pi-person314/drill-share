@@ -145,7 +145,7 @@ export default function NewSession() {
 
     return (
         <main className="flex-1 flex justify-center w-full p-16 pr-0">
-            <div className="flex flex-col items-center justify-between w-full max-w-400 space-y-16 pr-16 overflow-y-auto">
+            <div className="flex flex-col items-center justify-between w-full max-w-400 space-y-16 p-1 pr-16 overflow-y-auto">
                 <div className="flex justify-center w-2/3 xl:w-1/3">
                     <input 
                         placeholder={`Untitled ${sport} Session`} 
@@ -156,7 +156,7 @@ export default function NewSession() {
                 </div>
 
                 <div className="flex flex-col xl:flex-row items-center xl:items-start w-full space-y-16 xl:h-4/5 xl:space-y-0 xl:space-x-8">
-                    <div className="flex flex-col items-center w-full h-full xl:w-2/5 min-w-120 max-w-160 space-y-8 px-4 xl:overflow-y-auto" style={{scrollbarWidth: "none"}}>
+                    <div className="flex flex-col items-center w-full h-full xl:w-2/5 min-w-80 xl:min-w-120 max-w-160 space-y-8 px-4 xl:overflow-y-auto" style={{scrollbarWidth: "none"}}>
                         <TrainingSection type="Warmup" drillInfo={warmup} setDrillInfo={setWarmup} onClick={() => setType("Warmup")}/>
                         {sections.map((section) => (
                             <TrainingSection 
@@ -170,20 +170,20 @@ export default function NewSession() {
                         ))}
                         <div className="flex justify-center space-x-4">
                             <button onClick={() => setSections([...sections, {id: uuidv4(), type: "Technique", drillInfo: null}])} className="flex justify-center items-center bg-[var(--accent)] rounded-lg p-4 cursor-pointer hover:scale-105">
-                                Add Technique <FaGear className="ml-2 text-2xl"/>
+                                <p className="hidden md:block">Add Technique</p> <FaGear className="md:ml-2 text-2xl"/>
                             </button>
                             <button onClick={() => setSections([...sections, {id: uuidv4(), type: "Conditioning", drillInfo: null}])} className="flex justify-center items-center bg-[var(--accent)] rounded-lg p-4 cursor-pointer hover:scale-105">
-                                Add Conditioning <FaRunning className="ml-2 text-2xl"/>
+                                <p className="hidden md:block">Add Conditioning</p> <FaRunning className="md:ml-2 text-2xl"/>
                             </button>
                             <button onClick={() => setSections([...sections, {id: uuidv4(), type: "Strategy", drillInfo: null}])} className="flex justify-center items-center bg-[var(--accent)] rounded-lg p-4 cursor-pointer hover:scale-105">
-                                Add Strategy <PiStrategy className="ml-2 text-3xl"/>
+                                <p className="hidden md:block">Add Strategy</p> <PiStrategy className="md:ml-2 text-3xl"/>
                             </button>
                         </div>
                         <TrainingSection type="Cooldown" drillInfo={cooldown} setDrillInfo={setCooldown} onClick={() => setType("Cooldown")}/>
                     </div>
 
                     <div className="flex-1 border p-8 px-2 w-full h-full rounded-2xl shadow-lg">
-                        {!type && <p className="flex-1 flex items-center justify-center h-full text-xl text-[var(--muted)]">
+                        {!type && <p className="flex-1 flex items-center justify-center text-center h-full text-xl text-[var(--muted)] px-8">
                             Click a section to see matching drills!
                         </p>}
                         {type && <div className="flex-1 flex flex-col items-center h-full">
@@ -194,7 +194,7 @@ export default function NewSession() {
                             {!drills.length && !fetching && <p className="flex-1 flex items-center text-xl text-[var(--muted)]">
                                 No drills found
                             </p>}
-                            {!!drills.length && !fetching && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(20rem,1fr))] justify-items-center w-full space-y-8 overflow-y-auto">
+                            {!!drills.length && !fetching && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))] lg:[grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full gap-16 overflow-x-hidden overflow-y-auto">
                                 {drills.map((drill, index) => (
                                     <DrillCard key={index} drillInfo={drill} />
                                 ))}

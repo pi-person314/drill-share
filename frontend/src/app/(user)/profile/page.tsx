@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Select from "react-select";
 import { FaUpload } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function Profile() {
     type UserInfo = {
@@ -56,6 +57,7 @@ export default function Profile() {
 
         const data = await res.json();
         if (res.ok) {
+            toast.info("Profile updated!")
             router.push("/dashboard");
         } else {
             setError(data.message);

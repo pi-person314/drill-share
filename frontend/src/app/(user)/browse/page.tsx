@@ -169,7 +169,7 @@ export default function Browse() {
                 />
             </header>
 
-            {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))] justify-items-center h-full w-full overflow-x-hidden overflow-y-auto auto-rows-max pt-20 gap-y-20">
+            {!!drills.length && !fetching && <main className="grid [grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))] lg:[grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full overflow-x-hidden overflow-y-auto pt-16 gap-16">
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
                     <DrillCard key={index} drillInfo={drill} />
                 ))}
