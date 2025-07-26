@@ -30,8 +30,10 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
         }
     }
 
-    const handleVisit = async () => {
+    const onClick = async () => {
         await fetch(`http://localhost:5000/api/training/visit/${trainingInfo._id}`, {method: "PUT"});
+        const index = trainingInfo.videos.indexOf("") !== -1 ? trainingInfo.videos.indexOf("") : 0;
+        router.push(`/training/${trainingInfo._id}/${index}`);
     }
 
     useEffect(() => {
@@ -41,8 +43,8 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
     return (
         <>
             <div 
-                onClick={() => {handleVisit(); router.push(`/training/${trainingInfo._id}/0`)}} 
-                className="flex flex-col lg:flex-row justify-between [@media(max-width:1023px)]:items-center bg-[var(--primary)] rounded-xl cursor-pointer p-8 lg:pl-0 w-80 lg:w-130 h-150 lg:h-100 [@media(max-height:50rem)]:h-90 duration-300 hover:shadow-xl relative"
+                onClick={onClick} 
+                className="shrink-0 flex flex-col lg:flex-row justify-between [@media(max-width:1023px)]:items-center bg-[var(--primary)] rounded-xl cursor-pointer p-8 lg:pl-0 w-80 lg:w-130 h-150 lg:h-100 [@media(max-height:50rem)]:h-90 duration-300 hover:shadow-xl relative"
             >
                 <div className="absolute top-5 left-4">
                     <button onClick={handleCopy} className="text-2xl cursor-pointer duration-300 text-[var(--muted)] hover:text-[var(--link)]"><FaCopy /></button>

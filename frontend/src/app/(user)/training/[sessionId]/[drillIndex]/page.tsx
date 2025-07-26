@@ -20,6 +20,7 @@ export default function RecordPage() {
     const [ notes, setNotes ] = useState("");
     const [ fetching, setFetching ] = useState(true);
     const [ changed, setChanged ] = useState(false);
+    const [ recorded, setRecorded ] = useState(false);
     const { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream } = useRecorder();
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -38,7 +39,7 @@ export default function RecordPage() {
             })
         });
 
-        if (finish) {
+        if (finish && recorded) {
             const today = new Date().toLocaleDateString();
             const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
             const res = await fetch(`http://localhost:5000/api/users/${user}`);
@@ -132,7 +133,7 @@ export default function RecordPage() {
                                 {paused ? <FaPlay className="mr-2 text-lg md:text-xl" /> : <FaPause className="mr-2 text-lg md:text-xl" />}
                                 {paused ? "Resume" : "Pause"}
                             </button>
-                            <button onClick={() => {stop(); setChanged(true);}} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
+                            <button onClick={() => {stop(); setChanged(true); setRecorded(true); handleUpdate();}} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
                                 <FaSave className="mr-2 text-lg md:text-2xl" />Save
                             </button>
                         </div>}

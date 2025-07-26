@@ -21,7 +21,7 @@ export default function ReviewSessions() {
             const res = await fetch(`http://localhost:5000/api/training/created/${user}`);
             if (res.ok) {
                 const data = await res.json();
-                setSessions(data.data);
+                setSessions(data.data.sort((a: TrainingType, b: TrainingType) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()));
             }
             setFetching(false);
         }
@@ -49,10 +49,24 @@ export default function ReviewSessions() {
     }
 
     return (
-        <main className="flex-1 flex flex-wrap justify-center mx-auto overflow-x-hidden overflow-y-auto gap-16 p-16">
-            {sessions.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).map((session, index) => (
-                <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
-            ))}
+        <main className="flex-1 flex flex-col space-y-16 p-16 py-12 min-w-0 overflow-y-auto">
+            <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
+                <h1 className="text-center text-2xl font-semibold">Continue Where You Left Off</h1>
+                <div className="flex space-x-4 p-4 pr-0 overflow-x-auto border rounded-2xl shadow-lg">
+                    {sessions.filter(session => session.videos.includes("")).map((session, index) => (
+                        <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
+                    ))}
+                </div>
+            </div>
+            
+            <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
+                <h1 className="text-center text-2xl font-semibold">Review or Retry Completed Sessions</h1>
+                <div className="flex space-x-4 p-4 pr-0 overflow-x-auto border rounded-2xl shadow-lg">
+                    {sessions.filter(session => !session.videos.includes("")).map((session, index) => (
+                        <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
+                    ))}
+                </div>
+            </div>
         </main>
     )
 }

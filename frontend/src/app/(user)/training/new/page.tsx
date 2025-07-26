@@ -122,7 +122,7 @@ export default function NewSession() {
         return (
             <main className="flex-1 flex flex-col items-center justify-center p-16 space-y-8">
                 <h1 className="text-2xl md:text-4xl text-center font-semibold">Select a sport to begin!</h1>
-                <div className="flex flex-col space-y-8 w-full lg:w-2/3 max-w-300 p-4 lg:p-8 border rounded-xl">
+                <div className="flex flex-col space-y-8 w-full lg:w-2/3 max-w-300 p-4 lg:p-8 border rounded-xl shadow-lg">
                     <div className="flex justify-evenly space-x-2 lg:space-x-6 w-full">
                         <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
                             <img onClick={() => setSport("Soccer")} src="/images/soccer.png" alt="Soccer Ball"/>
@@ -213,7 +213,7 @@ export default function NewSession() {
                             {!drills.length && !fetching && <p className="flex-1 flex items-center text-xl text-[var(--muted)]">
                                 No drills found
                             </p>}
-                            {!!drills.length && !fetching && <div className="grid [grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))] lg:[grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full gap-16 overflow-x-hidden overflow-y-auto">
+                            {!!drills.length && !fetching && <div className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full gap-16 overflow-x-hidden overflow-y-auto">
                                 {drills.map((drill, index) => (
                                     <DrillCard key={index} drillInfo={drill} />
                                 ))}

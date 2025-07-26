@@ -42,6 +42,11 @@ export default function Register() {
     }, [user]);
     
     const handleRegister = async () => {
+        if (userInfo.password.length < 8) {
+            setError("Password must be at least 8 characters long.");
+            return;
+        }
+
         const res = await fetch("http://localhost:5000/api/users/register", {
             method: "POST",
             headers: {
@@ -104,7 +109,7 @@ export default function Register() {
                         type="password" 
                         value={userInfo.password}
                         onChange={e => setUserInfo({...userInfo, password: e.target.value})}
-                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && !userInfo.password ? "border-[var(--danger)]" : ""}`}
+                        className={`w-full bg-[var(--secondary)] placeholder-[var(--muted)] rounded-lg p-3 border ${error && userInfo.password.length < 8 ? "border-[var(--danger)]" : ""}`}
                     />
                 </div>
 
