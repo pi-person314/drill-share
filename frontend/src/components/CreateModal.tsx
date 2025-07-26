@@ -41,7 +41,12 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         { value: "Basketball", label: "Basketball" },
         { value: "Tennis", label: "Tennis" },
         { value: "Volleyball", label: "Volleyball" },
-        { value: "Baseball", label: "Baseball" }
+        { value: "Baseball", label: "Baseball" },
+        { value: "Hockey", label: "Hockey" },
+        { value: "Golf", label: "Golf" },
+        { value: "Cricket", label: "Cricket" },
+        { value: "Football", label: "Football" },
+        { value: "Badminton", label: "Badminton" }
     ];
 
     const difficultyOptions = [
@@ -142,12 +147,11 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         <ReactModal
             isOpen={open}
             ariaHideApp={false}
-            shouldFocusAfterRender={true}
-            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg p-12 py-8 w-1/2 max-h-5/6 overflow-y-auto`}
+            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg px-10 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
             overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
             <form onSubmit={e => {e.preventDefault(); update ? handleUpdate() : handleCreate();}} className="flex flex-col h-full space-y-4">
-                <div className="flex justify-end mb-0">
+                <div className="absolute right-4 top-4">
                     <button type="button" className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}><FaXmark /></button>
                 </div>
 
@@ -174,7 +178,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     />
                 </div>
 
-                <div className="flex justify-between space-x-4">
+                <div className="flex justify-between space-y-4">
                     <div className="space-y-1 w-1/3">
                         <p>Type <span className="text-[var(--danger)]">*</span></p>
                         <Select 

@@ -19,12 +19,12 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     }, []);
 
     return (
-        <div>
+        <div className="overflow-hidden w-screen h-screen">
             {width < 650 || height < 600 
                 ? <div className="flex items-center justify-center text-center w-screen h-screen p-8">
                     <p className="text-3xl text-[var(--muted)]">Drill Share is not yet supported for mobile screens!</p>
                 </div>
-                : <div className="flex w-screen h-screen overflow-hidden pl-4 py-8">
+                : <div className="flex w-screen h-screen pl-4 py-8">
                     <Sidebar />
                     <ToastContainer theme="dark"/>
                     <DrillProvider>

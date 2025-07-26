@@ -113,7 +113,7 @@ export default function NewSession() {
     if (!user || loading || fetchingTraining) {
         return (
             <div className="flex-1 flex items-center justify-center">
-                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+                <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
             </div>
         )
     }
@@ -122,21 +122,40 @@ export default function NewSession() {
         return (
             <main className="flex-1 flex flex-col items-center justify-center p-16 space-y-8">
                 <h1 className="text-2xl md:text-4xl text-center font-semibold">Select a sport to begin!</h1>
-                <div className="flex justify-evenly space-x-2 lg:space-x-6 w-full lg:w-2/3 max-w-300 p-4 lg:p-8 border rounded-xl">
-                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
-                        <img onClick={() => setSport("Soccer")} src="/images/soccer.png" alt="Soccer Ball"/>
+                <div className="flex flex-col space-y-8 w-full lg:w-2/3 max-w-300 p-4 lg:p-8 border rounded-xl">
+                    <div className="flex justify-evenly space-x-2 lg:space-x-6 w-full">
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Soccer")} src="/images/soccer.png" alt="Soccer Ball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Basketball")} src="/images/basketball.png" alt="Basketball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Tennis")} src="/images/tennis.png" alt="Tennis Ball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Volleyball")} src="/images/volleyball.png" alt="Volleyball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Baseball")} src="/images/baseball.png" alt="Baseball"/>
+                        </div>
                     </div>
-                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
-                        <img onClick={() => setSport("Basketball")} src="/images/basketball.png" alt="Basketball"/>
-                    </div>
-                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
-                        <img onClick={() => setSport("Tennis")} src="/images/tennis.png" alt="Tennis Ball"/>
-                    </div>
-                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
-                        <img onClick={() => setSport("Volleyball")} src="/images/volleyball.png" alt="Volleyball"/>
-                    </div>
-                    <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
-                        <img onClick={() => setSport("Baseball")} src="/images/baseball.png" alt="Baseball"/>
+                    <div className="flex justify-evenly space-x-2 lg:space-x-6 w-full">
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Hockey")} src="/images/hockey.png" alt="Hockey Puck"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Golf")} src="/images/golf.png" alt="Golf Ball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Cricket")} src="/images/cricket.png" alt="Cricket Ball"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Football")} src="/images/football.png" alt="Football"/>
+                        </div>
+                        <div className="flex-1 w-full max-w-30 hover:scale-110 cursor-pointer object-contain">
+                            <img onClick={() => setSport("Badminton")} src="/images/badminton.png" alt="Badminton Birdie"/>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -189,7 +208,7 @@ export default function NewSession() {
                         {type && <div className="flex-1 flex flex-col items-center h-full">
                             <h2 className="text-2xl font-medium mb-6">Saved {type} Drills</h2>
                             {fetching && <div className="flex-1 flex items-center">
-                                <p className="text-xl text-[var(--muted)]">Loading...</p>
+                                <p className="text-xl text-[var(--muted)] animate-pulse">Loading...</p>
                             </div>}
                             {!drills.length && !fetching && <p className="flex-1 flex items-center text-xl text-[var(--muted)]">
                                 No drills found

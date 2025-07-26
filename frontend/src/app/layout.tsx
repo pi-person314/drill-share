@@ -5,27 +5,27 @@ import Header from "@/components/Header";
 import { AuthProvider } from "@/hooks/auth";
 
 const exo = Exo({
-  variable: "--exo",
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"]
+    variable: "--exo",
+    weight: ["400", "500", "600", "700"],
+    subsets: ["latin"]
 });
 
 export const metadata: Metadata = {
-  title: "Drill Share",
-  description: "A platform for discovering and sharing new ways to practice sports!",
+    title: "Drill Share",
+    description: "A platform for discovering and sharing new ways to practice sports!",
 };
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
-  return (
-    <html lang="en">
-      <body className={`${exo.variable} antialiased`}>
-        <AuthProvider>
-          <div className="flex flex-col w-screen h-screen">
-            <Header />
-            {children}
-          </div>
-        </AuthProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+        <body className={`${exo.variable} antialiased`}>
+            <AuthProvider>
+            <div className="flex flex-col w-screen h-screen overflow-x-hidden">
+                <Header />
+                {children}
+            </div>
+            </AuthProvider>
+        </body>
+        </html>
+    );
 }

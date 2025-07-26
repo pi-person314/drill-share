@@ -21,7 +21,12 @@ export default function Profile() {
         { value: "Basketball", label: "Basketball" },
         { value: "Tennis", label: "Tennis" },
         { value: "Volleyball", label: "Volleyball" },
-        { value: "Baseball", label: "Baseball" }
+        { value: "Baseball", label: "Baseball" },
+        { value: "Hockey", label: "Hockey" },
+        { value: "Golf", label: "Golf" },
+        { value: "Cricket", label: "Cricket" },
+        { value: "Football", label: "Football" },
+        { value: "Badminton", label: "Badminton" }
     ];
 
     const { user, loading } = useAuth();
@@ -83,7 +88,7 @@ export default function Profile() {
     if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
-                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+                <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
             </div>
         )
     }

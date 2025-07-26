@@ -87,7 +87,7 @@ export default function Drills() {
     if (!user || loading || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
-                <p className="text-3xl text-[var(--muted)]">Loading...</p>
+                <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
             </div>
         )
     }
