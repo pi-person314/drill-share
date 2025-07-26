@@ -59,7 +59,7 @@ export default function Register() {
         }
     }
 
-    // TODO: add 5 more sports
+    // TODO: add 5 sports
     const options = [
         { value: "Soccer", label: "Soccer" },
         { value: "Basketball", label: "Basketball" },

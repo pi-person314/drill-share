@@ -42,7 +42,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
         <>
             <div 
                 onClick={() => {handleVisit(); router.push(`/training/${trainingInfo._id}/0`)}} 
-                className="flex flex-col lg:flex-row justify-between [@media(max-width:1023px)]:items-center bg-[var(--primary)] rounded-xl cursor-pointer p-8 lg:pl-0 w-80 lg:w-130 h-150 lg:h-100 duration-300 hover:shadow-xl relative"
+                className="flex flex-col lg:flex-row justify-between [@media(max-width:1023px)]:items-center bg-[var(--primary)] rounded-xl cursor-pointer p-8 lg:pl-0 w-80 lg:w-130 h-150 lg:h-100 [@media(max-height:50rem)]:h-90 duration-300 hover:shadow-xl relative"
             >
                 <div className="absolute top-5 left-4">
                     <button onClick={handleCopy} className="text-2xl cursor-pointer duration-300 text-[var(--muted)] hover:text-[var(--link)]"><FaCopy /></button>

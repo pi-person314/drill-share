@@ -123,7 +123,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                         </Slider>
                     </div>}
                     <div className="flex justify-between items-center mt-8">
-                        <p className="flex items-center w-1/3"><p className="hidden md:block">Creator:</p><span className="bg-[var(--accent)] md:ml-3 p-3 rounded-lg truncate">{selectedDrill.creator.username}</span></p>
+                        <p className="flex items-center w-1/3"><span className="hidden md:block">Creator:</span><span className="bg-[var(--accent)] md:ml-3 p-3 rounded-lg truncate">{selectedDrill.creator.username}</span></p>
                         <div className="flex space-x-4">
                             {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
                                 <button 

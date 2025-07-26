@@ -85,8 +85,8 @@ export default function Dashboard() {
     }
 
     return (
-        <main className="flex-1 flex justify-center p-16 min-w-0 overflow-y-auto">
-            <div className="flex flex-col space-y-28 max-w-400 w-full h-full">
+        <main className="flex-1 flex justify-center p-16 [@media(max-height:50rem)]:py-8 min-w-0 overflow-y-auto">
+            <div className="flex flex-col space-y-28 [@media(max-height:50rem)]:space-y-12 max-w-400 w-full h-full">
                 <div className="flex flex-col space-y-4">
                     <h1 className="text-2xl font-semibold">Recommended For You</h1>
                     <div className="flex space-x-8 overflow-x-auto p-4 border rounded-lg shadow-lg">
@@ -120,7 +120,7 @@ export default function Dashboard() {
                             <span className="flex items-center ml-4 text-xl text-[var(--danger)]"><FaFire className="mr-1"/>{streak}</span>
                         </h1>
                         <p className="text-[var(--muted)]">Complete training sessions daily to maintain your streak!</p>
-                        <div className="flex-1 flex flex-col items-center space-y-6 p-6 mt-4 border rounded-lg shadow-lg overflow-y-auto overflow-x-hidden">
+                        <div className="flex-1 flex flex-col items-center space-y-6 p-8 mt-4 border rounded-lg shadow-lg overflow-y-auto overflow-x-hidden">
                             {sessions.map((session, index) => <TrainingCard key={index} trainingInfo={session} />)}
                             {!sessions.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-8">
                                 No training sessions have been created yet.<br/>
