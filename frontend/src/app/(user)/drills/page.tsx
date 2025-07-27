@@ -41,8 +41,8 @@ export default function Drills() {
 
     const fetchDrills = async (first: boolean) => {
         if (first) setFetching(true);
-        const createdRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
-        const savedRes = await fetch(`http://localhost:5000/api/drills/saved/${user}`);
+        const createdRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/created/${user}`);
+        const savedRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/saved/${user}`);
         if (createdRes.ok && savedRes.ok) {
             const createdData = await createdRes.json();
             const savedData = await savedRes.json();

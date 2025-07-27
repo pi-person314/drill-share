@@ -87,7 +87,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
     const handleCreate = async () => {
         const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
-        const res = await fetch("http://localhost:5000/api/drills", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -110,7 +110,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     const handleUpdate = async () => {
         if (!selectedDrill) return;
         const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
-        const res = await fetch(`http://localhost:5000/api/drills/info/${selectedDrill._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/info/${selectedDrill._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -150,7 +150,11 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg px-10 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
             overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
-            <form onSubmit={e => {e.preventDefault(); update ? handleUpdate() : handleCreate();}} className="flex flex-col h-full space-y-4">
+            <form className="flex flex-col h-full space-y-4" onSubmit={e => {
+                e.preventDefault(); 
+                if (update) handleUpdate();
+                else handleCreate();
+            }}>
                 <div className="absolute right-4 top-4">
                     <button type="button" className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={() => {setOpen(false); setError("");}}><FaXmark /></button>
                 </div>

@@ -17,7 +17,7 @@ export default function Sidebar() {
     useEffect(() => {
         const getUserInfo = async () => {
             if (user) {
-                const res = await fetch(`http://localhost:5000/api/users/${user}`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
                 if (res.ok) {
                     const data = await res.json();
                     setUserInfo({

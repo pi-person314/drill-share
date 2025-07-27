@@ -18,7 +18,7 @@ export default function ReviewSessions() {
 
         const fetchSessions = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/training/created/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/created/${user}`);
             if (res.ok) {
                 const data = await res.json();
                 setSessions(data.data.sort((a: TrainingType, b: TrainingType) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()));

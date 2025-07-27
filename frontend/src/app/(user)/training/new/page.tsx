@@ -48,7 +48,7 @@ export default function NewSession() {
             return;
         }
 
-        const res = await fetch("http://localhost:5000/api/training", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -75,7 +75,7 @@ export default function NewSession() {
         if (!user && !loading) router.replace("/");
         const fetchTraining = async () => {
             setFetchingTraining(true);
-            const res = await fetch(`http://localhost:5000/api/training/${searchParams.get("id")}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${searchParams.get("id")}`);
             if (res.ok) {
                 const data = await res.json();
                 setSport(data.data.sport);
@@ -96,7 +96,7 @@ export default function NewSession() {
         }
         const fetchDrills = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/drills/saved/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/saved/${user}`);
             if (res.ok) {
                 const data = await res.json();
                 const typeDrills = data.data.filter((drill: DrillType) => drill.type === type);

@@ -8,7 +8,7 @@ import training from "./routes/training.js";
 const app = express();
 
 app.use(express.json({ limit: "100mb" }));
-app.use(cors());
+app.use(cors({origin: process.env.FRONTEND || "http://localhost:3000", credentials: true}));
 app.use("/api/users", users);
 app.use("/api/drills", drills);
 app.use("/api/training", training);

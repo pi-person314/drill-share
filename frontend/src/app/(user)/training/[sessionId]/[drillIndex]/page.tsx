@@ -27,7 +27,7 @@ export default function RecordPage() {
     const handleUpdate = async (finish?: boolean) => {
         if (!changed) return;
 
-        await fetch(`http://localhost:5000/api/training/${sessionId}`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${sessionId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -42,11 +42,11 @@ export default function RecordPage() {
         if (finish && recorded) {
             const today = new Date().toLocaleDateString();
             const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
-            const res = await fetch(`http://localhost:5000/api/users/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
             if (res.ok) {
                 const userData = await res.json();
                 const oldDailyAt = userData.data.dailyAt;
-                const res2 = await fetch(`http://localhost:5000/api/users/${user}`, {
+                const res2 = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`, {
                     method: "PUT",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
@@ -69,7 +69,7 @@ export default function RecordPage() {
     useEffect(() => {
         const fetchSession = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/training/${sessionId}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${sessionId}`);
             if (res.ok) {
                 const data = await res.json();
                 setSession(data.data);

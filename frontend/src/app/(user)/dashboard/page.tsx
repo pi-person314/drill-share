@@ -25,8 +25,8 @@ export default function Dashboard() {
 
     const fetchDrills = async (first: boolean) => {
         if (!userSports) return;
-        const publicRes = await fetch("http://localhost:5000/api/drills/public");
-        const myRes = await fetch(`http://localhost:5000/api/drills/created/${user}`);
+        const publicRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/public`);
+        const myRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/created/${user}`);
         if (publicRes.ok && myRes.ok) {
             const publicData = await publicRes.json();
             const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
@@ -45,7 +45,7 @@ export default function Dashboard() {
         if (!user && !loading) router.replace("/");
         const fetchUser = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/users/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
             if (res.ok) {
                 const today = new Date().toLocaleDateString();
                 const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
@@ -58,7 +58,7 @@ export default function Dashboard() {
 
         const fetchSessions = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/training/created/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/created/${user}`);
             if (res.ok) {
                 const data = await res.json();
                 const sortedSessions = data.data.sort((a: TrainingType, b: TrainingType) => b.visited - a.visited);

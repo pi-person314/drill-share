@@ -52,7 +52,7 @@ export default function Profile() {
     const [ fetching, setFetching ] = useState(true);
 
     const handleUpdate = async () => {
-        const res = await fetch(`http://localhost:5000/api/users/${user}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -73,7 +73,7 @@ export default function Profile() {
         if (!user && !loading) router.replace("/");
         const fetchUser = async () => {
             setFetching(true);
-            const res = await fetch(`http://localhost:5000/api/users/${user}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
             if (res.ok) {
                 const data = await res.json();
                 setUserInfo(data.data);

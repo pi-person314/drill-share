@@ -91,7 +91,7 @@ export default function Browse() {
 
         const fetchDrills = async () => {
             setFetching(true);
-            const res = await fetch("http://localhost:5000/api/drills/public");
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/public`);
             if (res.ok) {
                 const data = await res.json();
                 setDrills(data.data);
@@ -104,7 +104,7 @@ export default function Browse() {
     useEffect(() => {
         const filterDrills = async () => {
             setFetching(true);
-            const res = await fetch("http://localhost:5000/api/drills/public");
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/public`);
             if (res.ok) {
                 const data = await res.json();
                 const filteredDrills = data.data.filter((drill : DrillType) => (

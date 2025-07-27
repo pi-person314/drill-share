@@ -23,7 +23,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
 
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        const res = await fetch(`http://localhost:5000/api/training/${trainingInfo._id}`, {method: "DELETE"});
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${trainingInfo._id}`, {method: "DELETE"});
         if (res.ok) {
             toast.error("Deleted!");
             if (setTrigger) setTrigger(!trigger);
@@ -31,7 +31,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
     }
 
     const onClick = async () => {
-        await fetch(`http://localhost:5000/api/training/visit/${trainingInfo._id}`, {method: "PUT"});
+        await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/visit/${trainingInfo._id}`, {method: "PUT"});
         const index = trainingInfo.videos.indexOf("") !== -1 ? trainingInfo.videos.indexOf("") : 0;
         router.push(`/training/${trainingInfo._id}/${index}`);
     }

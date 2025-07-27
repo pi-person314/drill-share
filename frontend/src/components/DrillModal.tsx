@@ -17,7 +17,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
-        const res = await fetch(`http://localhost:5000/api/drills/interactions/${selectedDrill._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/interactions/${selectedDrill._id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -44,7 +44,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleSave = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
-        const res = await fetch(`http://localhost:5000/api/drills/interactions/${selectedDrill._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/interactions/${selectedDrill._id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -70,7 +70,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleDelete = async () => {
         if (!selectedDrill) return;
-        const res = await fetch(`http://localhost:5000/api/drills/${selectedDrill._id}`, {method: "DELETE"});
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/${selectedDrill._id}`, {method: "DELETE"});
         if (res.ok) {
             toast.error("Deleted!");
             setDrills(drills.filter(drill => drill._id != selectedDrill._id));
@@ -91,9 +91,10 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                 
                 {selectedDrill && <div className="flex flex-col space-y-12 h-full">
                     <div className="absolute right-4 top-4">
-                        <button className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={
-                            () => {setOpen ? setOpen(false) : setSelectedDrill(null)}
-                        }><FaXmark /></button>
+                        <button className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={() => {
+                            if (setOpen) setOpen(false);
+                            else setSelectedDrill(null);
+                        }}><FaXmark /></button>
                     </div>
                     
                     <div className="flex">
