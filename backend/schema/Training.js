@@ -5,7 +5,7 @@ const trainingSchema = new mongoose.Schema({
     drills: {type: [mongoose.SchemaTypes.ObjectId], ref: "Drill", required: true},
     creator: {type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true},
     sport: {type: String, required: true},
-    videos: {type: [String], default: []},
+    videos: {type: [mongoose.SchemaTypes.ObjectId], default: []},
     notes: {type: [String], default: []},
     visited: {type: Number, default: 1},
 }, {

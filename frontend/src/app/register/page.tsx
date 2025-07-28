@@ -13,11 +13,13 @@ export default function Register() {
         password: string;
         bio: string;
         sports: string[];
-        photo: string;
     }
 
-    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", password: "", bio: "", sports: [], photo: "" });
+    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", password: "", bio: "", sports: [] });
     const [ error, setError ] = useState("");
+    const [ photo, setPhoto ] = useState<File | null>(null);
+    const [ photoPreview, setPhotoPreview ] = useState("");
+    const [ fetching, setFetching ] = useState(false);
 
     const { user, login } = useAuth();
     const router = useRouter();
@@ -25,15 +27,8 @@ export default function Register() {
         multiple: false,
         accept: {"image/*": []},
         onDrop: (acceptedFiles) => {
-            const file = acceptedFiles[0];
-            if (file.size > 5 * 1024 * 1024) {
-                setError("File too large.");
-            } else {
-                setError("");
-                const reader = new FileReader();
-                reader.onload = () => setUserInfo({...userInfo, photo: reader.result as string});
-                reader.readAsDataURL(file);
-            }
+            setPhoto(acceptedFiles[0]);
+            setPhotoPreview(URL.createObjectURL(acceptedFiles[0]));
         }
     });
     
@@ -46,13 +41,27 @@ export default function Register() {
             setError("Password must be at least 8 characters long.");
             return;
         }
+        
+        setFetching(true);
+        let photoId: string[] = [];
+        if (photo) {
+            const formData = new FormData();
+            formData.append("file", photo);
+            const photoRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files`, {method: "POST", body: formData});
+            const photoData = await photoRes.json();
+            if (photoRes.ok) {
+                photoId = [photoData.data];
+            } else {
+                setError(photoData.message);
+            }
+        }
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userInfo)
+            body: JSON.stringify({...userInfo, photo: photoId})
         });
 
         const data = await res.json();
@@ -77,7 +86,7 @@ export default function Register() {
         { value: "Badminton", label: "Badminton" }
     ];
 
-    if (user) {
+    if (user || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
@@ -145,12 +154,13 @@ export default function Register() {
                         <input {...getInputProps()} />
                         <div className={`flex flex-col justify-center items-center h-full duration-300 ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
-                            {!userInfo.photo && <p className="text-xs md:text-sm">Drag and drop an image here</p>}
-                            {userInfo.photo && <div className="relative h-1/2">
-                                <img src={userInfo.photo} alt="Image Preview" className="h-full w-full object-cover" />
+                            {!photoPreview && <p className="text-xs md:text-sm">Drag and drop an image here</p>}
+                            {photoPreview && <div className="relative h-1/2">
+                                <img src={photoPreview} alt="Image Preview" className="h-full w-full object-cover" />
                                 <button type="button" onClick={e => {
                                     e.stopPropagation();
-                                    setUserInfo({ ...userInfo, photo: "" });
+                                    setPhoto(null);
+                                    setPhotoPreview("");
                                 }}
                                     className="absolute top-0 right-0 w-5 h-5 text-3xl flex items-center justify-center cursor-pointer bg-[var(--danger)] text-white hover:scale-105 rounded-full"
                                 >×</button>

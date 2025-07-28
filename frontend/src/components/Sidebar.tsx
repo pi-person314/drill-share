@@ -8,6 +8,7 @@ import { FaHome, FaSearch, FaBasketballBall, FaDumbbell } from "react-icons/fa";
 export default function Sidebar() {
     const { user, logout } = useAuth();
     const pathname = usePathname();
+    const [fetching, setFetching] = useState(true);
     const [userInfo, setUserInfo] = useState<{username: string, bio: string, photo: string}>({
         username: "Guest",
         bio: "",
@@ -16,15 +17,18 @@ export default function Sidebar() {
 
     useEffect(() => {
         const getUserInfo = async () => {
+            setFetching(true);
             if (user) {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
                 if (res.ok) {
                     const data = await res.json();
-                    setUserInfo({
-                        username: data.data.username,
-                        bio: data.data.bio,
-                        photo: data.data.photo || "/images/defaultPhoto.png"
-                    });
+                    if (data.data.photo.length) {
+                        const photoRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${data.data.photo[0]}`);
+                        const blob = await photoRes.blob();
+                        setUserInfo({username: data.data.username, bio: data.data.bio, photo: URL.createObjectURL(blob)});
+                    } else {
+                        setUserInfo({username: data.data.username, bio: data.data.bio, photo: "/images/defaultPhoto.png"});
+                    }
                 } else {
                     setUserInfo({
                         username: "Guest",
@@ -33,6 +37,7 @@ export default function Sidebar() {
                     });
                 }
             }
+            setFetching(false);
         }
         getUserInfo();
     }, [user, pathname]);
@@ -71,19 +76,24 @@ export default function Sidebar() {
                     </div>}
                 </div>
             </div>
-            <div className="flex flex-col lg:flex-row bg-[var(--secondary)] items-center w-full h-36 [@media(max-height:50rem)]:h-30 p-4 rounded-2xl shadow-lg">
-                <Link href="/profile" className="flex justify-center lg:pointer-events-none mx-auto lg:mr-4 lg:w-1/3">
-                    <img src={userInfo.photo} alt="Profile Picture" className="h-20 [@media(max-height:50rem)]:h-16 object-contain hover:opacity-50 duration-300"/>
-                </Link>
-                <div className="hidden lg:flex flex-1 flex-col min-w-0 h-full justify-center">
-                    <h1 className="text-xl [@media(max-height:50rem)]:text-lg font-medium w-full truncate">{userInfo.username}</h1>
-                    {userInfo.bio && <p className="text-sm [@media(max-height:50rem)]:text-xs text-[var(--muted)] whitespace-pre-line max-h-1/2 overflow-y-auto">{userInfo.bio}</p>}
-                    <div className="flex space-x-2 text-sm [@media(max-height:50rem)]:text-xs mt-1">
-                        <Link href="/profile" className="[@media(max-height:50rem)]:text-xs underline hover:text-[var(--muted)] duration-300">Edit</Link>
-                        <Link href="/" onClick={logout} className="[@media(max-height:50rem)]:text-xs underline hover:text-[var(--muted)] duration-300">Logout</Link>
+            <div className="bg-[var(--secondary)] w-full h-36 [@media(max-height:50rem)]:h-30 p-4 rounded-2xl shadow-lg">
+                {fetching && <div className="flex-1 flex items-center justify-center w-full h-full">
+                    <p className="text-xl text-[var(--muted)] animate-pulse">Loading...</p>
+                </div>}
+                {!fetching && <div className="flex flex-col lg:flex-row items-center w-full h-full">
+                    <Link href="/profile" className="flex justify-center lg:pointer-events-none mx-auto lg:mr-4 lg:w-1/3">
+                        <img src={userInfo.photo} alt="Profile Picture" className="h-20 [@media(max-height:50rem)]:h-16 object-contain hover:opacity-50 duration-300"/>
+                    </Link>
+                    <div className="hidden lg:flex flex-1 flex-col min-w-0 h-full justify-center">
+                        <h1 className="text-xl [@media(max-height:50rem)]:text-lg font-medium w-full truncate">{userInfo.username}</h1>
+                        {userInfo.bio && <p className="text-sm [@media(max-height:50rem)]:text-xs text-[var(--muted)] whitespace-pre-line max-h-1/2 overflow-y-auto">{userInfo.bio}</p>}
+                        <div className="flex space-x-2 text-sm [@media(max-height:50rem)]:text-xs mt-1">
+                            <Link href="/profile" className="[@media(max-height:50rem)]:text-xs underline hover:text-[var(--muted)] duration-300">Edit</Link>
+                            <Link href="/" onClick={logout} className="[@media(max-height:50rem)]:text-xs underline hover:text-[var(--muted)] duration-300">Logout</Link>
+                        </div>
                     </div>
-                </div>
-                <Link href="/" onClick={logout} className="lg:hidden mt-2 underline text-sm [@media(max-height:50rem)]:text-xs hover:text-[var(--muted)] duration-300">Logout</Link>
+                    <Link href="/" onClick={logout} className="lg:hidden mt-2 underline text-sm [@media(max-height:50rem)]:text-xs hover:text-[var(--muted)] duration-300">Logout</Link>
+                </div>}
             </div>
         </aside>
     )

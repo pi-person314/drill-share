@@ -13,7 +13,6 @@ export default function Profile() {
         username: string;
         bio: string;
         sports: string[];
-        photo: string;
     }
 
     const options = [
@@ -29,39 +28,50 @@ export default function Profile() {
         { value: "Badminton", label: "Badminton" }
     ];
 
+    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", bio: "", sports: [] });
+    const [ error, setError ] = useState("");
+    const [ fetching, setFetching ] = useState(true);
+    const [ photoFile, setPhotoFile ] = useState<File | null>(null);
+    const [ photoPreview, setPhotoPreview ] = useState("");
+    const [ prevPhoto, setPrevPhoto ] = useState("");
+
     const { user, loading } = useAuth();
     const router = useRouter();
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         multiple: false,
         accept: {"image/*": []},
         onDrop: (acceptedFiles) => {
-            const file = acceptedFiles[0];
-            if (file.size > 5 * 1024 * 1024) {
-                setError("File too large.");
-            } else {
-                setError("");
-                const reader = new FileReader();
-                reader.onload = () => setUserInfo({...userInfo, photo: reader.result as string});
-                reader.readAsDataURL(file);
-            }
+            setPhotoFile(acceptedFiles[0]);
+            setPhotoPreview(URL.createObjectURL(acceptedFiles[0]));
         }
     });
-    
-    const [ userInfo, setUserInfo ] = useState<UserInfo>({ username: "", bio: "", sports: [], photo: "" });
-    const [ error, setError ] = useState("");
-    const [ fetching, setFetching ] = useState(true);
 
     const handleUpdate = async () => {
+        setFetching(true);
+        let photoId: string[] = [];
+        if (photoFile) {
+            const formData = new FormData();
+            formData.append("file", photoFile);
+            const photoRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files`, {method: "POST", body: formData});
+            const photoData = await photoRes.json();
+            if (photoRes.ok) {
+                photoId = [photoData.data];
+            } else {
+                setError(photoData.message);
+            }
+        }
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userInfo)
+            body: JSON.stringify({...userInfo, photo: photoId})
         });
 
         const data = await res.json();
         if (res.ok) {
+            if (prevPhoto) await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${prevPhoto}`, {method: "DELETE"});
             toast.info("Profile updated!")
             router.push("/dashboard");
         } else {
@@ -76,9 +86,19 @@ export default function Profile() {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
             if (res.ok) {
                 const data = await res.json();
-                setUserInfo(data.data);
+                const { photo, ...rest } = data.data;
+                if (photo.length) {
+                    setPrevPhoto(photo[0]);
+                    const photoRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photo[0]}`);
+                    const blob = await photoRes.blob();
+                    if (photoRes.ok) {
+                        setPhotoFile(new File([blob], photo[0], {type: blob.type}));
+                        setPhotoPreview(URL.createObjectURL(blob));
+                    }
+                }
+                setUserInfo(rest);
             } else {
-                setUserInfo({ username: "", bio: "", sports: [], photo: "" });
+                setUserInfo({ username: "", bio: "", sports: [] });
             }
             setFetching(false);
         }
@@ -142,12 +162,13 @@ export default function Profile() {
                         <input {...getInputProps()} />
                         <div className={`flex flex-col justify-center items-center h-full duration-300 ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
-                            {!userInfo.photo && <p className="text-sm">Drag and drop an image here</p>}
-                            {userInfo.photo && <div className="relative h-1/2">
-                                <img src={userInfo.photo} alt="Image Preview" className="h-full w-full object-cover" />
+                            {!photoPreview && <p className="text-sm">Drag and drop an image here</p>}
+                            {photoPreview && <div className="relative h-1/2">
+                                <img src={photoPreview} alt="Image Preview" className="h-full w-full object-cover" />
                                 <button type="button" onClick={e => {
                                     e.stopPropagation();
-                                    setUserInfo({ ...userInfo, photo: "" });
+                                    setPhotoFile(null);
+                                    setPhotoPreview("");
                                 }}
                                     className="absolute top-0 right-0 w-5 h-5 text-3xl flex items-center justify-center cursor-pointer bg-[var(--danger)] text-white hover:scale-105 rounded-full"
                                 >×</button>

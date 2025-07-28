@@ -8,7 +8,7 @@ const drillSchema = new mongoose.Schema({
     difficulty: {type: String, required: true},
     time: {type: Number, required: true},
     sports: {type: [String], default: []},
-    media: {type: [String], default: []},
+    media: {type: [mongoose.SchemaTypes.ObjectId], default: []},
     public: {type: Boolean, default: true},
     likes: {type: Number, default: 0},
     usersLiked: {type: [mongoose.SchemaTypes.ObjectId], ref: "User", default: []},

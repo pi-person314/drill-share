@@ -5,15 +5,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useAuth } from "@/hooks/auth";
 import { useDrill } from "@/hooks/drill";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateModal from "./CreateModal";
 import { toast } from "react-toastify";
 import { FaXmark } from "react-icons/fa6";
 
-export default function DrillModal({ preview, open, setOpen } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void }) {
+export default function DrillModal({ preview, open, setOpen, photoPreviews } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void, photoPreviews?: string[] }) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill } = useDrill();
     const [ updateOpen, setUpdateOpen ] = useState(false);
+    const [ photos, setPhotos ] = useState<string[]>([]);
+    const [ fetching, setFetching ] = useState(false);
 
     const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
@@ -70,6 +72,7 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
 
     const handleDelete = async () => {
         if (!selectedDrill) return;
+        selectedDrill.media.forEach(async photo => await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photo}`, {method: "DELETE"}));
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/${selectedDrill._id}`, {method: "DELETE"});
         if (res.ok) {
             toast.error("Deleted!");
@@ -78,7 +81,42 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
         }
     }
 
+    useEffect(() => {
+        if (!selectedDrill) return;
+        if (photoPreviews) {
+            setPhotos(photoPreviews);
+            return;
+        }
+        const fetchPhotos = async () => {
+            setFetching(true);
+            const newPhotos: string[] = [];
+            for (const photoId of selectedDrill.media) {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photoId}`);
+                const blob = await res.blob();
+                if (res.ok) {
+                    newPhotos.push(URL.createObjectURL(blob));
+                }
+            };
+            setPhotos(newPhotos);
+            setFetching(false);
+        };
+        fetchPhotos();
+    }, [selectedDrill, photoPreviews]);
+
     if (!user) return null;
+
+    if (fetching) return (
+        <ReactModal
+            isOpen={open ?? !!selectedDrill}
+            className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
+            overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+            ariaHideApp={false}
+        >
+            <div className="flex-1 flex items-center justify-center h-full">
+                <p className="text-2xl text-[var(--muted)] animate-pulse">Loading...</p>
+            </div>
+        </ReactModal>
+    );
 
     return (
         <div onClick={e => e.stopPropagation()}>
@@ -115,10 +153,10 @@ export default function DrillModal({ preview, open, setOpen } : { preview: boole
                         <h2 className="text-2xl mb-2">Description</h2>
                         <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{selectedDrill.description}</p>
                     </div>
-                    {!!selectedDrill.media.length && <div>
+                    {!!photos.length && <div>
                         <h2 className="text-2xl mb-2">Media</h2>
                         <Slider infinite={false} speed={1000} arrows={false} dots={true} className="w-1/2 bg-[var(--primary)] py-8 rounded-xl">
-                            {selectedDrill.media.map((image, index) => (
+                            {photos.map((image, index) => (
                                 <img key={index} src={image} alt={`Image ${index}`} className="h-40 px-8 object-contain"/>
                             ))}
                         </Slider>

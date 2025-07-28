@@ -109,7 +109,7 @@ export default function Drills() {
                 </div>
                 {!!sortedCreatedDrills.length && <div className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center overflow-x-hidden overflow-y-auto gap-16 p-8 border rounded-2xl shadow-lg">
                     <button onClick={() => setCreateOpen(true)}>
-                        <FaCirclePlus className="text-[var(--accent)] text-9xl lg:text-[10rem] duration-300 hover:scale-105 cursor-pointer"/>
+                        <FaCirclePlus className="text-[var(--accent)] text-9xl lg:text-[10rem] duration-300 hover:scale-110 cursor-pointer"/>
                     </button>
                     {sortedCreatedDrills.map((drill, index) => (
                         <DrillCard key={index} drillInfo={drill} />
@@ -117,7 +117,7 @@ export default function Drills() {
                 </div>}
                 {!sortedCreatedDrills.length && <div className="flex items-center justify-center h-70">
                     <button onClick={() => setCreateOpen(true)}>
-                        <FaCirclePlus className="text-[var(--accent)] text-9xl lg:text-[10rem] duration-300 hover:scale-105 cursor-pointer"/>
+                        <FaCirclePlus className="text-[var(--accent)] text-9xl lg:text-[10rem] duration-300 hover:scale-110 cursor-pointer"/>
                     </button>
                 </div>}
             </div>

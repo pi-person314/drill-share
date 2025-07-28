@@ -35,6 +35,10 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         updatedAt: ""
     }
     const [ newDrill, setNewDrill ] = useState<DrillType>(emptyDrill);
+    const [ photos, setPhotos ] = useState<File[]>([]);
+    const [ photoPreviews, setPhotoPreviews ] = useState<string[]>([]);
+    const [ prevPhotos, setPrevPhotos ] = useState<string[]>([]);
+    const [ fetching, setFetching ] = useState(false);
 
     const sportsOptions = [
         { value: "Soccer", label: "Soccer" },
@@ -67,32 +71,32 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         multiple: true,
         accept: {"image/*": []},
         onDrop: (acceptedFiles) => {
-            acceptedFiles = acceptedFiles.slice(0, 5 - newDrill.media.length);
+            acceptedFiles = acceptedFiles.slice(0, 5 - photos.length);
             acceptedFiles.forEach(file => {
-                if (file.size > 5 * 1024 * 1024) {
-                    setError("File too large.");
-                } else {
-                    setError("");
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        const res = reader.result as string;
-                        setNewDrill(prev => ({...prev, media: [...prev.media, res]}));
-                    };
-                    reader.readAsDataURL(file);
-                }
-                
+                setPhotos(prev => [...prev, file]);
+                setPhotoPreviews(prev => [...prev, URL.createObjectURL(file)]);
             });
         }
     });
 
     const handleCreate = async () => {
-        const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        setFetching(true);
+        const {media, ...rest} = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        const photoIds = await Promise.all(photos.map(async (file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files`, {method: "POST", body: formData});
+            const data = await res.json();
+            if (res.ok) return data.data;
+            else setError(data.message);
+        }));
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(drillToSubmit)
+            body: JSON.stringify({...rest, media: photoIds})
         });
 
         const data = await res.json();
@@ -101,38 +105,58 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             setOpen(false);
             setDrills([...drills, data.data]);
             setNewDrill(emptyDrill);
+            setPhotos([]);
+            setPhotoPreviews([]);
+            setPrevPhotos([]);
             setError("");
         } else {
             setError(data.message);
         }
+        setFetching(false);
     }
 
     const handleUpdate = async () => {
         if (!selectedDrill) return;
-        const drillToSubmit = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        setFetching(true);
+        const {media, ...rest} = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        const photoIds = await Promise.all(photos.map(async (file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files`, {method: "POST", body: formData});
+            const data = await res.json();
+            if (res.ok) return data.data;
+            else setError(data.message);
+        }));
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/info/${selectedDrill._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(drillToSubmit)
+            body: JSON.stringify({...rest, media: photoIds})
         });
 
         const data = await res.json();
         if (res.ok) {
+            prevPhotos.forEach(async (id) => await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${id}`, {method: "DELETE"}));
             toast.info("Updated!");
             setOpen(false);
             setDrills(drills.map(drill => drill._id === selectedDrill._id ? data.data : drill));
             setSelectedDrill(data.data);
+            setPhotos([]);
+            setPhotoPreviews([]);
+            setPrevPhotos([]);
             setError("");
         } else {
             setError(data.message);
         }
+        setFetching(false);
     }
 
     const handlePreview = () => {
         if (newDrill.title && newDrill.description) {
-            setSelectedDrill(newDrill);
+            // TODO: fix this
+            setSelectedDrill(!newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill);
             setError("");
             setPreviewOpen(true);
         }
@@ -140,8 +164,43 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     }
 
     useEffect(() => {
-        if (update && selectedDrill) setNewDrill(selectedDrill);
+        const fetchDrill = async () => {
+            if (update && selectedDrill) {
+                setFetching(true);
+                const newPrevPhotos: string[] = [];
+                const newPhotos: File[] = [];
+                const newPhotoPreviews: string[] = [];
+                for (const photoId of selectedDrill.media) {
+                    newPrevPhotos.push(photoId);
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photoId}`);
+                    const blob = await res.blob();
+                    if (res.ok) {
+                        newPhotos.push(new File([blob], photoId, {type: blob.type}));
+                        newPhotoPreviews.push(URL.createObjectURL(blob));
+                    }
+                };
+                setPrevPhotos(newPrevPhotos);
+                setPhotos(newPhotos);
+                setPhotoPreviews(newPhotoPreviews);
+                setNewDrill(selectedDrill);
+                setFetching(false);
+            }
+        }
+        fetchDrill();
     }, [update, selectedDrill]);
+
+    if (fetching) return (
+        <ReactModal
+            isOpen={open}
+            ariaHideApp={false}
+            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg px-10 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
+            overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+        >
+            <div className="flex-1 flex items-center justify-center h-full">
+                <p className="text-2xl text-[var(--muted)] animate-pulse">Loading...</p>
+            </div>
+        </ReactModal>
+    );
 
     return (
         <ReactModal
@@ -242,16 +301,15 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                         <input {...getInputProps()} />
                         <div className={`flex flex-col justify-center items-center h-full duration-300 ${isDragActive ? "text-[var(--link)]": "text-[var(--muted)]"}`}>
                             <FaUpload className="text-3xl mb-3"/>
-                            {!newDrill.media.length && <p className="text-sm">Drag and drop images here</p>}
-                            {!!newDrill.media.length && <div className="flex space-x-2 h-1/2">
-                                {newDrill.media.map((image, index) => 
+                            {!photoPreviews.length && <p className="text-sm">Drag and drop images here</p>}
+                            {!!photoPreviews.length && <div className="flex space-x-2 h-1/2">
+                                {photoPreviews.map((image, index) => 
                                     <div key={index} className="relative h-full">
                                         <img src={image} alt="Image Preview" className="h-full w-full object-cover" />
                                         <button type="button" onClick={e => {
                                             e.stopPropagation();
-                                            const updated = [...newDrill.media];
-                                            updated.splice(index, 1);
-                                            setNewDrill({ ...newDrill, media: updated });
+                                            setPhotos(photos.filter((elem, i) => i != index));
+                                            setPhotoPreviews(photoPreviews.filter((elem, i) => i != index));
                                         }}
                                             className="absolute top-0 right-0 w-5 h-5 text-3xl flex items-center justify-center cursor-pointer bg-[var(--danger)] text-white hover:scale-105 rounded-full"
                                         >×</button>
@@ -281,8 +339,8 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                 
                 {error && <p className="text-[var(--danger)]">{error}</p>}
             </form>
-            {update && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen}/>}
-            {!update && <DrillModal preview={true}/>}
+            {update && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen} photoPreviews={photoPreviews}/>}
+            {!update && <DrillModal preview={true} photoPreviews={photoPreviews}/>}
         </ReactModal>
     )
 }
