@@ -9,13 +9,15 @@ import { useEffect, useState } from "react";
 import CreateModal from "./CreateModal";
 import { toast } from "react-toastify";
 import { FaXmark } from "react-icons/fa6";
+import { DrillType } from "@/types/drill";
 
-export default function DrillModal({ preview, open, setOpen, photoPreviews } : { preview: boolean, open?: boolean, setOpen?: (val: boolean) => void, photoPreviews?: string[] }) {
+export default function DrillModal({ open, setOpen, previewDrill } : { open?: boolean, setOpen?: (val: boolean) => void, previewDrill?: DrillType | null }) {
     const { user } = useAuth();
     const { drills, setDrills, selectedDrill, setSelectedDrill } = useDrill();
     const [ updateOpen, setUpdateOpen ] = useState(false);
     const [ photos, setPhotos ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(false);
+    const drill = previewDrill ?? selectedDrill;
 
     const handleLike = async ( add: boolean ) => {
         if (!selectedDrill || !user) return;
@@ -82,11 +84,11 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
     }
 
     useEffect(() => {
-        if (!selectedDrill) return;
-        if (photoPreviews) {
-            setPhotos(photoPreviews);
+        if (previewDrill) {
+            setPhotos(previewDrill.media);
             return;
         }
+        if (!selectedDrill) return;
         const fetchPhotos = async () => {
             setFetching(true);
             const newPhotos: string[] = [];
@@ -101,15 +103,15 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
             setFetching(false);
         };
         fetchPhotos();
-    }, [selectedDrill, photoPreviews]);
+    }, [selectedDrill?.media, previewDrill]);
 
     if (!user) return null;
 
     if (fetching) return (
         <ReactModal
             isOpen={open ?? !!selectedDrill}
-            className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
-            overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+            className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
+            overlayClassName={`${previewDrill ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
             ariaHideApp={false}
         >
             <div className="flex-1 flex items-center justify-center h-full">
@@ -122,12 +124,12 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
         <div onClick={e => e.stopPropagation()}>
             <ReactModal
                 isOpen={open ?? !!selectedDrill}
-                className={`${preview ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
-                overlayClassName={`${preview ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
+                className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
+                overlayClassName={`${previewDrill ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
                 ariaHideApp={false}
             >
                 
-                {selectedDrill && <div className="flex flex-col space-y-12 h-full">
+                {drill && <div className="flex flex-col space-y-12 h-full">
                     <div className="absolute right-4 top-4">
                         <button className="cursor-pointer duration-300 hover:text-[var(--danger)] text-3xl" onClick={() => {
                             if (setOpen) setOpen(false);
@@ -136,22 +138,22 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
                     </div>
                     
                     <div className="flex">
-                        <h1 className="text-5xl font-medium truncate">{selectedDrill.title}</h1>
-                        <button onClick={() => preview ? {} : selectedDrill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
-                            {selectedDrill.likes}<FaThumbsUp className={`ml-2 duration-300 ${preview ? "" : "cursor-pointer"} ${selectedDrill.usersLiked.includes(user) ? "text-[var(--success)]" : "hover:text-[var(--muted)]"}`}/>
+                        <h1 className="text-5xl font-medium truncate">{drill.title}</h1>
+                        <button onClick={() => previewDrill ? {} : drill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
+                            {drill.likes}<FaThumbsUp className={`ml-2 duration-300 ${previewDrill ? "" : "cursor-pointer"} ${drill.usersLiked.includes(user) ? "text-[var(--success)]" : !previewDrill ? "hover:text-[var(--muted)]" : ""}`}/>
                         </button>
                     </div>
                     <div className="flex space-x-3 -mt-8">
-                        {selectedDrill.sports.map((sport, index) => (
+                        {drill.sports.map((sport, index) => (
                             <h2 key={index} className="bg-[var(--accent)] p-2 rounded-xl">{sport}</h2>
                         ))}
-                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.type}</h2>
-                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.difficulty}</h2>
-                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{selectedDrill.time} min</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.type}</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.difficulty}</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.time} min</h2>
                     </div>
                     <div>
                         <h2 className="text-2xl mb-2">Description</h2>
-                        <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{selectedDrill.description}</p>
+                        <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{drill.description}</p>
                     </div>
                     {!!photos.length && <div>
                         <h2 className="text-2xl mb-2">Media</h2>
@@ -162,9 +164,9 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
                         </Slider>
                     </div>}
                     <div className="flex justify-between items-center mt-8">
-                        <p className="flex items-center w-1/3">Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg truncate">{selectedDrill.creator.username}</span></p>
+                        <p className="flex items-center w-1/3">Creator:<span className="bg-[var(--accent)] ml-3 p-3 rounded-lg truncate">{drill.creator.username}</span></p>
                         <div className="flex space-x-4">
-                            {user === selectedDrill.creator._id && !preview && <div className="flex space-x-4">
+                            {user === drill.creator._id && !previewDrill && <div className="flex space-x-4">
                                 <button 
                                     onClick={() => setUpdateOpen(true)} 
                                     className="flex items-center bg-[var(--primary)] p-3 rounded-lg cursor-pointer duration-300 hover:scale-105 hover:text-[var(--success)]"
@@ -179,10 +181,10 @@ export default function DrillModal({ preview, open, setOpen, photoPreviews } : {
                                 </button>
                             </div>}
                             <button 
-                                onClick={() => preview ? {} : selectedDrill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
-                                className={`flex items-center bg-[var(--primary)] p-3 rounded-lg duration-300 ${preview ? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
+                                onClick={() => previewDrill ? {} : drill.usersSaved.includes(user) ? handleSave(false) : handleSave(true)} 
+                                className={`flex items-center bg-[var(--primary)] p-3 rounded-lg duration-300 ${previewDrill? "" : "cursor-pointer hover:scale-105 hover:text-[var(--muted)]"}`}
                             >
-                                <FaDownload className="md:mr-2"/><p className="hidden md:block">{selectedDrill.usersSaved.includes(user) && !preview ? "Remove" : "Save"}</p>
+                                <FaDownload className="md:mr-2"/><p className="hidden md:block">{drill.usersSaved.includes(user) && !previewDrill ? "Remove" : "Save"}</p>
                             </button>
                         </div>
                     </div>

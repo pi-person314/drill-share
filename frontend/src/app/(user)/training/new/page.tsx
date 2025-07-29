@@ -238,7 +238,7 @@ export default function NewSession() {
                 </div>}
             </div>
             
-            <DrillModal preview={false} />
+            <DrillModal />
         </main>
     )
 }

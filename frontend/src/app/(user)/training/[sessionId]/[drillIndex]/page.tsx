@@ -14,7 +14,7 @@ export default function RecordPage() {
     const { user, loading } = useAuth();
     const { sessionId, drillIndex } = useParams();
     const router = useRouter();
-    const { setSelectedDrill } = useDrill();
+    const { selectedDrill, setSelectedDrill } = useDrill();
     const [ session, setSession ] = useState<TrainingType | null>(null);
     const [ drill, setDrill ] = useState<DrillType | null>(null);
     const [ notes, setNotes ] = useState("");
@@ -170,7 +170,7 @@ export default function RecordPage() {
                 </div>
             </div>
 
-            <DrillModal preview={true} />
+            <DrillModal />
         </main>
     )
 }

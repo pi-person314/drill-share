@@ -39,6 +39,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     const [ photoPreviews, setPhotoPreviews ] = useState<string[]>([]);
     const [ prevPhotos, setPrevPhotos ] = useState<string[]>([]);
     const [ fetching, setFetching ] = useState(false);
+    const [ previewDrill, setPreviewDrill ] = useState<DrillType>(emptyDrill);
 
     const sportsOptions = [
         { value: "Soccer", label: "Soccer" },
@@ -155,8 +156,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
     const handlePreview = () => {
         if (newDrill.title && newDrill.description) {
-            // TODO: fix this
-            setSelectedDrill(!newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill);
+            setPreviewDrill(!newDrill.sports.length ? {...newDrill, sports: ["General"], media: photoPreviews} : {...newDrill, media: photoPreviews});
             setError("");
             setPreviewOpen(true);
         }
@@ -187,7 +187,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             }
         }
         fetchDrill();
-    }, [update, selectedDrill]);
+    }, []);
 
     if (fetching) return (
         <ReactModal
@@ -339,8 +339,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                 
                 {error && <p className="text-[var(--danger)]">{error}</p>}
             </form>
-            {update && <DrillModal preview={true} open={previewOpen} setOpen={setPreviewOpen} photoPreviews={photoPreviews}/>}
-            {!update && <DrillModal preview={true} photoPreviews={photoPreviews}/>}
+            <DrillModal open={previewOpen} setOpen={setPreviewOpen} previewDrill={previewDrill}/>
         </ReactModal>
     )
 }

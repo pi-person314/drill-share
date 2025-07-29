@@ -131,7 +131,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-            <DrillModal preview={false} />
+            <DrillModal />
         </main>
         
     )

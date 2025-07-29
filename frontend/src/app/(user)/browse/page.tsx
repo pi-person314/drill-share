@@ -178,7 +178,7 @@ export default function Browse() {
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
                     <DrillCard key={index} drillInfo={drill} />
                 ))}
-                <DrillModal preview={false}/>
+                <DrillModal />
             </main>}
             {!drills.length && !fetching && <main className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)] text-center p-8">

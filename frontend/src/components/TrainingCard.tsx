@@ -65,7 +65,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
                     ))}
                 </div>
             </div>
-            <DrillModal preview={false} /> 
+            <DrillModal /> 
         </>
     )
 }
