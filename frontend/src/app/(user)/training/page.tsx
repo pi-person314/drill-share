@@ -11,7 +11,10 @@ export default function Training() {
     const router = useRouter();
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
     }, [user, loading]);
         
     if (!user || loading) {

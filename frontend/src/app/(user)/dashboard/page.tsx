@@ -42,7 +42,10 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
         const fetchUser = async () => {
             setFetching(true);
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);

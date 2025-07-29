@@ -14,7 +14,10 @@ export default function ReviewSessions() {
     const [ trigger, setTrigger ] = useState(false);
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
 
         const fetchSessions = async () => {
             setFetching(true);

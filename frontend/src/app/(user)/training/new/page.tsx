@@ -72,7 +72,10 @@ export default function NewSession() {
     }
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
         const fetchTraining = async () => {
             setFetchingTraining(true);
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${searchParams.get("id")}`);

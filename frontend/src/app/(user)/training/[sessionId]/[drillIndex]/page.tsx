@@ -63,7 +63,10 @@ export default function RecordPage() {
     }
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
     }, [user, loading]);
 
     useEffect(() => {

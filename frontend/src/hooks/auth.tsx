@@ -5,6 +5,8 @@ type AuthContextType = {
     user: string | null;
     username: string;
     loading: boolean;
+    trigger: boolean;
+    setTrigger: (val: boolean) => void;
     login: (uid: string) => void;
     logout: () => void;
 };
@@ -13,14 +15,17 @@ const AuthContext = createContext<AuthContextType>({
     user: null,
     username: "Deleted User",
     loading: true,
+    trigger: true,
+    setTrigger: () => {},
     login: () => {},
     logout: () => {}
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<string | null>(null);
-    const [username, setUsername] = useState<string>("Deleted User");
+    const [ user, setUser ] = useState<string | null>(null);
+    const [ username, setUsername ] = useState<string>("Deleted User");
     const [ loading, setLoading ] = useState(true);
+    const [ trigger, setTrigger ] = useState(true);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -54,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, username, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, username, loading, trigger, setTrigger, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -2,11 +2,11 @@
 import { useAuth } from '@/hooks/auth';
 import { useDrill } from '@/hooks/drill';
 import { DrillType } from '@/types/drill';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { FaThumbsUp } from 'react-icons/fa';
 import { IoPerson } from 'react-icons/io5';
 
-export default function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
+function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
     const { user } = useAuth();
     const { setSelectedDrill } = useDrill();
     const [ thumbnail, setThumbnail ] = useState("");
@@ -26,6 +26,8 @@ export default function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
                     const blob = await res.blob();
                     setThumbnail(URL.createObjectURL(blob));
                 }
+            } else {
+                setThumbnail("");
             }
             setFetching(false);
         }
@@ -61,3 +63,5 @@ export default function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
         </div>
     )
 }
+
+export default memo(DrillCard, (prevProps: { drillInfo: DrillType }, nextProps: { drillInfo: DrillType }) => prevProps.drillInfo.media === nextProps.drillInfo.media);

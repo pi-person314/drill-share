@@ -87,7 +87,10 @@ export default function Browse() {
     }
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
 
         const fetchDrills = async () => {
             setFetching(true);

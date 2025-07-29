@@ -35,7 +35,7 @@ export default function Profile() {
     const [ photoPreview, setPhotoPreview ] = useState("");
     const [ prevPhoto, setPrevPhoto ] = useState("");
 
-    const { user, loading } = useAuth();
+    const { user, loading, trigger, setTrigger } = useAuth();
     const router = useRouter();
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         multiple: false,
@@ -72,7 +72,8 @@ export default function Profile() {
         const data = await res.json();
         if (res.ok) {
             if (prevPhoto) await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${prevPhoto}`, {method: "DELETE"});
-            toast.info("Profile updated!")
+            toast.info("Profile updated!");
+            setTrigger(!trigger);
             router.push("/dashboard");
         } else {
             setError(data.message);
@@ -80,7 +81,10 @@ export default function Profile() {
     }
 
     useEffect(() => {
-        if (!user && !loading) router.replace("/");
+        if (!user && !loading) {
+            router.replace("/");
+            return;
+        }
         const fetchUser = async () => {
             setFetching(true);
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);

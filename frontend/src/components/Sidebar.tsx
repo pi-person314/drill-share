@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { FaHome, FaSearch, FaBasketballBall, FaDumbbell } from "react-icons/fa";
 
 export default function Sidebar() {
-    const { user, logout } = useAuth();
+    const { user, trigger, logout } = useAuth();
     const pathname = usePathname();
     const [fetching, setFetching] = useState(true);
     const [userInfo, setUserInfo] = useState<{username: string, bio: string, photo: string}>({
@@ -40,7 +40,7 @@ export default function Sidebar() {
             setFetching(false);
         }
         getUserInfo();
-    }, [user, pathname]);
+    }, [user, trigger]);
 
     if (!user) return null;
 
