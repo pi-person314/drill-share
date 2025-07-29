@@ -58,7 +58,7 @@ export default function NewSession() {
                 drills: [warmup._id, ...sections.map((s) => s.drillInfo?._id), cooldown._id], 
                 creator: user,
                 sport: sport,
-                videos: Array.from({length: sections.length + 2}, () => ""),
+                videos: Array.from({length: sections.length + 2}, () => null),
                 notes: Array.from({length: sections.length + 2}, () => "")
             })
         });

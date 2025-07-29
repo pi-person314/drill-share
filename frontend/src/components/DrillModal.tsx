@@ -84,7 +84,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
     }
 
     useEffect(() => {
-        if (previewDrill) {
+        if (previewDrill && open) {
             setPhotos(previewDrill.media);
             return;
         }
@@ -110,7 +110,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
     if (fetching) return (
         <ReactModal
             isOpen={open ?? !!selectedDrill}
-            className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
+            className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg p-4 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
             overlayClassName={`${previewDrill ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
             ariaHideApp={false}
         >
@@ -124,7 +124,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
         <div onClick={e => e.stopPropagation()}>
             <ReactModal
                 isOpen={open ?? !!selectedDrill}
-                className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg px-12 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
+                className={`${previewDrill ? "z-3" : "z-1"} bg-[var(--secondary)] rounded-2xl shadow-lg p-12 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
                 overlayClassName={`${previewDrill ? "z-3" : "z-1"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
                 ariaHideApp={false}
             >

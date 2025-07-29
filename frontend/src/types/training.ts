@@ -4,7 +4,7 @@ export type TrainingType = {
     _id: string;
     title: string;
     drills: DrillType[];
-    videos: string[];
+    videos: (string | null)[];
     notes: string[];
     updatedAt: string;
     visited: number;

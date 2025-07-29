@@ -20,7 +20,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <div className="overflow-hidden w-screen h-screen">
-            {width < 650 || height < 600 
+            {typeof window !== "undefined" && (width < 650 || height < 600)
                 ? <div className="flex items-center justify-center text-center w-screen h-screen p-8">
                     <p className="text-3xl text-[var(--muted)]">Drill Share is not yet supported for mobile screens!</p>
                 </div>

@@ -193,7 +193,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         <ReactModal
             isOpen={open}
             ariaHideApp={false}
-            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg px-10 pt-16 pb-8 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
+            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg p-4 w-3/4 max-w-200 h-1/2 overflow-y-auto`}
             overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
             <div className="flex-1 flex items-center justify-center h-full">
@@ -206,7 +206,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
         <ReactModal
             isOpen={open}
             ariaHideApp={false}
-            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg px-10 pt-16 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
+            className={`${update ? "z-2" : "z-0"} bg-[var(--secondary)] rounded-2xl shadow-lg p-12 pb-8 w-3/4 max-w-200 max-h-5/6 overflow-y-auto relative`}
             overlayClassName={`${update ? "z-2" : "z-0"} fixed inset-0 flex items-center justify-center bg-[rgba(130,146,151,0.8)]`}
         >
             <form className="flex flex-col h-full space-y-4" onSubmit={e => {

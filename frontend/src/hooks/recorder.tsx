@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 export function useRecorder() {
     const [recording, setRecording] = useState(false);
     const [paused, setPaused] = useState(false);
-    const [mediaUrl, setMediaUrl] = useState<string | null>(null);
+    const [mediaId, setMediaId] = useState<string | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const chunks = useRef<Blob[]>([]);
@@ -14,21 +14,39 @@ export function useRecorder() {
         mediaRecorderRef.current = new window.MediaRecorder(userStream);
         chunks.current = [];
         mediaRecorderRef.current.ondataavailable = (e) => chunks.current.push(e.data);
-        mediaRecorderRef.current.onstop = () => {
-            const blob = new Blob(chunks.current, { type: "video/webm" });
-            const reader = new FileReader();
-            reader.onload = () => setMediaUrl(reader.result as string);
-            reader.readAsDataURL(blob);
-            userStream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        };
         mediaRecorderRef.current.start();
         setRecording(true);
     };
 
-    const stop = () => {
-        mediaRecorderRef.current?.stop();
-        setRecording(false);
+    const stop = async () => {
+        return new Promise<string | null>((resolve, reject) => {
+            mediaRecorderRef.current!.onstop = async () => {
+                stream?.getTracks().forEach(track => track.stop());
+                setStream(null);
+                setRecording(false);
+    
+                const blob = new Blob(chunks.current, { type: "video/webm" });
+                const formData = new FormData();
+                formData.append("file", blob);
+    
+                try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files`, {
+                        method: "POST",
+                        body: formData,
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        setMediaId(data.data);
+                        resolve(data.data);
+                    } else {
+                        resolve(null);
+                    }
+                } catch (error) {
+                    reject(error);
+                }
+            };
+            mediaRecorderRef.current!.stop();
+        });
     };
 
     const pause = () => {
@@ -41,12 +59,14 @@ export function useRecorder() {
         setPaused(false);
     };
 
-    const restart = () => {
-        setMediaUrl(null);
+    const restart = async () => {
+        setMediaId(null);
         setStream(null);
         setRecording(false);
         setPaused(false);
+        await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${mediaId}`, {method: "DELETE"});
+        return null;
     };
 
-    return { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream };
+    return { start, stop, pause, resume, restart, recording, paused, mediaId, setMediaId, stream };
 }

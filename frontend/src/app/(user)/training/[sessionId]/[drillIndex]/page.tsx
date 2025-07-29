@@ -20,12 +20,13 @@ export default function RecordPage() {
     const [ notes, setNotes ] = useState("");
     const [ fetching, setFetching ] = useState(true);
     const [ changed, setChanged ] = useState(false);
-    const [ recorded, setRecorded ] = useState(false);
-    const { start, stop, pause, resume, restart, recording, paused, mediaUrl, setMediaUrl, stream } = useRecorder();
+    const { start, stop, pause, resume, restart, recording, paused, mediaId, setMediaId, stream } = useRecorder();
+    const [ mediaUrl, setMediaUrl ] = useState("");
+    const [ fetchingVideo, setFetchingVideo ] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const handleUpdate = async (finish?: boolean) => {
-        if (!changed) return;
+    const handleUpdate = async (finish?: boolean, id?: string | null) => {
+        if (!changed && id === undefined) return;
 
         await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${sessionId}`, {
             method: "PUT",
@@ -35,11 +36,11 @@ export default function RecordPage() {
             body: JSON.stringify({
                 ...session, 
                 notes: session?.notes.map((note, index) => index === Number(drillIndex) ? notes : note),
-                videos: session?.videos.map((video, index) => index === Number(drillIndex) ? mediaUrl || "" : video)
+                videos: session?.videos.map((video, index) => index === Number(drillIndex) ? (id === undefined ? mediaId : id) : video)
             })
         });
 
-        if (finish && recorded) {
+        if (finish) {
             const today = new Date().toLocaleDateString();
             const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/${user}`);
@@ -62,6 +63,17 @@ export default function RecordPage() {
         }
     }
 
+    const handleSave = async () => {
+        setFetchingVideo(true);
+        const id = await stop();
+        if (id) handleUpdate(false, id);
+    }
+
+    const handleRestart = async () => {
+        const id = await restart();
+        handleUpdate(false, id);
+    }
+
     useEffect(() => {
         if (!user && !loading) {
             router.replace("/");
@@ -78,7 +90,7 @@ export default function RecordPage() {
                 setSession(data.data);
                 setDrill(data.data.drills[Number(drillIndex)]);
                 setNotes(data.data.notes[Number(drillIndex)]);
-                setMediaUrl(data.data.videos[Number(drillIndex)]);
+                setMediaId(data.data.videos[Number(drillIndex)]);
             }
             setFetching(false);
         }
@@ -88,6 +100,23 @@ export default function RecordPage() {
     useEffect(() => {
         if (videoRef.current && stream) videoRef.current.srcObject = stream;
     }, [stream]);
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+            if (!mediaId) {
+                setMediaUrl("");
+            } else {
+                setFetchingVideo(true);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${mediaId}`);
+                const blob = await res.blob();
+                if (res.ok) {
+                    setMediaUrl(URL.createObjectURL(blob));
+                }
+                setFetchingVideo(false);
+            }
+        }
+        fetchVideo();
+    }, [mediaId]);
 
     if (!user || loading || fetching) {
         return (
@@ -121,11 +150,15 @@ export default function RecordPage() {
 
                 <div className="flex flex-col xl:flex-row w-full xl:h-full space-y-8 xl:space-y-0 xl:space-x-16">
                     <div className="flex flex-col items-center justify-center bg-[var(--primary)] rounded-xl shadow-lg min-h-80 xl:w-2/3 p-8 space-y-8">
-                        {recording ? 
+                        {recording ?
                             <video ref={videoRef} autoPlay className={`w-full h-3/4 ${paused ? "opacity-50" : ""}`} /> 
-                        : mediaUrl ? 
+                        : mediaUrl ?
                             <video src={mediaUrl} controls className="w-full h-3/4" />
-                        : 
+                        : fetchingVideo ?
+                            <div className="flex-1 flex items-center justify-center">
+                                <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
+                            </div>
+                        :
                             <button onClick={start} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
                                 <FaMicrophone className="mr-2 text-xl md:text-2xl" />Record
                             </button>
@@ -136,11 +169,11 @@ export default function RecordPage() {
                                 {paused ? <FaPlay className="mr-2 text-lg md:text-xl" /> : <FaPause className="mr-2 text-lg md:text-xl" />}
                                 {paused ? "Resume" : "Pause"}
                             </button>
-                            <button onClick={() => {stop(); setChanged(true); setRecorded(true); handleUpdate();}} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
+                            <button onClick={handleSave} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--success)]">
                                 <FaSave className="mr-2 text-lg md:text-2xl" />Save
                             </button>
                         </div>}
-                        {!recording && mediaUrl && <button onClick={restart} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
+                        {!recording && mediaUrl && <button onClick={handleRestart} className="flex items-center bg-[var(--secondary)] text-sm md:text-base rounded-lg shadow-lg p-4 cursor-pointer hover:text-[var(--danger)]">
                             <FaRedo className="mr-2 text-lg md:text-xl" />Restart
                         </button>}
                     </div>
@@ -173,7 +206,7 @@ export default function RecordPage() {
                 </div>
             </div>
 
-            <DrillModal />
+            <DrillModal previewDrill={selectedDrill}/>
         </main>
     )
 }

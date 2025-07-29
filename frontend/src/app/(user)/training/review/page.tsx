@@ -1,6 +1,7 @@
 "use client";
 import TrainingCard from "@/components/TrainingCard";
 import { useAuth } from "@/hooks/auth";
+import { useDrill } from "@/hooks/drill";
 import { TrainingType } from "@/types/training";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 export default function ReviewSessions() {
     const { user, loading } = useAuth();
     const router = useRouter();
+    const { setDrills } = useDrill();
     const [ sessions, setSessions ] = useState<TrainingType[]>([]);
     const [ fetching, setFetching ] = useState(true);
     const [ trigger, setTrigger ] = useState(false);
@@ -25,6 +27,7 @@ export default function ReviewSessions() {
             if (res.ok) {
                 const data = await res.json();
                 setSessions(data.data.sort((a: TrainingType, b: TrainingType) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()));
+                setDrills(data.data.flatMap((session: TrainingType) => session.drills))
             }
             setFetching(false);
         }
@@ -53,23 +56,23 @@ export default function ReviewSessions() {
 
     return (
         <main className="flex-1 flex flex-col space-y-16 p-16 py-12 min-w-0 overflow-y-auto">
-            <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
+            {!!sessions.filter(session => session.videos.includes(null)).length && <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
                 <h1 className="text-center text-2xl font-semibold">Continue Where You Left Off</h1>
                 <div className="flex space-x-4 p-4 pr-0 overflow-x-auto border rounded-2xl shadow-lg">
-                    {sessions.filter(session => session.videos.includes("")).map((session, index) => (
+                    {sessions.filter(session => session.videos.includes(null)).map((session, index) => (
                         <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
                     ))}
                 </div>
-            </div>
+            </div>}
             
-            <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
+            {!!sessions.filter(session => !session.videos.includes(null)).length && <div className="flex-1 lg:min-h-0 [@media(max-height:70rem)]:min-h-auto space-y-4">
                 <h1 className="text-center text-2xl font-semibold">Review or Retry Completed Sessions</h1>
                 <div className="flex space-x-4 p-4 pr-0 overflow-x-auto border rounded-2xl shadow-lg">
-                    {sessions.filter(session => !session.videos.includes("")).map((session, index) => (
+                    {sessions.filter(session => !session.videos.includes(null)).map((session, index) => (
                         <TrainingCard key={index} trainingInfo={session} trigger={trigger} setTrigger={setTrigger} />
                     ))}
                 </div>
-            </div>
+            </div>}
         </main>
     )
 }

@@ -30,13 +30,14 @@ export default function Dashboard() {
         if (publicRes.ok && myRes.ok) {
             const publicData = await publicRes.json();
             const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
-            const sortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            setRecDrills(sortedDrills.slice(0, 5));
+            const recSortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+            setRecDrills(recSortedDrills);
 
             const myData = await myRes.json();
-            setMyDrills(myData.data.sort((a: DrillType, b: DrillType) => b.likes - a.likes).slice(0, 5));
+            const mySortedDrills = myData.data.sort((a: DrillType, b: DrillType) => b.likes - a.likes).slice(0, 5)
+            setMyDrills(mySortedDrills);
             setContribution(myData.data.filter((drill: DrillType) => drill.likes >= 10).length);
-            if (first) setDrills([...recDrills, ...myDrills, ...sessions.flatMap((session: TrainingType) => session.drills)]);
+            if (first) setDrills([...recSortedDrills, ...mySortedDrills, ...sessions.flatMap((session: TrainingType) => session.drills)]);
         }
         setFetching(false);
     }
@@ -119,7 +120,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-col space-y-2">
                         <h1 className="flex text-2xl font-semibold">
-                            Popular Training Sessions
+                            Frequent Training Sessions
                             <span className="flex items-center ml-4 text-xl text-[var(--danger)]"><FaFire className="mr-1"/>{streak}</span>
                         </h1>
                         <p className="text-[var(--muted)]">Complete training sessions daily to maintain your streak!</p>
