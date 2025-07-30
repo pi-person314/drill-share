@@ -82,7 +82,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
     const handleCreate = async () => {
         setFetching(true);
-        const {media, ...rest} = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        const submitDrill = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
         const photoIds = await Promise.all(photos.map(async (file) => {
             const formData = new FormData();
             formData.append("file", file);
@@ -97,7 +97,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({...rest, media: photoIds})
+            body: JSON.stringify({...submitDrill, media: photoIds})
         });
 
         const data = await res.json();
@@ -119,7 +119,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
     const handleUpdate = async () => {
         if (!selectedDrill) return;
         setFetching(true);
-        const {media, ...rest} = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
+        const submitDrill = !newDrill.sports.length ? {...newDrill, sports: ["General"]} : newDrill;
         const photoIds = await Promise.all(photos.map(async (file) => {
             const formData = new FormData();
             formData.append("file", file);
@@ -134,7 +134,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({...rest, media: photoIds})
+            body: JSON.stringify({...submitDrill, media: photoIds})
         });
 
         const data = await res.json();

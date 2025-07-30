@@ -5,7 +5,7 @@ import DrillCard from "./DrillCard";
 import DrillModal from "./DrillModal";
 import { FaCopy, FaTrash } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useDrill } from "@/hooks/drill";
 
 export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { trainingInfo: TrainingType, trigger?: boolean, setTrigger?: (val: boolean) => void }) {
