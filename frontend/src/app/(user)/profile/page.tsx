@@ -96,7 +96,7 @@ export default function Profile() {
                     const photoRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photo[0]}`);
                     const blob = await photoRes.blob();
                     if (photoRes.ok) {
-                        setPhotoFile(new File([blob], photo[0], {type: blob.type}));
+                        setPhotoFile(new File([blob], photo[0], {type: "image/webp"}));
                         setPhotoPreview(URL.createObjectURL(blob));
                     }
                 }
@@ -119,7 +119,7 @@ export default function Profile() {
 
     return (
         <main className="flex-1 flex justify-center items-center p-16">
-            <form className="flex flex-col w-full max-w-[50rem] space-y-5 bg-[var(--secondary)] rounded-3xl shadow-lg p-16 pb-12"
+            <form className="flex flex-col w-full max-w-[50rem] max-h-full space-y-5 bg-[var(--secondary)] rounded-3xl shadow-lg p-16 pb-12 overflow-y-auto"
                 onSubmit={e => {e.preventDefault(); handleUpdate();}}
             >
                 <h1 className="text-5xl mb-10 font-medium">Edit Profile</h1>

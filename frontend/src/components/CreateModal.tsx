@@ -175,7 +175,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photoId}`);
                     const blob = await res.blob();
                     if (res.ok) {
-                        newPhotos.push(new File([blob], photoId, {type: blob.type}));
+                        newPhotos.push(new File([blob], photoId, {type: "image/webm"}));
                         newPhotoPreviews.push(URL.createObjectURL(blob));
                     }
                 };
