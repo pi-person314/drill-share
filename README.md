@@ -9,5 +9,5 @@ If you're new to this site, begin by navigating to [drill-share.vercel.app](dril
 3. Check out the training page and begin a new session. You'll be prompted to select a sport that you want to train, and you'll be able to drag and drop your saved drills into the various sections of your training. The training session itself will prompt you to record yourself doing each drill, and it'll provide a space for you to take notes if you wish to review them later. Finally, if you complete a training session every day, you'll be able to maintain a daily streak on your dashboard, so stay motivated!
 
 ## Technologies
-Frontend: Next.js, Typescript, Tailwind CSS
+Frontend: Next.js, Typescript, Tailwind CSS\
 Backend: Express.js, Node.js, MongoDB
