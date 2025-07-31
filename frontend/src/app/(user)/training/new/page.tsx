@@ -166,8 +166,8 @@ export default function NewSession() {
     }
 
     return (
-        <main className="flex-1 flex justify-center w-full p-16 pr-0">
-            <div className="flex flex-col items-center justify-between w-full max-w-400 space-y-16 p-1 pr-16 overflow-y-auto">
+        <main className="flex-1 flex justify-center w-full h-full p-16 pr-0">
+            <div className="flex flex-col items-center justify-between w-full max-w-400 h-full space-y-16 p-1 pr-16 overflow-y-auto">
                 <div className="flex justify-center w-2/3 xl:w-1/3">
                     <input 
                         placeholder={`Untitled ${sport} Session`} 
@@ -177,7 +177,7 @@ export default function NewSession() {
                     />
                 </div>
 
-                <div className="flex flex-col xl:flex-row items-center xl:items-start w-full space-y-16 xl:h-4/5 xl:space-y-0 xl:space-x-8">
+                <div className="flex-1 xl:min-h-0 flex flex-col xl:flex-row items-center xl:items-start w-full space-y-16 xl:space-y-0 xl:space-x-8">
                     <div className="flex flex-col items-center w-full h-full xl:w-2/5 min-w-80 xl:min-w-120 max-w-160 space-y-8 px-4 xl:overflow-y-auto" style={{scrollbarWidth: "none"}}>
                         <TrainingSection type="Warmup" drillInfo={warmup} setDrillInfo={setWarmup} onClick={() => setType("Warmup")}/>
                         {sections.map((section) => (
