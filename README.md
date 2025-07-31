@@ -1,5 +1,5 @@
 # drill-share
-This website is my first solo attempt at a full-stack app! The idea is similar to a workout app, except with the goal of finding and sharing brand new ways of training for your sport of choice! Feel free to contact me at [jmli314@berkeley.edu](jmli314@berkeley.edu) if you have any questions!
+Welcome to Drill Share! The idea is similar to a workout app, except with the goal of finding and sharing brand new ways of training for your sport of choice. Feel free to contact me at [jmli314@berkeley.edu](jmli314@berkeley.edu) if you have any questions!
 
 ## How to Use
 If you're new to this site, begin by navigating to [drill-share.vercel.app](https://drill-share.vercel.app) and creating an account. You'll be immediately redirected to your dashboard, where you'll be able to view drills recommended to you based on your sports of interest, as well as your most popular drills and training sessions (once you've created some). From here, you'll have 3 main options for what to do next.
