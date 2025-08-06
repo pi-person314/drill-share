@@ -71,6 +71,7 @@ export default function Register() {
         } else {
             setError(data.message);
         }
+        setFetching(false);
     }
 
     const options = [
@@ -95,8 +96,8 @@ export default function Register() {
     }
 
     return (
-        <main className="flex-1 flex justify-center items-center p-10">
-            <form className="flex flex-col w-1/2 min-w-76 max-w-[50rem] justify-center items-center space-y-5 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
+        <main className="flex-1 flex justify-center p-10">
+            <form className="flex flex-col w-1/2 min-w-76 max-w-[50rem] h-min items-center space-y-4 bg-[var(--primary)] rounded-3xl shadow-lg p-16"
                 onSubmit={e => {e.preventDefault(); handleRegister();}}
             >
                 <h1 className="text-4xl md:text-5xl mb-10 font-medium">Register</h1>

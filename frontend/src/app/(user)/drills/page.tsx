@@ -80,7 +80,7 @@ export default function Drills() {
         const sorted = [...savedDrills];
 
         if (savedSort === "difficulty") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.difficulty.localeCompare(drill2.difficulty)));
-        else if (savedSort === "time") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.time - drill2.time));
+        else if (savedSort === "time") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill1.time! - drill2.time!));
         else if (savedSort === "likes") sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * (drill2.likes - drill1.likes));
         else sorted.sort((drill1, drill2) => (savedReverse ? -1 : 1) * drill1.title.toLowerCase().localeCompare(drill2.title.toLowerCase()));
         

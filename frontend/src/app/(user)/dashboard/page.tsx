@@ -29,7 +29,7 @@ export default function Dashboard() {
         const myRes = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/created/${user}`);
         if (publicRes.ok && myRes.ok) {
             const publicData = await publicRes.json();
-            const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && userSports.some((sport) => drill.sports.includes(sport)));
+            const filteredDrills = publicData.data.filter((drill: DrillType) => drill.creator._id !== user && (drill.sports.includes("General") || userSports.some((sport) => drill.sports.includes(sport))));
             const recSortedDrills = filteredDrills.sort((a: DrillType, b: DrillType) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
             setRecDrills(recSortedDrills);
 
@@ -96,7 +96,7 @@ export default function Dashboard() {
                     <div className="flex space-x-8 overflow-x-auto p-4 border rounded-lg shadow-lg">
                         {recDrills.map((drill, index) => <DrillCard key={index} drillInfo={drill} />)}
                         {!recDrills.length && <p className="text-center text-xl text-[var(--muted)] w-full p-8">
-                            No drills have been shared yet.<br/>
+                            No drills for your sports have been shared yet.<br/>
                             Create your own{" "}
                             <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>
                         </p>}

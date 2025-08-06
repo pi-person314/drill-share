@@ -8,7 +8,7 @@ export type DrillType = {
     };
     type: string;
     difficulty: string;
-    time: number;
+    time: number | null;
     sports: string[];
     media: string[];
     public: boolean;

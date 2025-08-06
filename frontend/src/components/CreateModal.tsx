@@ -241,7 +241,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     />
                 </div>
 
-                <div className="flex justify-between space-y-4">
+                <div className="flex justify-between space-y-4 space-x-4">
                     <div className="space-y-1 w-1/3">
                         <p>Type <span className="text-[var(--danger)]">*</span></p>
                         <Select 
@@ -269,14 +269,14 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                     </div>
 
                     <div className="space-y-1 w-32">
-                        <p>Time (minutes) <span className="text-[var(--danger)]">*</span></p>
+                        <p>Time (min) <span className="text-[var(--danger)]">*</span></p>
                         <input 
                             type="number"
                             min={1}
                             max={9999}
-                            value={newDrill.time}
-                            onChange={e => setNewDrill({...newDrill, time: e.target.value === "" ? 0 : Number(e.target.value)})}
-                            className="w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border"
+                            value={newDrill.time || ""}
+                            onChange={e => setNewDrill({...newDrill, time: e.target.value === "" ? null : Number(e.target.value)})}
+                            className={`w-full h-[38px] bg-[var(--secondary)] placeholder-[var(--muted)] rounded p-3 border ${error && !newDrill.time ? "border-[var(--danger)]" : ""}`}
                         />
                     </div>
                 </div>

@@ -114,7 +114,7 @@ export default function Browse() {
                     (!filters.sport || drill.sports.includes(filters.sport)) && 
                     (!filters.type || drill.type === filters.type) &&
                     (!filters.difficulty || drill.difficulty === filters.difficulty) &&
-                    (!filters.time || drill.time >= filters.time[0] && drill.time <= filters.time[1]) &&  
+                    (!filters.time || drill.time! >= filters.time[0] && drill.time! <= filters.time[1]) &&  
                     (!filters.query || editDistance(drill.title, filters.query) <= 0.3)
                 ));
                 setDrills(filteredDrills);
@@ -132,7 +132,7 @@ export default function Browse() {
         )
     }
     return (
-        <div className="flex-1 flex flex-col items-center space-y-4 p-16">
+        <div className="flex-1 flex flex-col items-center space-y-4 p-16 overflow-y-auto">
             <header className="flex flex-col justify-evenly [@media(min-width:90rem)]:w-full max-w-300 [@media(min-width:90rem)]:h-auto space-y-20 [@media(min-width:90rem)]:space-y-6 p-8 rounded-xl shadow-lg bg-[var(--primary)]">
                 <div className="flex flex-col [@media(min-width:90rem)]:flex-row items-center w-full space-y-4 [@media(min-width:90rem)]:space-y-0 [@media(min-width:90rem)]:space-x-8">
                     <h1 className="text-xl">Filters:</h1>
@@ -177,7 +177,7 @@ export default function Browse() {
                 />
             </header>
 
-            {!!drills.length && !fetching && <main className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full overflow-x-hidden overflow-y-auto pt-16 gap-16">
+            {!!drills.length && !fetching && <main className="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(17.5rem,1fr))] justify-items-center w-full pt-16 gap-16">
                 {drills.sort((drill1, drill2) => drill2.likes - drill1.likes).map((drill, index) => (
                     <DrillCard key={index} drillInfo={drill} />
                 ))}
@@ -190,7 +190,7 @@ export default function Browse() {
                     <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>
                 </p>
             </main>}
-            {fetching && <div className="flex-1 flex items-center justify-center">
+            {fetching && <div className="flex-1 flex items-center justify-center p-8">
                 <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
             </div>}
         </div>

@@ -18,14 +18,14 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
     return (
         <html lang="en">
-        <body className={`${exo.variable} antialiased`}>
-            <AuthProvider>
-            <div className="flex flex-col w-screen h-screen overflow-x-hidden">
-                <Header />
-                {children}
-            </div>
-            </AuthProvider>
-        </body>
+            <body className={`${exo.variable} antialiased`}>
+                <AuthProvider>
+                <div className="flex flex-col w-full min-h-screen overflow-hidden">
+                    <Header />
+                    {children}
+                </div>
+                </AuthProvider>
+            </body>
         </html>
     );
 }

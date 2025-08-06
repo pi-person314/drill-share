@@ -8,6 +8,7 @@ export default function Login() {
     const [ userInfo, setUserInfo ] = useState({ username: "", password: "" });
     const [ error, setError ] = useState("");
     const { user, login } = useAuth();
+    const [ fetching, setFetching ] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -15,6 +16,7 @@ export default function Login() {
     }, [user]);
 
     const handleLogin = async () => {
+        setFetching(true);
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/users/login`, {
             method: "POST",
             headers: {
@@ -30,9 +32,10 @@ export default function Login() {
         } else {
             setError(data.message);
         }
+        setFetching(false);
     }
     
-    if (user) {
+    if (user || fetching) {
         return (
             <div className="flex-1 flex items-center justify-center">
                 <p className="text-3xl text-[var(--muted)] animate-pulse">Loading...</p>
