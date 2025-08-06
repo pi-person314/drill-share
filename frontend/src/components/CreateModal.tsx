@@ -139,7 +139,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
 
         const data = await res.json();
         if (res.ok) {
-            prevPhotos.forEach(async (id) => await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${id}`, {method: "DELETE"}));
+            prevPhotos.forEach(async (id) => {if (id) await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${id}`, {method: "DELETE"})});
             toast.info("Updated!");
             setOpen(false);
             setDrills(drills.map(drill => drill._id === selectedDrill._id ? data.data : drill));

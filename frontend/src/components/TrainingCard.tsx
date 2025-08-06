@@ -22,7 +22,7 @@ export default function TrainingCard({ trainingInfo, trigger, setTrigger }: { tr
 
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        trainingInfo.videos.forEach(async video => await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${video}`, {method: "DELETE"}));
+        trainingInfo.videos.forEach(async video => {if (video) await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${video}`, {method: "DELETE"})});
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/training/${trainingInfo._id}`, {method: "DELETE"});
         if (res.ok) {
             toast.error("Deleted!");

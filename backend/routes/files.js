@@ -25,6 +25,11 @@ router.post("/", upload.single("file"), async (req, res) => {
     try {
         const bucket = getBucket();
         if (req.file.mimetype.startsWith("image/")) {
+            try {
+                await sharp(req.file.buffer).webp({ quality: 50 }).toBuffer();
+            } catch (error) {
+                return res.status(400).json({ message: "File type not supported." });
+            }
             const uploadStream = bucket.openUploadStream(req.file.originalname, { contentType: "image/webp" });
             sharp(req.file.buffer).webp({ quality: 50 }).pipe(uploadStream).on("finish", () => {
                 res.status(201).json({ data: uploadStream.id, message: "Image uploaded!" });

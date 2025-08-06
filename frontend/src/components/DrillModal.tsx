@@ -74,7 +74,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
 
     const handleDelete = async () => {
         if (!selectedDrill) return;
-        selectedDrill.media.forEach(async photo => await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photo}`, {method: "DELETE"}));
+        selectedDrill.media.forEach(async photo => {if (photo) await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photo}`, {method: "DELETE"})});
         const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/drills/${selectedDrill._id}`, {method: "DELETE"});
         if (res.ok) {
             toast.error("Deleted!");
@@ -138,7 +138,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
                     </div>
                     
                     <div className="flex">
-                        <h1 className="text-5xl font-medium truncate">{drill.title}</h1>
+                        <h1 className="text-5xl font-semibold truncate pb-1">{drill.title}</h1>
                         <button onClick={() => previewDrill ? {} : drill.usersLiked.includes(user) ? handleLike(false) : handleLike(true)} className="flex items-center ml-10 text-xl">
                             {drill.likes}<FaThumbsUp className={`ml-2 duration-300 ${previewDrill ? "" : "cursor-pointer"} ${drill.usersLiked.includes(user) ? "text-[var(--success)]" : !previewDrill ? "hover:text-[var(--muted)]" : ""}`}/>
                         </button>
@@ -152,11 +152,11 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
                         <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.time} min</h2>
                     </div>
                     <div>
-                        <h2 className="text-2xl mb-2">Description</h2>
+                        <h2 className="text-2xl font-medium mb-2">Description</h2>
                         <p className="whitespace-pre-line truncate max-h-40 overflow-y-auto">{drill.description}</p>
                     </div>
                     {!!photos.length && <div>
-                        <h2 className="text-2xl mb-2">Media</h2>
+                        <h2 className="text-2xl font-medium mb-2">Media</h2>
                         <Slider infinite={false} speed={1000} arrows={false} dots={true} className="w-1/2 bg-[var(--primary)] py-8 rounded-xl">
                             {photos.map((image, index) => (
                                 <img key={index} src={image} alt={`Image ${index}`} className="h-40 px-8 object-contain"/>

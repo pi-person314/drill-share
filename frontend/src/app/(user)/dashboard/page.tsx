@@ -95,7 +95,7 @@ export default function Dashboard() {
                     <h1 className="text-2xl font-semibold">Recommended For You</h1>
                     <div className="flex space-x-8 overflow-x-auto p-4 border rounded-lg shadow-lg">
                         {recDrills.map((drill, index) => <DrillCard key={index} drillInfo={drill} />)}
-                        {!recDrills.length && <p className="text-center text-xl text-[var(--muted)] w-full p-8">
+                        {!recDrills.length && <p className="text-center text-xl text-[var(--muted)] w-full p-4">
                             No drills for your sports have been shared yet.<br/>
                             Create your own{" "}
                             <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>
@@ -111,7 +111,7 @@ export default function Dashboard() {
                         <p className="text-[var(--muted)]">Create drills with 10+ likes to increase your contribution!</p>
                         <div className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(17.5rem,1fr))] justify-center justify-items-center overflow-y-auto gap-16 p-8 mt-4 overflow-x-hidden border rounded-lg shadow-lg">
                             {myDrills.map((drill, index) => <DrillCard key={index} drillInfo={drill} />)}
-                            {!myDrills.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-8">
+                            {!myDrills.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-4">
                                 No drills have been created yet.<br/>
                                 Begin{" "}
                                 <Link href="/drills#my-drills" className="text-[var(--link)] underline">here!</Link>
@@ -126,7 +126,7 @@ export default function Dashboard() {
                         <p className="text-[var(--muted)]">Complete training sessions daily to maintain your streak!</p>
                         <div className="flex-1 flex flex-col items-center space-y-6 p-8 mt-4 border rounded-lg shadow-lg overflow-y-auto overflow-x-hidden">
                             {sessions.map((session, index) => <TrainingCard key={index} trainingInfo={session} />)}
-                            {!sessions.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-8">
+                            {!sessions.length && <p className="text-center text-xl text-[var(--muted)] m-auto p-4">
                                 No training sessions have been created yet.<br/>
                                 Begin{" "}
                                 <Link href="/training/new" className="text-[var(--link)] underline">here!</Link>
