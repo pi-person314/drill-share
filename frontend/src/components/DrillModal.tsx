@@ -93,6 +93,7 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
             setFetching(true);
             const newPhotos: string[] = [];
             for (const photoId of selectedDrill.media) {
+                if (!photoId) continue;
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photoId}`);
                 const blob = await res.blob();
                 if (res.ok) {

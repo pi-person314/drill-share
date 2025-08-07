@@ -20,7 +20,7 @@ function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
     useEffect(() => {
         const getThumbnail = async () =>  {
             setFetching(true);
-            if (drillInfo.media.length) {
+            if (drillInfo.media.length && drillInfo.media[0]) {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${drillInfo.media[0]}`);
                 if (res.ok) {
                     const blob = await res.blob();

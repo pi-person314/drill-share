@@ -11,8 +11,8 @@ export default function Training() {
     const router = useRouter();
 
     useEffect(() => {
-        if (!user && !loading) {
-            router.replace("/");
+        if (!user) {
+            if (!loading) router.replace("/");
             return;
         }
     }, [user, loading]);
@@ -26,8 +26,8 @@ export default function Training() {
     }
 
     return (
-        <main className="flex-1 flex flex-col justify-center items-center [@media(max-height:60rem)]:space-y-8 space-y-16 p-16 [@media(max-height:60rem)]:p-8">
-            <h1 className="text-4xl lg:text-5xl [@media(max-height:60rem)]:text-4xl font-semibold text-center">Welcome to Training!</h1>
+        <main className="flex-1 flex flex-col justify-center items-center [@media(max-height:60rem)]:space-y-4 space-y-16 p-16 [@media(max-height:60rem)]:p-8">
+            <h1 className="text-4xl lg:text-5xl [@media(max-height:60rem)]:text-4xl font-semibold text-center mt-4">Welcome to Training!</h1>
             <div className="[@media(max-height:60rem)]:flex-1 flex flex-col xl:flex-row justify-around items-center [@media(max-height:60rem, max-width:1279px)]:space-y-8 space-y-16 xl:space-y-0 xl:h-3/5 p-8 xl:w-4/5 overflow-x-hidden overflow-y-auto">
                 <Link href="/training/new" className="flex flex-col justify-center items-center h-full w-full xl:w-2/5 p-12 [@media(max-height:60rem)]:p-8 border rounded-2xl shadow-lg hover:scale-105">
                     <h1 className="text-2xl lg:text-3xl [@media(max-height:60rem)]:text-2xl font-medium text-center mb-4 [@media(max-height:60rem)]:mb-2">New Session</h1>

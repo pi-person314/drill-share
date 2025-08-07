@@ -54,8 +54,8 @@ export default function Drills() {
     }
 
     useEffect(() => {
-        if (!user && !loading) {
-            router.replace("/");
+        if (!user) {
+            if (!loading) router.replace("/");
             return;
         }
         fetchDrills(true);

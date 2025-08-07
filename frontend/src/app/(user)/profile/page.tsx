@@ -81,8 +81,8 @@ export default function Profile() {
     }
 
     useEffect(() => {
-        if (!user && !loading) {
-            router.replace("/");
+        if (!user) {
+            if (!loading) router.replace("/");
             return;
         }
         const fetchUser = async () => {

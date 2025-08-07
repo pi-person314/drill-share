@@ -171,6 +171,7 @@ export default function CreateModal({ update, open, setOpen } : { update: boolea
                 const newPhotos: File[] = [];
                 const newPhotoPreviews: string[] = [];
                 for (const photoId of selectedDrill.media) {
+                    if (!photoId) continue;
                     newPrevPhotos.push(photoId);
                     const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/files/${photoId}`);
                     const blob = await res.blob();

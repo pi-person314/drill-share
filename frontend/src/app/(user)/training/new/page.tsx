@@ -72,8 +72,8 @@ export default function NewSession() {
     }
 
     useEffect(() => {
-        if (!user && !loading) {
-            router.replace("/");
+        if (!user) {
+            if (!loading) router.replace("/");
             return;
         }
         const fetchTraining = async () => {
