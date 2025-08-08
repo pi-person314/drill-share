@@ -144,13 +144,13 @@ export default function DrillModal({ open, setOpen, previewDrill } : { open?: bo
                             {drill.likes}<FaThumbsUp className={`ml-2 duration-300 ${previewDrill ? "" : "cursor-pointer"} ${drill.usersLiked.includes(user) ? "text-[var(--success)]" : !previewDrill ? "hover:text-[var(--muted)]" : ""}`}/>
                         </button>
                     </div>
-                    <div className="flex space-x-3 -mt-8">
+                    <div className="flex space-x-3 -mt-8 pb-2 overflow-x-auto">
                         {drill.sports.map((sport, index) => (
                             <h2 key={index} className="bg-[var(--accent)] p-2 rounded-xl">{sport}</h2>
                         ))}
                         <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.type}</h2>
                         <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.difficulty}</h2>
-                        <h2 className="bg-[var(--accent)] p-2 rounded-xl">{drill.time} min</h2>
+                        <h2 className="bg-[var(--accent)] p-2 rounded-xl whitespace-nowrap">{drill.time} min</h2>
                     </div>
                     <div>
                         <h2 className="text-2xl font-medium mb-2">Description</h2>
