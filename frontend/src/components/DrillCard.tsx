@@ -65,6 +65,8 @@ function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
 }
 
 export default memo(DrillCard, (prevProps: { drillInfo: DrillType }, nextProps: { drillInfo: DrillType }) => 
-    prevProps.drillInfo.media === nextProps.drillInfo.media &&
+    prevProps.drillInfo.title === nextProps.drillInfo.title &&
+    prevProps.drillInfo.media.length === nextProps.drillInfo.media.length &&
+    prevProps.drillInfo.media.every((elem, idx) => elem === nextProps.drillInfo.media[idx]) &&
     prevProps.drillInfo.likes === nextProps.drillInfo.likes
 );
