@@ -24,18 +24,18 @@ export default function Home() {
             </p>
             <div className="flex flex-col space-y-4 mt-4 w-2/3">
                 <div className="flex justify-center w-full space-x-3">
-                    <img src="/images/soccer.png" alt="Soccer Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-bounce"/>
-                    <img src="/images/basketball.png" alt="Basketball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-bounce"/>
-                    <img src="/images/tennis.png" alt="Tennis Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-bounce"/>
-                    <img src="/images/volleyball.png" alt="Volleyball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-bounce"/>
-                    <img src="/images/baseball.png" alt="Baseball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-bounce"/>
+                    <img src="/images/soccer.png" alt="Soccer Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:-500ms] hover:animate-bounce"/>
+                    <img src="/images/basketball.png" alt="Basketball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:-500ms] hover:animate-bounce"/>
+                    <img src="/images/tennis.png" alt="Tennis Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:-500ms] hover:animate-bounce"/>
+                    <img src="/images/volleyball.png" alt="Volleyball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:-500ms] hover:animate-bounce"/>
+                    <img src="/images/baseball.png" alt="Baseball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:-500ms] hover:animate-bounce"/>
                 </div>
                 <div className="flex justify-center w-full space-x-3">
-                    <img src="/images/hockey.png" alt="Hockey Puck" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-spin"/>
-                    <img src="/images/golf.png" alt="Golf Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-spin"/>
-                    <img src="/images/cricket.png" alt="Cricket Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-spin"/>
-                    <img src="/images/football.png" alt="Football" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-spin"/>
-                    <img src="/images/badminton.png" alt="Badminton Birdie" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:[animation-delay:200ms] hover:animate-spin"/>
+                    <img src="/images/hockey.png" alt="Hockey Puck" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:animate-spin"/>
+                    <img src="/images/golf.png" alt="Golf Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:animate-spin"/>
+                    <img src="/images/cricket.png" alt="Cricket Ball" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:animate-spin"/>
+                    <img src="/images/football.png" alt="Football" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:animate-spin"/>
+                    <img src="/images/badminton.png" alt="Badminton Birdie" className="w-1/5 max-w-30 [@media(max-height:50rem)]:max-w-20 object-contain cursor-pointer hover:animate-spin"/>
                 </div> 
             </div>
         </main>
