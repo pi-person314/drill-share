@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/auth";
 import { useDrill } from "@/hooks/drill";
 import { DrillType } from "@/types/drill";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlay, FaRunning, FaTrash } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { PiStrategy } from "react-icons/pi";
