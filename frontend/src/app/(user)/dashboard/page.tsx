@@ -102,7 +102,7 @@ export default function Dashboard() {
                         </p>}
                     </div>
                 </div>
-                <div className="flex-1 flex flex-col 2xl:flex-row space-x-0 2xl:space-x-16 space-y-16 2xl:space-y-0 min-h-0">
+                <div className="flex-1 flex flex-col 2xl:flex-row [@media(max-height:50rem)]:flex-col space-x-0 2xl:space-x-16 [@media(max-height:50rem)]:space-x-0 space-y-16 2xl:space-y-0 [@media(max-height:50rem)]:space-y-16 min-h-0">
                     <div className="flex-1 flex flex-col space-y-2">
                         <h1 className="flex text-2xl font-semibold">
                             Your Top Drills
