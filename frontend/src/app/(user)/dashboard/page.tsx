@@ -15,7 +15,7 @@ export default function Dashboard() {
     const { user, loading } = useAuth();
     const router = useRouter(); 
     const { drills, setDrills } = useDrill();
-    const [ fetching, setFetching ] = useState(false);
+    const [ fetching, setFetching ] = useState(true);
     const [ userSports, setUserSports ] = useState<string[] | null>(null);
     const [ streak, setStreak ] = useState<number>(0);
     const [ contribution, setContribution ] = useState<number>(0);

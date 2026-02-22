@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+* {
+  scrollbar-color: rgba(155, 155, 155, 0.4) transparent;
+}
+
 :root {
   --bg: #eaf1f4;
   --primary: #b2d6e3;

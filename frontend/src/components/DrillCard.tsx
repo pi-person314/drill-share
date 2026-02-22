@@ -10,7 +10,7 @@ function DrillCard({ drillInfo }: { drillInfo: DrillType }) {
     const { user } = useAuth();
     const { setSelectedDrill } = useDrill();
     const [ thumbnail, setThumbnail ] = useState("");
-    const [ fetching, setFetching ] = useState(false);
+    const [ fetching, setFetching ] = useState(true);
 
     const handleDrag = (e: React.DragEvent) => {
         e.dataTransfer.setData("application/json", JSON.stringify(drillInfo));

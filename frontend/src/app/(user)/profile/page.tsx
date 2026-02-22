@@ -118,8 +118,8 @@ export default function Profile() {
     }
 
     return (
-        <main className="flex-1 flex justify-center items-center p-12">
-            <form className="flex flex-col w-full max-w-[50rem] space-y-5 bg-[var(--secondary)] rounded-3xl shadow-lg p-12 overflow-y-auto"
+        <main className="flex-1 overflow-y-auto p-12">
+            <form className="flex flex-col w-full max-w-[50rem] mx-auto space-y-5 bg-[var(--secondary)] rounded-3xl shadow-lg p-12"
                 onSubmit={e => {e.preventDefault(); handleUpdate();}}
             >
                 <h1 className="text-5xl mb-10 font-medium">Edit Profile</h1>
